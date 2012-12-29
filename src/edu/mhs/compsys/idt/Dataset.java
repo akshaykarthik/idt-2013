@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 
 import javax.imageio.ImageIO;
 
@@ -57,8 +56,9 @@ public class Dataset {
 	 *            The folder to search for images
 	 * @param type
 	 *            The file type of the image
+	 * @throws IOException 
 	 */
-	public Dataset(String folder, String type) {
+	public Dataset(String folder, String type) throws IOException {
 		this(folder, type, 1280, 1024);
 	}
 
@@ -67,8 +67,9 @@ public class Dataset {
 	 * folder with the specific image dimensions of (1280x1024)
 	 * 
 	 * @param folder
+	 * @throws IOException 
 	 */
-	public Dataset(String folder) {
+	public Dataset(String folder) throws IOException {
 		this(folder, "png");
 	}
 
@@ -101,4 +102,6 @@ public class Dataset {
 	public BufferedImage get(int index) {
 		return (index < length()) ? _data.get(index) : null;
 	}
+	
+	
 }
