@@ -1,0 +1,20 @@
+/**
+ * 
+ */
+package edu.mhs.compsys.testing;
+
+/**
+ * @author akr, drew, peter
+ *
+ */
+public class Tester {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
