@@ -30,24 +30,42 @@ public class BinaryImage {
 			_data.get(i).clear();
 		}
 	}
-	
-	public boolean inBounds(int x, int y){
+
+	public BinaryImage(String str, String sep) {
+		String[] columns = str.split(sep);
+		this._height = columns.length;
+		this._width = columns[0].length();
+		_data = new ArrayList<BitSet>();
+		for (int i = 0; i < columns.length; i++) {
+			BitSet b = new BitSet(_width);
+			for (int j = 0; j < _width; j++) {
+				b.set(j, (columns[i].charAt(j) == '1'));
+			}
+			_data.add(i, b);
+		}
+	}
+
+	public BinaryImage(String str) {
+		this(str, "\n");
+	}
+
+	public boolean inBounds(int x, int y) {
 		return (0 < x && x < _width) && (0 < y && y < _height);
 	}
-	
-	public boolean get(int x, int y) throws IndexOutOfBoundsException{
+
+	public boolean get(int x, int y) throws IndexOutOfBoundsException {
 		return _data.get(y).get(x);
 	}
 
-	public void set(int x, int y, boolean value){
+	public void set(int x, int y, boolean value) {
 		_data.get(y).set(x, value);
 	}
-	
-	public void flip(int x, int y){
+
+	public void flip(int x, int y) {
 		set(x, y, !get(x, y));
 	}
 
-	public BinaryImage inverse(){
+	public BinaryImage inverse() {
 		BinaryImage ret = new BinaryImage(_height, _width);
 		for (int i = 0; i < _height; i++) {
 			for (int j = 0; j < _width; j++) {
@@ -56,8 +74,8 @@ public class BinaryImage {
 		}
 		return ret;
 	}
-	
-	public BinaryImage and(BinaryImage other){
+
+	public BinaryImage and(BinaryImage other) {
 		BinaryImage ret = new BinaryImage(_height, _width);
 		for (int i = 0; i < _height; i++) {
 			for (int j = 0; j < _width; j++) {
@@ -66,8 +84,8 @@ public class BinaryImage {
 		}
 		return ret;
 	}
-	
-	public BinaryImage or(BinaryImage other){
+
+	public BinaryImage or(BinaryImage other) {
 		BinaryImage ret = new BinaryImage(_height, _width);
 		for (int i = 0; i < _height; i++) {
 			for (int j = 0; j < _width; j++) {
@@ -75,43 +93,26 @@ public class BinaryImage {
 			}
 		}
 		return ret;
-	}	
-	
-	public String toString(){
-		String retval = "BinaryImage("+_height+","+_width+")\n";
+	}
+
+	public boolean equals(BinaryImage other) {
+		for (int i = 0; i < _height; i++)
+			for (int j = 0; j < _width; j++)
+				if (get(i, j) != other.get(i, j))
+					return false;
+		return true;
+	}
+
+	public String toString() {
+		String retval = "BinaryImage(" + _height + "," + _width + ")\n";
 		for (int i = 0; i < _height; i++) {
 			retval += "\t";
 			for (int j = 0; j < _width; j++) {
-				retval += (get(i,j)?"1":"0");
+				retval += (get(i, j) ? "1" : "0");
 			}
 			retval += "\n";
 		}
 		return retval;
 	}
-	
-	public static void main(String[] args){
 
-		System.out.println("Test Binary Image");
-		BinaryImage a = new BinaryImage(5, 5);
-		a.flip(0, 0);
-		a.flip(1, 1);
-		a.flip(2, 2);
-		a.flip(3, 3);
-		a.flip(4, 4);
-		
-		BinaryImage b = new BinaryImage(5, 5);
-		b.flip(0, 0);
-		b.flip(0, 1);
-		b.flip(0, 2);
-		b.flip(0, 3);
-		b.flip(0, 4);
-		
-		System.out.println("A:" + a.toString());
-		System.out.println("b:" + b.toString());
-		System.out.println("A inv:" + a.inverse().toString());
-		System.out.println("A&&B:" + a.and(b).toString());
-		System.out.println("A||B:" + a.or(b).toString());
-		
-		
-	}
 }
