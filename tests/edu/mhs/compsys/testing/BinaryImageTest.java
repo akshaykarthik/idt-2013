@@ -24,27 +24,35 @@ public class BinaryImageTest {
 	}
 
 	@Test
-	public void test() {
+	public void testFlip() {
 		reset();
-
 		assertTrue(a.get(0, 0));
 		a.flip(0, 0);
 		assertFalse(a.get(0, 0));
-
+	}
+	
+	@Test
+	public void testInverse(){
 		reset();
 		assertTrue(a.get(0, 0));
 		assertFalse(a.get(0, 1));
 		a = a.inverse();
 		assertFalse(a.get(0, 0));
 		assertTrue(a.get(0, 1));
+	}
 
+	@Test
+	public void testAnd(){
 		reset();
 		BinaryImage c = a.and(b);
 		assertEquals(c.get(0, 0), a.get(0, 0) && b.get(0, 0));
 		assertEquals(c.get(0, 1), a.get(0, 1) && b.get(0, 1));
-
+	}
+	
+	@Test
+	public void testOr() {
 		reset();
-		c = a.or(b);
+		BinaryImage c = a.or(b);
 		assertEquals(c.get(0, 0), a.get(0, 0) || b.get(0, 0));
 		assertEquals(c.get(0, 1), a.get(0, 1) || b.get(0, 1));
 	}

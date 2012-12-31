@@ -104,6 +104,11 @@ public class BinaryImage {
 	}
 
 	public String toString() {
+		return toString("1", "0");
+	}
+
+	public String toString(String one, String zero) {
+
 		String retval = "BinaryImage(" + _height + "," + _width + ")\n \t  ";
 		for (int i = 0; i < _width; i++)
 			retval += i;
@@ -112,12 +117,13 @@ public class BinaryImage {
 		for (int i = 0; i < _height; i++) {
 			retval += "\t" + i + " ";
 			for (int j = 0; j < _width; j++) {
-				retval += (get(i, j) ? "1" : "0");
+				retval += (get(i, j) ? one : zero);
 			}
 			retval += "\n";
 		}
 
 		return retval;
+
 	}
 
 }
