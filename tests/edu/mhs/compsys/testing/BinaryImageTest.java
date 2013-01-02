@@ -15,8 +15,8 @@ public class BinaryImageTest {
 
 	@Before
 	public void setUp() throws Exception {
-		reset();
-
+		a = new BinaryImage("10000 01000 00100 00010 00001", " ");
+		b = new BinaryImage("11111 00000 00000 00000 00000", " ");
 	}
 
 	@After
@@ -25,7 +25,6 @@ public class BinaryImageTest {
 
 	@Test
 	public void testFlip() {
-		reset();
 		assertTrue(a.get(0, 0));
 		a.flip(0, 0);
 		assertFalse(a.get(0, 0));
@@ -33,17 +32,15 @@ public class BinaryImageTest {
 	
 	@Test
 	public void testInverse(){
-		reset();
 		assertTrue(a.get(0, 0));
 		assertFalse(a.get(0, 1));
 		a = a.inverse();
-		assertFalse(a.get(0, 0));
+		assertFalse(a.	get(0, 0));
 		assertTrue(a.get(0, 1));
 	}
 
 	@Test
 	public void testAnd(){
-		reset();
 		BinaryImage c = a.and(b);
 		assertEquals(c.get(0, 0), a.get(0, 0) && b.get(0, 0));
 		assertEquals(c.get(0, 1), a.get(0, 1) && b.get(0, 1));
@@ -51,14 +48,9 @@ public class BinaryImageTest {
 	
 	@Test
 	public void testOr() {
-		reset();
 		BinaryImage c = a.or(b);
 		assertEquals(c.get(0, 0), a.get(0, 0) || b.get(0, 0));
 		assertEquals(c.get(0, 1), a.get(0, 1) || b.get(0, 1));
 	}
 
-	public void reset() {
-		a = new BinaryImage("10000 01000 00100 00010 00001", " ");
-		b = new BinaryImage("11111 00000 00000 00000 00000", " ");
-	}
 }

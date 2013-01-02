@@ -34,11 +34,20 @@ public class BinaryImage {
 		_data = new boolean[_height][_width];
 		for (int i = 0; i < _data.length; i++)
 			for (int j = 0; j < _data[0].length; j++)
-				_data[i][j] = (columns[i].charAt(j) == '1');
+				set(i, j, (columns[i].charAt(j) == '1'));
 	}
 
 	public BinaryImage(String str) {
 		this(str, "\n");
+	}
+	
+	public BinaryImage clone(){
+		BinaryImage b = new BinaryImage(_height, _width);
+
+		for (int i = 0; i < _data.length; i++)
+			for (int j = 0; j < _data[0].length; j++)
+				b.set(i, j, get(i, j));
+		return b;
 	}
 
 	public int getHeight() {
@@ -50,7 +59,7 @@ public class BinaryImage {
 	}
 
 	public boolean inBounds(int x, int y) {
-		return (0 <= x && x < _width) && (0 <= y && y < _height);
+		return (0 <= x && x < _height) && (0 <= y && y < _width);
 	}
 
 	public boolean get(int x, int y) throws IndexOutOfBoundsException {
