@@ -1,0 +1,38 @@
+1_A 1_B Desktop Icon Change
+
+1_B 1_C Desktop Icon Change
+1_B 1_C New Window
+1_B 1_C TaskBar Change
+
+1_C 1_D Application Area Update
+
+1_D 1_E Window Title UPdate
+1_D 1_E Desktop Icon Change
+1_D 1_E TaskBar Change
+
+1_E 1_F Menu Select
+
+1_F 1_G Menu Open
+
+1_G 1_H Menu Item Select
+
+1_H 1_I Window Open
+
+1_I 1_J Application Area Update
+
+1_J 1_K Application Area Update
+
+1_K 1_L Desktop Icon Change
+1_K 1_L Window Close
+
+1_L 1_M Title Bar Click
+
+1_M 1_N Window Resize
+
+1_N 1_O Menu Select
+
+1_O 1_P Menu Open
+
+1_P 1_Q Menu Item Select
+
+1_Q 1_R Window Close

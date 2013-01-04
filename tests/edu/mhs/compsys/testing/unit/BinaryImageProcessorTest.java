@@ -1,4 +1,4 @@
-package edu.mhs.compsys.testing;
+package edu.mhs.compsys.testing.unit;
 
 
 import static org.junit.Assert.*;
@@ -26,7 +26,7 @@ public class BinaryImageProcessorTest {
 
 	@Test
 	public void test() {
-
+		
 	}
 
 }
