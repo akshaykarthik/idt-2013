@@ -11,6 +11,7 @@ public class Config {
 	private int taskBarHeight;
 	private int xButtonHeight;
 	private int xButtonWidth;
+	private int[][] colorOfX;
 
 	/**
 	 * Initializes new Config Class with default config file of Config.ini If
@@ -40,6 +41,23 @@ public class Config {
 					.getProperty("XButtonHeight"));
 			this.xButtonWidth = Integer.parseInt(serv
 					.getProperty("XButtonWidth"));
+			String xArray = serv.getProperty("XButtonColor");
+			xArray.replace("[", "");
+			xArray.replace("{", "");
+			xArray.replace("]", "");
+			xArray.replace("}", "");
+			String[] colors = xArray.split(",");
+			for (int row = 0; row < this.xButtonHeight; row++) {
+				for (int col = 0; col < this.xButtonWidth; col++) {
+					// while(xArray.startsWith("[") || xArray.startsWith("]") ||
+					// xArray.startsWith("{") || xArray.startsWith("}"))
+					// xArray = xArray.substring(1);
+					colorOfX[row][col] = Integer.parseInt(colors[row
+							* xButtonHeight + col]);
+					// xArray.substring(0,xArray.indexOf(",")));
+					// xArray = xArray.substring(xArray.indexOf(","));
+				}
+			}
 
 		} catch (FileNotFoundException e) {
 			this.imageHeight = 1024;
@@ -56,6 +74,7 @@ public class Config {
 
 	/**
 	 * Returns the height of the image to be loaded.
+	 * 
 	 * @return int imageHeight
 	 */
 	public int getImageHeight() {
@@ -64,6 +83,7 @@ public class Config {
 
 	/**
 	 * Returns the width of the image to be loaded.
+	 * 
 	 * @return int imageWidth
 	 */
 	public int getImageWidth() {
@@ -72,6 +92,7 @@ public class Config {
 
 	/**
 	 * Returns the height of the taskbar in the loaded image.
+	 * 
 	 * @return int taskBarHeight
 	 */
 	public int getTaskBarHeight() {
@@ -80,6 +101,7 @@ public class Config {
 
 	/**
 	 * Returns the height of the X button in the loaded image.
+	 * 
 	 * @return int xButtonHeight
 	 */
 	public int getXButtonHeight() {
@@ -88,6 +110,7 @@ public class Config {
 
 	/**
 	 * Returns the width of the X button in the loaded image.
+	 * 
 	 * @return int xButtonWidth
 	 */
 	public int getXButtonWidth() {
