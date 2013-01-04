@@ -8,12 +8,9 @@ import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
-/**
- * @author akr
- * 
- */
-public class Dataset {
-	private ArrayList<BufferedImage> _data;
+public class Dataset
+{
+	private ArrayList<BufferedImage>	_data;
 
 	/**
 	 * Constructs a dataset given a folder by adding all images in that folder.
@@ -32,18 +29,20 @@ public class Dataset {
 	 * 
 	 * @param the
 	 *            width of the image
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	public Dataset(String folder, String type, int length, int width) throws IOException {
+	public Dataset(String folder, String type, int length, int width) throws IOException
+	{
 		File ifolder = new File(folder);
 		File[] listOfFiles = ifolder.listFiles();
 		String[] paths = new String[listOfFiles.length];
-		
-		for (int i = 0; i < listOfFiles.length; i++) {
+
+		for (int i = 0; i < listOfFiles.length; i++)
+		{
 			paths[i] = listOfFiles[i].getPath();
 		}
 		Arrays.sort(paths);
-		for(String filepath : paths)
+		for (String filepath : paths)
 			this._data.add(ImageIO.read(new File(filepath)));
 	}
 
@@ -56,9 +55,10 @@ public class Dataset {
 	 *            The folder to search for images
 	 * @param type
 	 *            The file type of the image
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	public Dataset(String folder, String type) throws IOException {
+	public Dataset(String folder, String type) throws IOException
+	{
 		this(folder, type, 1280, 1024);
 	}
 
@@ -67,9 +67,10 @@ public class Dataset {
 	 * folder with the specific image dimensions of (1280x1024)
 	 * 
 	 * @param folder
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	public Dataset(String folder) throws IOException {
+	public Dataset(String folder) throws IOException
+	{
 		this(folder, "png");
 	}
 
@@ -80,10 +81,11 @@ public class Dataset {
 	 * 
 	 * 
 	 * @param bufferedImages
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	public Dataset(String[] bufferedImages) throws IOException {
-		for(String file : bufferedImages)
+	public Dataset(String[] bufferedImages) throws IOException
+	{
+		for (String file : bufferedImages)
 			this._data.add(ImageIO.read(new File(file)));
 	}
 
@@ -91,7 +93,8 @@ public class Dataset {
 	 * @return Returns the size of the dataset, returns -1 if dataset is not
 	 *         initialized
 	 */
-	public int length() {
+	public int length()
+	{
 		return ((_data != null) ? _data.size() : -1);
 	}
 
@@ -99,9 +102,9 @@ public class Dataset {
 	 * @param index
 	 * @return
 	 */
-	public BufferedImage get(int index) {
+	public BufferedImage get(int index)
+	{
 		return (index < length()) ? _data.get(index) : null;
 	}
-	
-	
+
 }
