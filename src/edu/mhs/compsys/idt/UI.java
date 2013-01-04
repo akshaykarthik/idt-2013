@@ -81,7 +81,6 @@ public class UI extends JFrame implements ActionListener
 	{
 		resX = 800;
 		resY = 350;
-		// cfg.
 	}
 	private void loadConfig()
 	{
