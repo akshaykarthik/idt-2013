@@ -12,10 +12,25 @@ public class Config {
 	private int xButtonHeight;
 	private int xButtonWidth;
 
+	/**
+	 * Initializes new Config Class with default config file of Config.ini If
+	 * Config.ini was deleted, loads default values.
+	 */
 	public Config() {
+		this("Config.ini");
+	}
+
+	/**
+	 * Initializes new Config Class with config file name of fileName If file is
+	 * not found, loads default values.
+	 * 
+	 * @param fileName
+	 *            The name of the config file.
+	 */
+	public Config(String fileName) {
 		try {
 			Properties serv = new Properties();
-			serv.load(new FileReader("Config.ini"));
+			serv.load(new FileReader(fileName));
 			this.imageHeight = Integer
 					.parseInt(serv.getProperty("ImageHeight"));
 			this.imageWidth = Integer.parseInt(serv.getProperty("ImageWidth"));
@@ -36,7 +51,47 @@ public class Config {
 		} catch (IOException e) {
 			System.out.println("Could Not Find File: Config.ini");
 		}
-		
+
+	}
+
+	/**
+	 * Returns the height of the image to be loaded.
+	 * @return int imageHeight
+	 */
+	public int getImageHeight() {
+		return imageHeight;
+	}
+
+	/**
+	 * Returns the width of the image to be loaded.
+	 * @return int imageWidth
+	 */
+	public int getImageWidth() {
+		return imageWidth;
+	}
+
+	/**
+	 * Returns the height of the taskbar in the loaded image.
+	 * @return int taskBarHeight
+	 */
+	public int getTaskBarHeight() {
+		return taskBarHeight;
+	}
+
+	/**
+	 * Returns the height of the X button in the loaded image.
+	 * @return int xButtonHeight
+	 */
+	public int getXButtonHeight() {
+		return xButtonHeight;
+	}
+
+	/**
+	 * Returns the width of the X button in the loaded image.
+	 * @return int xButtonWidth
+	 */
+	public int getXButtonWidth() {
+		return xButtonWidth;
 	}
 
 }
