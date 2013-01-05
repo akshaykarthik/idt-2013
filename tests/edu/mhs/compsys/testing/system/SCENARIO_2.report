@@ -1,0 +1,44 @@
+2_A 2_B Desktop Icon Change
+
+2_B 2_C Desktop Icon Change
+2_B 2_C New Window
+2_B 2_C TaskBar Change
+
+2_C 2_D Application Area Update
+
+2_D 2_E Menu Select
+
+2_E 2_F Menu Open
+
+2_F 2_G Menu Item Select
+
+2_G 2_H Window Open
+
+2_H 2_I Application Area Update
+
+2_I 2_J Application Area Update
+
+2_J 2_K Application Area Update
+
+2_K 2_L Application Area Update
+
+2_L 2_M Window Resize
+2_L 2_M Application Area Update
+
+2_M 2_N Window Titlebar Click
+
+2_N 2_O Window Minimize (No Taskbar Change, Window Close)
+
+2_O 2_P Icon Select
+
+2_P 2_Q Window Open
+2_P 2_Q Taskbar Change
+
+2_Q 2_R Application Area Update
+
+2_R 2_S Window Open
+
+2_S 2_T Window Titlebar Click
+
+2_T 2_U Window Close
+2_T 2_U Taskbar Change
