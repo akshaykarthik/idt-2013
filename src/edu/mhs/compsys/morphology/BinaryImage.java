@@ -40,8 +40,8 @@ public class BinaryImage {
 	public BinaryImage(String str) {
 		this(str, "\n");
 	}
-	
-	public BinaryImage clone(){
+
+	public BinaryImage clone() {
 		BinaryImage b = new BinaryImage(_height, _width);
 
 		for (int i = 0; i < _data.length; i++)
@@ -118,7 +118,8 @@ public class BinaryImage {
 
 	public String toString(String one, String zero) {
 
-		String retval = "BinaryImage(" + _height + "," + _width + ")\n \t  ";
+		String retval = String.format("BinaryImage(%s,%s)\n \t  ", _width,
+				_height);
 		for (int i = 0; i < _width; i++)
 			retval += i;
 		retval += "\n";
