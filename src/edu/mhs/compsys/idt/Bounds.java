@@ -81,7 +81,7 @@ public class Bounds {
 	 */
 	@Override
 	public String toString() {
-		return String.format("Bounds [x=%s, y=%s, l=%s, w=%s]", x, y, l, w);
+		return String.format("[x=%s, y=%s, l=%s, w=%s]", x, y, l, w);
 	}
 
 }
