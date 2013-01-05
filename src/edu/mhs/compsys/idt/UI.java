@@ -34,6 +34,10 @@ public class UI extends JFrame implements ActionListener
 	{
 
 	}
+	/**
+	 * initializer method to start up the JFrame creates needed objects and sets
+	 * basic settings loads up a kKeyListener
+	 */
 	public void init()
 	{
 		setVisible(true);
@@ -45,17 +49,18 @@ public class UI extends JFrame implements ActionListener
 		jfc = new JFileChooser();
 		jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-
-		String path = getClass().getResource("UI.class").toString();
-		path = path.substring(6, path.length() - 8);
-		for (int i = path.length() - 1; i > 0; i--)
-		{
-			if (path.charAt(i) == '/')
-			{
-				path = path.substring(0, i) + "\\" + path.substring(i + 1);
-				i--;
-			}
-		}
+		// this just finds the URL to the class file for some reason
+		// ya know, if you need it
+		// String path = getClass().getResource("UI.class").toString();
+		// path = path.substring(6, path.length() - 8);
+		// for (int i = path.length() - 1; i > 0; i--)
+		// {
+		// if (path.charAt(i) == '/')
+		// {
+		// path = path.substring(0, i) + "\\" + path.substring(i + 1);
+		// i--;
+		// }
+		// }
 
 		setDefaults();
 		loadUI();
@@ -79,8 +84,8 @@ public class UI extends JFrame implements ActionListener
 	}
 	private void setDefaults()
 	{
-		resX = 800;
-		resY = 350;
+		resX = 1000;
+		resY = 500;
 	}
 	private void loadConfig()
 	{
