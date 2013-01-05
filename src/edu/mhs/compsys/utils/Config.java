@@ -41,23 +41,23 @@ public class Config {
 					.getProperty("XButtonHeight"));
 			this.xButtonWidth = Integer.parseInt(serv
 					.getProperty("XButtonWidth"));
-			String xArray = serv.getProperty("XButtonColor");
-			xArray.replace("[", "");
-			xArray.replace("{", "");
-			xArray.replace("]", "");
-			xArray.replace("}", "");
-			String[] colors = xArray.split(",");
-			for (int row = 0; row < this.xButtonHeight; row++) {
-				for (int col = 0; col < this.xButtonWidth; col++) {
-					// while(xArray.startsWith("[") || xArray.startsWith("]") ||
-					// xArray.startsWith("{") || xArray.startsWith("}"))
-					// xArray = xArray.substring(1);
-					colorOfX[row][col] = Integer.parseInt(colors[row
-							* xButtonHeight + col]);
-					// xArray.substring(0,xArray.indexOf(",")));
-					// xArray = xArray.substring(xArray.indexOf(","));
-				}
-			}
+//			String xArray = serv.getProperty("XButtonColor");
+//			xArray.replace("[", "");
+//			xArray.replace("{", "");
+//			xArray.replace("]", "");
+//			xArray.replace("}", "");
+//			String[] colors = xArray.split(",");
+//			for (int row = 0; row < this.xButtonHeight; row++) {
+//				for (int col = 0; col < this.xButtonWidth; col++) {
+//					// while(xArray.startsWith("[") || xArray.startsWith("]") ||
+//					// xArray.startsWith("{") || xArray.startsWith("}"))
+//					// xArray = xArray.substring(1);
+//					colorOfX[row][col] = Integer.parseInt(colors[row
+//							* xButtonHeight + col]);
+//					// xArray.substring(0,xArray.indexOf(",")));
+//					// xArray = xArray.substring(xArray.indexOf(","));
+//				}
+//		}
 
 		} catch (FileNotFoundException e) {
 			this.imageHeight = 1024;
@@ -67,7 +67,7 @@ public class Config {
 			this.xButtonWidth = 16;
 
 		} catch (IOException e) {
-			System.out.println("Could Not Find File: Config.ini");
+			System.out.println("Could not read from file: "+fileName);
 		}
 
 	}
