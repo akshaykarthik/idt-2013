@@ -88,7 +88,20 @@ public class Dataset
 		for (String file : bufferedImages)
 			this._data.add(ImageIO.read(new File(file)));
 	}
-
+	
+	/**
+	 * Construct a Dataset using the given images.
+	 * Loaded directly from file object.
+	 * 
+	 * @param file
+	 * @throws IOException
+	 */
+	public Dataset(File[] file) throws IOException
+	{
+		for(File fileName : file)
+			this._data.add(ImageIO.read(fileName));
+	}
+	
 	/**
 	 * @return Returns the size of the dataset, returns -1 if dataset is not
 	 *         initialized

@@ -11,6 +11,7 @@ import edu.mhs.compsys.utils.Config;
 public class ConfigTest {
 
 	private Config cfg;
+
 	@Before
 	public void setUp() throws Exception {
 		cfg = new Config();
@@ -43,6 +44,11 @@ public class ConfigTest {
 	@Test
 	public void testGetXButtonWidth() {
 		assertEquals(cfg.getXButtonWidth(), 16);
+	}
+
+	@Test
+	public void testGetDateWidth() {
+		assertEquals(cfg.getDateWidth(), 200);
 	}
 
 }
