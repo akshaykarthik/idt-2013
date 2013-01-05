@@ -1,3 +1,9 @@
+edu.mhs.compsys.application
 edu.mhs.compsys.idt
 edu.mhs.compsys.morphology
+edu.mhs.compsys.reporting
 edu.mhs.compsys.testing
+edu.mhs.compsys.testing.integration
+edu.mhs.compsys.testing.system
+edu.mhs.compsys.testing.unit
+edu.mhs.compsys.utils
