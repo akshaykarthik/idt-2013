@@ -210,15 +210,15 @@ public class Config {
 	public int getDateWidth() {
 		return dateWidth;
 	}
-	
+
 	/**
-	 * Returns the colors of each pixel of the x button for each window in their hexadecimal values.
+	 * Returns the colors of each pixel of the x button for each window in their
+	 * hexadecimal values.
 	 * 
 	 * @return int[][] colorOfX
 	 */
-	public int[][] getColorOfX(){
+	public int[][] getColorOfX() {
 		return colorOfX;
 	}
-	
 
 }
