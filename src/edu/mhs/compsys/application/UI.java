@@ -1,11 +1,13 @@
-package edu.mhs.compsys.idt;
+package edu.mhs.compsys.application;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -20,6 +22,7 @@ public class UI extends JFrame implements ActionListener
 	private Config			cfg;
 	private JFileChooser	jfc;
 	File[]					files;
+	ImageIcon[]				pics, changePics;
 
 	public static void main(String[] pirates)
 	{
@@ -49,6 +52,7 @@ public class UI extends JFrame implements ActionListener
 		jfc = new JFileChooser();
 		jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		jfc.setMultiSelectionEnabled(true);
 		// this just finds the URL to the class file for some reason
 		// ya know, if you need it
 		// String path = getClass().getResource("UI.class").toString();
@@ -66,6 +70,7 @@ public class UI extends JFrame implements ActionListener
 		loadUI();
 		loadConfig();
 		setSize(resX, resY);
+		setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - this.getSize().width / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - this.getSize().height / 2);
 
 		addKeyListener(new KeyListener()
 		{
@@ -110,6 +115,10 @@ public class UI extends JFrame implements ActionListener
 		JMenu help = new JMenu("Help"); // help menu
 		menu.add(help);
 		{
+			JMenuItem helpinfo = new JMenuItem("Help Information");
+			helpinfo.addActionListener(this);
+			help.add(helpinfo);
+
 			JMenuItem about = new JMenuItem("About");
 			about.addActionListener(this);
 			help.add(about);
@@ -139,9 +148,20 @@ public class UI extends JFrame implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		String name = e.getActionCommand();
-		if (name.equals("About"))
+
+		if (name.equals("Help Information"))
 		{
-			print("about stuff here just for now");
+			HelpUI hui = new HelpUI();
+			hui.setVisible(true);
+		}
+		else if (name.equals("About"))
+		{
+			AboutUI aui = new AboutUI();
+			aui.setVisible(true);
+		}
+		else if (name.equals("Documentationalizer"))
+		{
+			
 		}
 		else if (name.equals("Open Images"))
 		{
@@ -149,9 +169,21 @@ public class UI extends JFrame implements ActionListener
 			if (rv == JFileChooser.APPROVE_OPTION)
 			{
 				files = jfc.getSelectedFiles();
+				loadImages(files);
 			}
 
 		}
+	}
+	private void loadImages(File[] f)
+	{
+		pics = new ImageIcon[f.length];
+		for (int i = 0; i < files.length; i++)
+		{
+			ImageIcon ii = new ImageIcon(files[i].getPath());
+			pics[i] = ii;
+
+		}
+
 	}
 	/**
 	 * Just an easy way to print stuff
