@@ -20,6 +20,6 @@ public class AboutUI extends JFrame
 	public void paint(Graphics g)
 	{
 		g.setColor(Color.black);
-		g.drawString("sup bro", 100, 100);
+		
 	}
 }

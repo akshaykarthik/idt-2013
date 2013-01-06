@@ -1,0 +1,6 @@
+To Load Images:
+
+1) Click "File" In the top left to open the drop down dialogue box.
+2) Click "Open Images" and a file explorer should appear.
+3) Highlight all of the images to analyze.
+4) Click "Open" and let the application do the rest.

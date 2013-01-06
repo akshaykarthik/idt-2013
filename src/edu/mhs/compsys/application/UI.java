@@ -110,7 +110,6 @@ public class UI extends JFrame implements ActionListener
 			JMenuItem open = new JMenuItem("Open Images");
 			open.addActionListener(this);
 			file.add(open);
-
 		}
 		JMenu help = new JMenu("Help"); // help menu
 		menu.add(help);
@@ -159,9 +158,15 @@ public class UI extends JFrame implements ActionListener
 			AboutUI aui = new AboutUI();
 			aui.setVisible(true);
 		}
-		else if (name.equals("Documentationalizer"))
+		else if (name.equals("Documentation"))
 		{
-			
+			DocumentationUI dui = new DocumentationUI();
+			dui.setVisible(true);
+		}
+		else if (name.equals("Testing"))
+		{
+			TestingUI tui = new TestingUI();
+			tui.setVisible(true);
 		}
 		else if (name.equals("Open Images"))
 		{
@@ -171,7 +176,6 @@ public class UI extends JFrame implements ActionListener
 				files = jfc.getSelectedFiles();
 				loadImages(files);
 			}
-
 		}
 	}
 	private void loadImages(File[] f)
