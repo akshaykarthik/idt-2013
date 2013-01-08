@@ -27,19 +27,21 @@ public class GraphicsPanel extends JPanel implements ActionListener
 	private static final long	serialVersionUID	= 1L;
 
 	private JFileChooser		jfc;
-	public JMenuBar			menu				= new JMenuBar();
+	JFrame						jframe;
+	private JMenuBar			menu				= new JMenuBar();
 	private JButton				next, prev;
 	private File[]				files;
 	private ImageIcon[]			images, imageChanges;
 	private boolean				drawImages			= false, notAllImages;
 	private int					imageNum			= -1;
-	private int resX=1000, resY=500;
+	private int					resX				= 1000, resY = 500;
 
 	public static void main(String[] args)
 	{
 		JFrame jf = new JFrame("IDT 2013 | MHS");
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GraphicsPanel gp = new GraphicsPanel();
+		gp.loadJFrame(jf);
 		jf.add(gp);
 		jf.setVisible(true);
 		jf.pack();
@@ -76,6 +78,10 @@ public class GraphicsPanel extends JPanel implements ActionListener
 		loadUI();
 
 	}
+	public void loadJFrame(JFrame jf)
+	{
+		jframe = jf;
+	}
 	public Dimension getPreferredSize()
 	{
 		return new Dimension(resX, resY);
@@ -89,12 +95,16 @@ public class GraphicsPanel extends JPanel implements ActionListener
 		g.drawString("Esc - Close", 10, this.getHeight() - 10);
 		if (drawImages)
 		{
-			for (int i = 0; i < images.length; i++)
+
+			resX = jframe.getWidth();
+			int imgWidth = (resX - 40) / 2;
+
+			int imgXSize = (int) (imgWidth);
+			int imgYSize = (int) ((1024.0 / 1280.0) * imgWidth);
+			if (images != null && images.length > 2 && images.length - 1 > imageNum)
 			{
-				double div = (resX);
-				int imgXSize = (int)(1280/ div);
-				int imgYSize = (int)(1024/ div);
-				g.drawImage(images[i].getImage(), i * 500, 50, imgXSize, imgYSize, null);
+				g.drawImage(images[imageNum].getImage(), 10, 10, imgXSize, imgYSize, null);
+				g.drawImage(images[imageNum + 1].getImage(), 10 + (imgWidth + 10), 10, imgXSize, imgYSize, null);
 			}
 		}
 		else
@@ -175,17 +185,25 @@ public class GraphicsPanel extends JPanel implements ActionListener
 		}
 		if (drawImages)
 		{
+			imageNum = 0;
 			notAllImages = false;
 			next = new JButton("Next");
 			prev = new JButton("Prev");
-			add(next);
 			add(prev);
+			add(next);
+			resX = 1000;
+			resY = 850;
+			jframe.setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - jframe.getWidth() / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - jframe.getHeight() / 2);
+			setSize(resX, resY);
+			jframe.setSize(resX, resY);
+
+			repaint();
 		}
 		// TODO: this is where the processing will be
 		// analyzer.analyze(images);
 		// analyzer.getChangeImages(imageChanges);
 		// analyzer.getChange
-		repaint(); // once images are loaded, they are paintd to the screen
+		repaint(); // once images are loaded, they are painted to the screen
 	}
 
 	public void actionPerformed(ActionEvent e)
