@@ -1,11 +1,13 @@
 package edu.mhs.compsys.application;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -15,6 +17,8 @@ import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -25,18 +29,33 @@ public class GraphicsPanel extends JPanel implements ActionListener
 	private static final long	serialVersionUID	= 1L;
 
 	private JFileChooser		jfc;
-	// public to allow the RunMe class to access it
-	public JMenuBar				menu				= new JMenuBar();
+	private JMenuBar			menu				= new JMenuBar();
 	private JButton				next, prev;
 	private File[]				files;
 	private ImageIcon[]			images, imageChanges;
-	private boolean				drawImages			= false;
+	private boolean				drawImages			= false, notAllImages;
 	private int					imageNum			= -1;
+	private int resX=1000, resY=500;
 
+	public static void main(String[] args)
+	{
+		JFrame jf = new JFrame("IDT 2013 | MHS");
+		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		GraphicsPanel gp = new GraphicsPanel();
+		jf.add(gp);
+		jf.setVisible(true);
+		jf.pack();
+		jf.setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - jf.getWidth() / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - jf.getHeight() / 2);
+		jf.setJMenuBar(gp.menu);
+
+	}
+
+	/**
+	 * Constructor - Initializes the JFileChooser
+	 */
 	public GraphicsPanel()
 	{
 		jfc = new JFileChooser();
-		jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		jfc.setMultiSelectionEnabled(true);
 		this.setFocusable(true);
@@ -53,35 +72,50 @@ public class GraphicsPanel extends JPanel implements ActionListener
 				if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
 				{
 					System.exit(0);
-					System.out.println("closed");
 				}
 			}
 		});
 		loadUI();
+
 	}
 	public Dimension getPreferredSize()
 	{
-		return new Dimension(1000, 500);
+		return new Dimension(resX, resY);
 	}
 	public void paintComponent(Graphics g)
 	{
-		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-		g.setFont(new Font("Calibri", 0, 20));
 		super.paintComponent(g);
+		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setFont(new Font("Calibri", 0, 20));
 		g.setColor(Color.black);
 		g.drawString("Esc - Close", 10, this.getHeight() - 10);
 		if (drawImages)
 		{
-
+			for (int i = 0; i < images.length; i++)
+			{
+				int imgXSize = 490;
+				int imgYSize = 380;
+				g.drawImage(images[i].getImage(), i * 500, 50, imgXSize, imgYSize, null);
+			}
 		}
 		else
 		{
-			g.drawString("You have not loaded the images yet.", 250, 200);
+			if (!notAllImages)
+				g.drawString("You have not loaded the images yet.", 250, 200);
+			else
+			{
+				g.setColor(Color.red);
+				g.drawString("Something loaded was not an image. Please try again.", 250, 200);
+				g.setColor(Color.black);
+			}
 			g.drawString("Click \"File > Open Images\" to load the images into the applicaiton.", 250, 220);
 			g.drawString("For more help click \"Help > Help Information\" to open a help window.", 250, 240);
 		}
 	}
+	/**
+	 * Loads up the menu strip buttons and assigns action listeners to the
+	 * options
+	 */
 	private void loadUI()
 	{
 		JMenu file = new JMenu("File");// file drop down menu
@@ -111,26 +145,50 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			help.add(doc);
 		}
 	}
+	/**
+	 * This takes in the files from the "Open" window. Files will only be loaded
+	 * if they end with .png (not case sensative) and an error message will be
+	 * displayed in-window alerting the user if there is anything wrong with the
+	 * loaded files
+	 * 
+	 * @param f
+	 *            the loaded files obtained through the
+	 *            JFileChooser.getSelectedFiles()
+	 */
 	private void loadImages(File[] f)
 	{
 		images = new ImageIcon[f.length];
-
+		boolean haveImages = true;
 		for (int i = 0; i < files.length; i++)
 		{
 			ImageIcon ii = new ImageIcon(files[i].getPath());
 			images[i] = ii;
+			if (!files[i].getName().toUpperCase().endsWith(".PNG"))
+				haveImages = false;
 		}
-		drawImages = true;
-		next = new JButton("Next");
-		prev = new JButton("Prev");
-		add(next);
-		add(prev);
+		if (haveImages)
+			drawImages = true;
+		if (files.length > 0 && !haveImages)
+		{
+			files = null;
+			notAllImages = true;
+			drawImages = false;
+		}
+		if (drawImages)
+		{
+			notAllImages = false;
+			next = new JButton("Next");
+			prev = new JButton("Prev");
+			add(next);
+			add(prev);
+		}
 		// TODO: this is where the processing will be
 		// analyzer.analyze(images);
 		// analyzer.getChangeImages(imageChanges);
 		// analyzer.getChange
 		repaint(); // once images are loaded, they are paintd to the screen
 	}
+
 	public void actionPerformed(ActionEvent e)
 	{
 		String name = e.getActionCommand();
