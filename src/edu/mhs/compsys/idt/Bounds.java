@@ -74,15 +74,17 @@ public class Bounds {
 		this.l = l;
 		this.w = w;
 	}
-	public Bounds(){
+
+	public Bounds() {
 		this.x = -1;
 		this.y = -1;
 		this.l = -1;
-		this.w = -1;		
+		this.w = -1;
 	}
 
 	/*
-	 * Returns a visual representation of bounds of change 
+	 * Returns a visual representation of bounds of change
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
