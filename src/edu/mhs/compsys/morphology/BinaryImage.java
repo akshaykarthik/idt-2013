@@ -117,22 +117,21 @@ public class BinaryImage {
 	}
 
 	public String toString(String one, String zero) {
-
-		String retval = String.format("BinaryImage(%s,%s)\n \t  ", _width,
-				_height);
+		StringBuilder ret = new StringBuilder();
+		ret.append(String.format("BinaryImage(%s,%s)\n \t  ", _width, _height));
 		for (int i = 0; i < _width; i++)
-			retval += i;
-		retval += "\n";
+			ret.append(i);
+		ret.append("\n");
 
 		for (int i = 0; i < _height; i++) {
-			retval += "\t" + i + " ";
+			ret.append("\t" + i + " ");
 			for (int j = 0; j < _width; j++) {
-				retval += (get(i, j) ? one : zero);
+				ret.append(get(i, j) ? one : zero);
 			}
-			retval += "\n";
+			ret.append("\n");
 		}
 
-		return retval;
+		return ret.toString();
 
 	}
 

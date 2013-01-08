@@ -1,6 +1,5 @@
 package edu.mhs.compsys.testing.unit;
 
-
 import static org.junit.Assert.*;
 
 import org.junit.After;
@@ -14,10 +13,10 @@ public class BinaryImageProcessorTest {
 
 	BinaryImage a;
 	BinaryImage b;
+
 	@Before
 	public void setUp() throws Exception {
-		a = new BinaryImage("11111 1000" +
-				"1 10001 10001 11111", " ");
+		a = new BinaryImage("11111 10001 10001 10001 11111", " ");
 		b = new BinaryImage("00000 01110 01110 01110 00000", " ");
 	}
 
@@ -27,7 +26,17 @@ public class BinaryImageProcessorTest {
 
 	@Test
 	public void test() {
-		
+		assertEquals(true, true);
+		System.out.println("--------b--------");
+		System.out.println(b);
+		System.out.println(BinaryImageProcessor.close(b));
+		System.out.println(BinaryImageProcessor.erode(b, false));
+		System.out.println(BinaryImageProcessor.erode(b, true));
+		System.out.println("--------a--------");
+		System.out.println(a);
+		System.out.println(BinaryImageProcessor.dilate(a));
+		System.out.println(BinaryImageProcessor.dilate(a, false));
+		System.out.println(BinaryImageProcessor.dilate(a, true));
 	}
 
 }
