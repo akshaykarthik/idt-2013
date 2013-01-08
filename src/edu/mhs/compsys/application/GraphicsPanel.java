@@ -1,7 +1,6 @@
 package edu.mhs.compsys.application;
 
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -18,7 +17,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -29,7 +27,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 	private static final long	serialVersionUID	= 1L;
 
 	private JFileChooser		jfc;
-	private JMenuBar			menu				= new JMenuBar();
+	public JMenuBar			menu				= new JMenuBar();
 	private JButton				next, prev;
 	private File[]				files;
 	private ImageIcon[]			images, imageChanges;
@@ -93,8 +91,9 @@ public class GraphicsPanel extends JPanel implements ActionListener
 		{
 			for (int i = 0; i < images.length; i++)
 			{
-				int imgXSize = 490;
-				int imgYSize = 380;
+				double div = (resX);
+				int imgXSize = (int)(1280/ div);
+				int imgYSize = (int)(1024/ div);
 				g.drawImage(images[i].getImage(), i * 500, 50, imgXSize, imgYSize, null);
 			}
 		}
