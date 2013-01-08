@@ -2,7 +2,10 @@ package edu.mhs.compsys.application;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -10,8 +13,8 @@ import java.awt.event.KeyListener;
 import java.io.File;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -22,22 +25,14 @@ public class GraphicsPanel extends JPanel implements ActionListener
 	private static final long	serialVersionUID	= 1L;
 
 	private JFileChooser		jfc;
-	private File[]				files;
-	private ImageIcon[]			pics, changePics;
-	private boolean				drawImages			= false;
-	public JMenuBar				menu				= new JMenuBar();
-
 	// public to allow the RunMe class to access it
-	public static void main(String[] args)
-	{
-		JFrame jf = new JFrame();
-		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		GraphicsPanel gp = new GraphicsPanel();
-		jf.add(gp);
-		jf.setVisible(true);
-		jf.pack();
-		jf.setJMenuBar(gp.menu);
-}
+	public JMenuBar				menu				= new JMenuBar();
+	private JButton				next, prev;
+	private File[]				files;
+	private ImageIcon[]			images, imageChanges;
+	private boolean				drawImages			= false;
+	private int					imageNum			= -1;
+
 	public GraphicsPanel()
 	{
 		jfc = new JFileChooser();
@@ -70,12 +65,21 @@ public class GraphicsPanel extends JPanel implements ActionListener
 	}
 	public void paintComponent(Graphics g)
 	{
+		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		g.setFont(new Font("Calibri", 0, 20));
 		super.paintComponent(g);
 		g.setColor(Color.black);
 		g.drawString("Esc - Close", 10, this.getHeight() - 10);
 		if (drawImages)
 		{
 
+		}
+		else
+		{
+			g.drawString("You have not loaded the images yet.", 250, 200);
+			g.drawString("Click \"File > Open Images\" to load the images into the applicaiton.", 250, 220);
+			g.drawString("For more help click \"Help > Help Information\" to open a help window.", 250, 240);
 		}
 	}
 	private void loadUI()
@@ -106,18 +110,25 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			doc.addActionListener(this);
 			help.add(doc);
 		}
-
 	}
 	private void loadImages(File[] f)
 	{
-		pics = new ImageIcon[f.length];
+		images = new ImageIcon[f.length];
 
 		for (int i = 0; i < files.length; i++)
 		{
 			ImageIcon ii = new ImageIcon(files[i].getPath());
-			pics[i] = ii;
+			images[i] = ii;
 		}
 		drawImages = true;
+		next = new JButton("Next");
+		prev = new JButton("Prev");
+		add(next);
+		add(prev);
+		// TODO: this is where the processing will be
+		// analyzer.analyze(images);
+		// analyzer.getChangeImages(imageChanges);
+		// analyzer.getChange
 		repaint(); // once images are loaded, they are paintd to the screen
 	}
 	public void actionPerformed(ActionEvent e)
@@ -153,6 +164,19 @@ public class GraphicsPanel extends JPanel implements ActionListener
 				loadImages(files);
 			}
 		}
+		else if (name.equals("Next"))
+		{
+			imageNum++;
+			if (imageNum >= images.length)
+				imageNum = 0;
+		}
+		else if (name.equals("Prev."))
+		{
+			imageNum--;
+			if (imageNum == -1 && images.length > 2)
+				imageNum = images.length - 2;
+			else
+				imageNum = images.length - 1;
+		}
 	}
-
 }
