@@ -74,6 +74,12 @@ public class Bounds {
 		this.l = l;
 		this.w = w;
 	}
+	public Bounds(){
+		this.x = -1;
+		this.y = -1;
+		this.l = -1;
+		this.w = -1;		
+	}
 
 	/*
 	 * Returns a visual representation of bounds of change 
