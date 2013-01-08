@@ -28,7 +28,7 @@ public class RunMe// don't actually run me, this is just a fancy wan of doing
 		jf.pack();
 		jf.setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - jf.getWidth() / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - jf.getHeight() / 2);
 
-		jf.setJMenuBar(gp.menu);
+		//jf.setJMenuBar(gp.menu);
 	}
 
 }
