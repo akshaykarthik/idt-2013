@@ -1,6 +1,8 @@
 package edu.mhs.compsys.application;
 
-import java.awt.Toolkit;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -13,65 +15,38 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 
-import edu.mhs.compsys.utils.Config;
-
-public class UI extends JFrame implements ActionListener
+public class GraphicsPanel extends JPanel implements ActionListener
 {
-	private int				resX, resY;
-	private Config			cfg;
-	private JFileChooser	jfc;
-	File[]					files;
-	ImageIcon[]				pics, changePics;
+	private static final long	serialVersionUID	= 1L;
 
-	public static void main(String[] pirates)
+	private JFileChooser		jfc;
+	private File[]				files;
+	private ImageIcon[]			pics, changePics;
+	private boolean				drawImages			= false;
+	public JMenuBar				menu				= new JMenuBar();
+
+	// public to allow the RunMe class to access it
+	public static void main(String[] args)
 	{
-		UI ui = new UI();
-		ui.init();
-	}
-
-	/**
-	 * Constructor yo, does nothing right nao
-	 */
-	public UI()
+		JFrame jf = new JFrame();
+		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		GraphicsPanel gp = new GraphicsPanel();
+		jf.add(gp);
+		jf.setVisible(true);
+		jf.pack();
+		jf.setJMenuBar(gp.menu);
+}
+	public GraphicsPanel()
 	{
-
-	}
-	/**
-	 * initializer method to start up the JFrame creates needed objects and sets
-	 * basic settings loads up a kKeyListener
-	 */
-	public void init()
-	{
-		setVisible(true);
-		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setTitle("IDT 2013 | MHS");
-
-		cfg = new Config();
 		jfc = new JFileChooser();
 		jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		jfc.setMultiSelectionEnabled(true);
-		// this just finds the URL to the class file for some reason
-		// ya know, if you need it
-		// String path = getClass().getResource("UI.class").toString();
-		// path = path.substring(6, path.length() - 8);
-		// for (int i = path.length() - 1; i > 0; i--)
-		// {
-		// if (path.charAt(i) == '/')
-		// {
-		// path = path.substring(0, i) + "\\" + path.substring(i + 1);
-		// i--;
-		// }
-		// }
-
-		setDefaults();
-		loadUI();
-		loadConfig();
-		setSize(resX, resY);
-		setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - this.getSize().width / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - this.getSize().height / 2);
-
+		this.setFocusable(true);
+		// in line KeyListener
+		// lets the user close with the Esc key
 		addKeyListener(new KeyListener()
 		{
 			public void keyPressed(KeyEvent e)
@@ -83,27 +58,28 @@ public class UI extends JFrame implements ActionListener
 				if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
 				{
 					System.exit(0);
+					System.out.println("closed");
 				}
 			}
 		});
+		loadUI();
 	}
-	private void setDefaults()
+	public Dimension getPreferredSize()
 	{
-		resX = 1000;
-		resY = 500;
+		return new Dimension(1000, 500);
 	}
-	private void loadConfig()
+	public void paintComponent(Graphics g)
 	{
+		super.paintComponent(g);
+		g.setColor(Color.black);
+		g.drawString("Esc - Close", 10, this.getHeight() - 10);
+		if (drawImages)
+		{
 
+		}
 	}
-	/**
-	 * Loads up the UI including drop down menus, buttons, and other window
-	 * properties
-	 */
 	private void loadUI()
 	{
-		JMenuBar menu = new JMenuBar();
-		setJMenuBar(menu);
 		JMenu file = new JMenu("File");// file drop down menu
 		menu.add(file);
 		{
@@ -132,17 +108,17 @@ public class UI extends JFrame implements ActionListener
 		}
 
 	}
-	/**
-	 * will return the files if they have been loaded if null if not
-	 * 
-	 * @return
-	 */
-	public File[] getFiles()
+	private void loadImages(File[] f)
 	{
-		if (files != null)
-			return files;
-		else
-			return null;
+		pics = new ImageIcon[f.length];
+
+		for (int i = 0; i < files.length; i++)
+		{
+			ImageIcon ii = new ImageIcon(files[i].getPath());
+			pics[i] = ii;
+		}
+		drawImages = true;
+		repaint(); // once images are loaded, they are paintd to the screen
 	}
 	public void actionPerformed(ActionEvent e)
 	{
@@ -178,25 +154,5 @@ public class UI extends JFrame implements ActionListener
 			}
 		}
 	}
-	private void loadImages(File[] f)
-	{
-		pics = new ImageIcon[f.length];
-		for (int i = 0; i < files.length; i++)
-		{
-			ImageIcon ii = new ImageIcon(files[i].getPath());
-			pics[i] = ii;
 
-		}
-
-	}
-	/**
-	 * Just an easy way to print stuff
-	 * 
-	 * @param o
-	 *            is the object being printed
-	 */
-	public void print(Object o)
-	{
-		System.out.println(o);
-	}
 }

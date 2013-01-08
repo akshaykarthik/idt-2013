@@ -34,24 +34,5 @@ public class HelpUI extends JFrame
 			}
 		});
 	}
-	public void paint(Graphics g)
-	{
-		g.setColor(Color.black);
-		g.drawString("Esc - Close", 10, this.getHeight() - 12);
-		try
-		{
-			int drawHeight = 100;
-			Scanner scan = new Scanner(new File("HelpText.txt"));
-			while (scan.hasNextLine())
-			{
-				String s = scan.nextLine();
-				g.drawString(s, 30, drawHeight);
-				drawHeight += 17;
-			}
-		}
-		catch (Exception e)
-		{
-			System.out.println(e);
-		}
-	}
+
 }

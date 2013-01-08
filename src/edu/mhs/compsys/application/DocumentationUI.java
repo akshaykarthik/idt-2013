@@ -36,11 +36,6 @@ public class DocumentationUI extends JFrame
 			}
 		});
 	}
-	public void paint(Graphics g)
-	{
-		g.setColor(Color.black);
-		g.drawString("Esc - Close", 10, this.getHeight() - 12);
 
-	}
 
 }
