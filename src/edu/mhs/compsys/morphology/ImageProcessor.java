@@ -19,21 +19,28 @@ public class ImageProcessor {
 	 */
 	public ArrayList<Point> findIn(BufferedImage bigImg, BufferedImage smallImg) {
 		int count = 0;
+
+		int smallImgX = smallImg.getWidth();
+		int smallImgY = smallImg.getHeight();
+		int bigImgX = bigImg.getWidth();
+		int bigImgY = bigImg.getHeight();
+
 		ArrayList<Point> locs = new ArrayList<Point>();
-		for (int y = 0; y < smallImg.getHeight(); y++) {
-			for (int x = 0; x < smallImg.getWidth(); x++) {
-				if ((bigImg.getRGB(x, y) == smallImg.getRGB(0, 0))
-						&& smallImg.getWidth() + x <= cfg.getImageWidth()
-						&& smallImg.getHeight() + y <= cfg.getImageHeight()) {
-					for (int smallY = 0; smallY < smallImg.getHeight(); smallY++) {
-						for (int smallX = 0; smallX < smallImg.getWidth(); smallX++) {
+		for (int y = 0; y < bigImgY - smallImgY; y++) {
+			for (int x = 0; x < bigImgX - smallImgX; x++) {
+				
+				if ((bigImg.getRGB(x, y) == smallImg.getRGB(0, 0))) {
+					nestedLoop: for (int smallY = 0; smallY < smallImgY; smallY++) {
+						for (int smallX = 0; smallX < smallImgX; smallX++) {
 
 							if (smallImg.getRGB(smallX, smallY) == bigImg
 									.getRGB(smallX + x, smallY + y))
 								count++;
+							else
+								break nestedLoop;
 						}
 					}
-					if (count == smallImg.getWidth() * smallImg.getHeight())
+					if (count == smallImgX * smallImgY)
 						locs.add(new Point(x, y));
 				}
 			}
