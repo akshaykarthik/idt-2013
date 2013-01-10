@@ -1,12 +1,8 @@
 package edu.mhs.compsys.application;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
-import java.util.Scanner;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -36,6 +32,5 @@ public class DocumentationUI extends JFrame
 			}
 		});
 	}
-
 
 }
