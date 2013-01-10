@@ -32,11 +32,11 @@ public class Recognizer {
 			BinaryImage diff = BinaryImageProcessor.fromDiff(data.get(i),
 					data.get(i + 1));
 			diffs.add(BinaryImageProcessor.toImage(diff));
-			StateTransition c = new StateTransition("State_" + i, "State_"
-					+ i + 1);
+			StateTransition c = new StateTransition("State_" + i, "State_" + i
+					+ 1);
 			for (IChangeProcessor proc : processors) {
 				proc.process(data.get(i), data.get(i + 1), diff, changes, data);
-				for(Change ch: proc.getChanges()){
+				for (Change ch : proc.getChanges()) {
 					c.addChange(ch);
 				}
 			}

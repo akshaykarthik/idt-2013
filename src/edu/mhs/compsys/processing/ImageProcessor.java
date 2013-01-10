@@ -1,4 +1,4 @@
-package edu.mhs.compsys.morphology;
+package edu.mhs.compsys.processing;
 
 import java.awt.Point;
 import java.awt.image.BufferedImage;

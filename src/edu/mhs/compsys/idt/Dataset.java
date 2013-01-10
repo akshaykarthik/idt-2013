@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 
 public class Dataset
 {
-	private ArrayList<BufferedImage>	_data;
+	private ArrayList<BufferedImage> _data;
 
 	/**
 	 * Constructs a dataset given a folder by adding all images in that folder.
