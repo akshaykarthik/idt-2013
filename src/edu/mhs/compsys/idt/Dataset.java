@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class Dataset
 {
-	private ArrayList<BufferedImage> _data;
+	private ArrayList<BufferedImage>	_data;
 
 	/**
 	 * Constructs a dataset given a folder by adding all images in that folder.
@@ -88,20 +89,25 @@ public class Dataset
 		for (String file : bufferedImages)
 			this._data.add(ImageIO.read(new File(file)));
 	}
-	
+	public Dataset(BufferedImage[] buffed)
+	{
+		_data = new ArrayList<BufferedImage>(Arrays.asList(buffed));
+	}
 	/**
-	 * Construct a Dataset using the given images.
-	 * Loaded directly from file object.
+	 * Construct a Dataset using the given images. Loaded directly from file
+	 * object.
 	 * 
 	 * @param file
 	 * @throws IOException
 	 */
 	public Dataset(File[] file) throws IOException
 	{
-		for(File fileName : file)
-			this._data.add(ImageIO.read(fileName));
+		for (File fileName : file)
+		{
+			this._data.add(ImageIO.read(new File(fileName.getPath())));
+		}
 	}
-	
+
 	/**
 	 * @return Returns the size of the dataset, returns -1 if dataset is not
 	 *         initialized

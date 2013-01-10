@@ -14,45 +14,57 @@ import edu.mhs.compsys.reporting.Report;
  * processing step. It also creates a final report in the string format;
  * 
  */
-public class Recognizer {
+public class Recognizer
+{
 
-	private Dataset data;
-	private Report report;
-	private ArrayList<StateTransition> changes;
-	private ArrayList<BufferedImage> diffs;
-	private ArrayList<IChangeProcessor> processors;
+	private Dataset						data;
+	private Report						report;
+	private ArrayList<StateTransition>	changes;
+	private ArrayList<BufferedImage>	diffs;
+	private ArrayList<IChangeProcessor>	processors;
 
-	public Recognizer(Dataset data) {
+	public Recognizer(Dataset data)
+	{
 		this.data = data;
 		this.report = new Report();
 	}
 
-	public void process() {
-		for (int i = 0; i < data.length() - 1; i++) {
+	public void process()
+	{
+		diffs = new ArrayList<BufferedImage>();
+		processors = new ArrayList<IChangeProcessor>();
+		changes = new ArrayList<StateTransition>();
+
+		for (int i = 0; i < data.length() - 1; i++)
+		{
 			BinaryImage diff = BinaryImageProcessor.fromDiff(data.get(i),
 					data.get(i + 1));
 			diffs.add(BinaryImageProcessor.toImage(diff));
 			StateTransition c = new StateTransition("State_" + i, "State_" + i
 					+ 1);
-			for (IChangeProcessor proc : processors) {
+			for (IChangeProcessor proc : processors)
+			{
 				proc.process(data.get(i), data.get(i + 1), diff, changes, data);
-				for (Change ch : proc.getChanges()) {
+				for (Change ch : proc.getChanges())
+				{
 					c.addChange(ch);
 				}
 			}
 			changes.add(c);
 		}
 	}
-
-	public Report getReport() {
+	public Report getReport()
+	{
 		return report;
 	}
 
-	public ArrayList<StateTransition> getChanges() {
+	public ArrayList<StateTransition> getChanges()
+	{
 		return changes;
 	}
 
-	public ArrayList<BufferedImage> getDiff() {
+	public ArrayList<BufferedImage> getDiff()
+	{
 		return diffs;
 	}
 }

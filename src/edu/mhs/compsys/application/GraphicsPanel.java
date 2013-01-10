@@ -12,7 +12,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -22,6 +24,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+
+import edu.mhs.compsys.idt.Dataset;
+import edu.mhs.compsys.processing.Recognizer;
 
 public class GraphicsPanel extends JPanel implements ActionListener
 {
@@ -42,8 +47,11 @@ public class GraphicsPanel extends JPanel implements ActionListener
 	private boolean				drawImages				= false, notAllImages;
 	private int					imageNum				= -1;
 	private int					resX					= 1000, resY = 500;
+	private Dataset				dataset;
+	private Recognizer			rec;
 
 	public static void main(String[] args)
+
 	{
 		JFrame jf = new JFrame("IDT 2013 | MHS");
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -84,6 +92,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 					next();
 			}
 		});
+
 		loadUI();
 
 	}
@@ -113,10 +122,19 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			int imgYSize = (int) ((1024.0 / 1280.0) * imgWidth);
 			if (images != null && images.length > 1 && images.length - 1 > imageNum)
 			{
+				// Image 1 --- quadrant: 2
 				g.drawString(files[imageNum].getName() + "        " + (imageNum + 1) + " of " + images.length, 10, 50);
 				g.drawImage(images[imageNum].getImage(), 10, 55, imgXSize, imgYSize, null);
+
+				// Image 2 --- quadrant: 1
 				g.drawString(files[imageNum + 1].getName() + "        " + (imageNum + 2) + " of " + images.length, 10 + (imgWidth + 10), 50);
 				g.drawImage(images[imageNum + 1].getImage(), 10 + (imgWidth + 10), 55, imgXSize, imgYSize, null);
+
+				// Change image --- quadrant: 3
+				g.drawImage(imageChanges[imageNum].getImage(), 10, 55 + imgYSize + 10, null);
+
+				// Change Strings --- quadrant: 4
+
 			}
 		}
 
@@ -217,7 +235,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			}
 			else if (1280 != new ImageIcon(files[i].toString()).getImage().getWidth(null)
 					|| 1024 != new ImageIcon(files[i].toString()).getImage().getHeight(null))
-			{// XXX I dont work yet
+			{
 				errorCode = ERROR_WRONG_IMAGE_SIZE;
 				haveImages = false;
 			}
@@ -261,6 +279,26 @@ public class GraphicsPanel extends JPanel implements ActionListener
 		// analyzer.getChangeImages(imageChanges);
 		// analyzer.getChange
 		// once images are loaded, they are painted to the screen
+
+		if (haveImages && drawImages)
+		{
+			BufferedImage[] buff = new BufferedImage[images.length];
+			for (int i = 0; i < images.length; i++)
+			{
+				ImageIcon icon = images[i];
+				buff[i] = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+				Graphics g = buff[i].createGraphics();
+				icon.paintIcon(null, g, 0, 0);
+				g.dispose();
+			}
+
+			dataset = new Dataset(buff);
+			rec = new Recognizer(dataset);
+			rec.process();
+			ArrayList<BufferedImage> _d = rec.getDiff();
+			imageChanges = new ImageIcon[images.length - 1];
+			imageChanges = 
+		}
 		repaint();
 	}
 	private void next()
