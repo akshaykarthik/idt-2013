@@ -2,6 +2,7 @@ package edu.mhs.compsys.application;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -24,17 +25,23 @@ import javax.swing.JPanel;
 
 public class GraphicsPanel extends JPanel implements ActionListener
 {
-	private static final long	serialVersionUID	= 1L;
+	private static final long	serialVersionUID		= 1L;
+
+	private final int			ERROR_NOT_AN_IMAGE		= 1;
+	private final int			ERROR_WRONG_IMAGE_SIZE	= 2;
+	private final int			ERROR_TOO_FEW_IMAGES	= 3;
+	private int					errorCode				= 0;
 
 	private JFileChooser		jfc;
-	JFrame						jframe;
-	private JMenuBar			menu				= new JMenuBar();
-	private JButton				next, prev;
+	private JFrame				jframe;
+	private JMenuBar			menu					= new JMenuBar();
+	private JButton				next, prev, helpButton;
+
 	private File[]				files;
 	private ImageIcon[]			images, imageChanges;
-	private boolean				drawImages			= false, notAllImages;
-	private int					imageNum			= -1;
-	private int					resX				= 1000, resY = 500;
+	private boolean				drawImages				= false, notAllImages;
+	private int					imageNum				= -1;
+	private int					resX					= 1000, resY = 500;
 
 	public static void main(String[] args)
 	{
@@ -70,9 +77,11 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			public void keyReleased(KeyEvent e)
 			{
 				if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-				{
 					System.exit(0);
-				}
+				else if (e.getKeyCode() == KeyEvent.VK_LEFT)
+					prev();
+				else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+					next();
 			}
 		});
 		loadUI();
@@ -93,33 +102,56 @@ public class GraphicsPanel extends JPanel implements ActionListener
 		g.setFont(new Font("Calibri", 0, 20));
 		g.setColor(Color.black);
 		g.drawString("Esc - Close", 10, this.getHeight() - 10);
+
 		if (drawImages)
 		{
-
+			helpButton.setVisible(false);
 			resX = jframe.getWidth();
 			int imgWidth = (resX - 40) / 2;
 
 			int imgXSize = (int) (imgWidth);
 			int imgYSize = (int) ((1024.0 / 1280.0) * imgWidth);
-			if (images != null && images.length > 2 && images.length - 1 > imageNum)
+			if (images != null && images.length > 1 && images.length - 1 > imageNum)
 			{
-				g.drawImage(images[imageNum].getImage(), 10, 10, imgXSize, imgYSize, null);
-				g.drawImage(images[imageNum + 1].getImage(), 10 + (imgWidth + 10), 10, imgXSize, imgYSize, null);
+				g.drawString(files[imageNum].getName() + "        " + (imageNum + 1) + " of " + images.length, 10, 50);
+				g.drawImage(images[imageNum].getImage(), 10, 55, imgXSize, imgYSize, null);
+				g.drawString(files[imageNum + 1].getName() + "        " + (imageNum + 2) + " of " + images.length, 10 + (imgWidth + 10), 50);
+				g.drawImage(images[imageNum + 1].getImage(), 10 + (imgWidth + 10), 55, imgXSize, imgYSize, null);
 			}
 		}
+
 		else
 		{
 			if (!notAllImages)
 				g.drawString("You have not loaded the images yet.", 250, 200);
-			else
+			else if (errorCode == this.ERROR_NOT_AN_IMAGE)
 			{
 				g.setColor(Color.red);
 				g.drawString("Something loaded was not an image. Please try again.", 250, 200);
 				g.setColor(Color.black);
+				addHelpButton();
+			}
+			else if (errorCode == this.ERROR_WRONG_IMAGE_SIZE)
+			{
+				g.setColor(Color.red);
+				g.drawString("One of the images loaded was not the correct size. Please try again.", 250, 200);
+				g.setColor(Color.black);
+				addHelpButton();
+			}
+			else if (errorCode == this.ERROR_TOO_FEW_IMAGES)
+			{
+				g.setColor(Color.red);
+				g.drawString("More images are needed. Please load all of the images to be tested.", 250, 200);
+				g.setColor(Color.black);
+				addHelpButton();
 			}
 			g.drawString("Click \"File > Open Images\" to load the images into the applicaiton.", 250, 220);
 			g.drawString("For more help click \"Help > Help Information\" to open a help window.", 250, 240);
 		}
+	}
+	private void addHelpButton()
+	{
+		helpButton.setVisible(true);
 	}
 	/**
 	 * Loads up the menu strip buttons and assigns action listeners to the
@@ -127,6 +159,11 @@ public class GraphicsPanel extends JPanel implements ActionListener
 	 */
 	private void loadUI()
 	{
+		helpButton = new JButton("Help");
+		helpButton.addActionListener(this);
+		helpButton.setVisible(false);
+		this.setLayout(new FlowLayout(1));
+		add(helpButton);
 		JMenu file = new JMenu("File");// file drop down menu
 		menu.add(file);
 		{
@@ -134,24 +171,24 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			open.addActionListener(this);
 			file.add(open);
 		}
-		JMenu help = new JMenu("Help"); // help menu
-		menu.add(help);
+		JMenu helpMenu = new JMenu("Help"); // help menu
+		menu.add(helpMenu);
 		{
 			JMenuItem helpinfo = new JMenuItem("Help Information");
 			helpinfo.addActionListener(this);
-			help.add(helpinfo);
+			helpMenu.add(helpinfo);
 
 			JMenuItem about = new JMenuItem("About");
 			about.addActionListener(this);
-			help.add(about);
+			helpMenu.add(about);
 
 			JMenuItem testing = new JMenuItem("Testing");
 			testing.addActionListener(this);
-			help.add(testing);
+			helpMenu.add(testing);
 
 			JMenuItem doc = new JMenuItem("Documentation");
 			doc.addActionListener(this);
-			help.add(doc);
+			helpMenu.add(doc);
 		}
 	}
 	/**
@@ -166,6 +203,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 	 */
 	private void loadImages(File[] f)
 	{
+
 		images = new ImageIcon[f.length];
 		boolean haveImages = true;
 		for (int i = 0; i < files.length; i++)
@@ -173,44 +211,83 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			ImageIcon ii = new ImageIcon(files[i].getPath());
 			images[i] = ii;
 			if (!files[i].getName().toUpperCase().endsWith(".PNG"))
+			{
+				errorCode = ERROR_NOT_AN_IMAGE;
 				haveImages = false;
+			}
+			else if (1280 != new ImageIcon(files[i].toString()).getImage().getWidth(null)
+					|| 1024 != new ImageIcon(files[i].toString()).getImage().getHeight(null))
+			{// XXX I dont work yet
+				errorCode = ERROR_WRONG_IMAGE_SIZE;
+				haveImages = false;
+			}
+
 		}
-		if (haveImages)
-			drawImages = true;
+
+		if (files.length < 2 && haveImages)
+		{
+			errorCode = ERROR_TOO_FEW_IMAGES;
+			drawImages = false;
+			haveImages = false;
+
+		}
 		if (files.length > 0 && !haveImages)
 		{
 			files = null;
 			notAllImages = true;
 			drawImages = false;
 		}
-		if (drawImages)
+
+		if (haveImages && !drawImages)
 		{
 			imageNum = 0;
 			notAllImages = false;
 			next = new JButton("Next");
-			prev = new JButton("Prev");
+			next.addActionListener(this);
+			prev = new JButton("Prev.");
+			prev.addActionListener(this);
 			add(prev);
 			add(next);
 			resX = 1000;
 			resY = 850;
-			jframe.setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - jframe.getWidth() / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - jframe.getHeight() / 2);
 			setSize(resX, resY);
 			jframe.setSize(resX, resY);
-
-			repaint();
+			jframe.setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - jframe.getWidth() / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - jframe.getHeight() / 2);
 		}
+		if (haveImages)
+			drawImages = true;
 		// TODO: this is where the processing will be
 		// analyzer.analyze(images);
 		// analyzer.getChangeImages(imageChanges);
 		// analyzer.getChange
-		repaint(); // once images are loaded, they are painted to the screen
+		// once images are loaded, they are painted to the screen
+		repaint();
 	}
-
+	private void next()
+	{
+		if (drawImages)
+		{
+			imageNum++;
+			if (imageNum == images.length - 1)
+				imageNum = 0;
+			repaint();
+		}
+	}
+	private void prev()
+	{
+		if (drawImages)
+		{
+			imageNum--;
+			if (imageNum == -1)
+				imageNum = images.length - 2;
+			repaint();
+		}
+	}
 	public void actionPerformed(ActionEvent e)
 	{
 		String name = e.getActionCommand();
 
-		if (name.equals("Help Information"))
+		if (name.equals("Help Information") || name.equals("Help"))
 		{
 			HelpUI hui = new HelpUI();
 			hui.setVisible(true);
@@ -235,23 +312,18 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			int rv = jfc.showOpenDialog(this);
 			if (rv == JFileChooser.APPROVE_OPTION)
 			{
+				repaint();
 				files = jfc.getSelectedFiles();
 				loadImages(files);
 			}
 		}
 		else if (name.equals("Next"))
 		{
-			imageNum++;
-			if (imageNum >= images.length)
-				imageNum = 0;
+			next();
 		}
 		else if (name.equals("Prev."))
 		{
-			imageNum--;
-			if (imageNum == -1 && images.length > 2)
-				imageNum = images.length - 2;
-			else
-				imageNum = images.length - 1;
+			prev();
 		}
 	}
 }
