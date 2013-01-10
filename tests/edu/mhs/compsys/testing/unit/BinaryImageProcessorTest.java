@@ -6,8 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.mhs.compsys.morphology.BinaryImage;
-import edu.mhs.compsys.morphology.BinaryImageProcessor;
+import edu.mhs.compsys.processing.BinaryImage;
+import edu.mhs.compsys.processing.BinaryImageProcessor;
 
 public class BinaryImageProcessorTest {
 

@@ -95,10 +95,18 @@ public enum ClassificationType {
 		this.type = type;
 	}
 
+	/**
+	 * Returns visual change for classification
+	 * @return
+	 */
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 * Returns css class for classification
+	 * @return
+	 */
 	public String getType() {
 		return type;
 	}

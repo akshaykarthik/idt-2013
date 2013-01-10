@@ -1,4 +1,4 @@
-package edu.mhs.compsys.morphology;
+package edu.mhs.compsys.processing;
 
 import java.awt.image.BufferedImage;
 
@@ -7,6 +7,11 @@ import java.awt.image.BufferedImage;
  * 
  */
 public class BinaryImageProcessor {
+
+	public static final int WHITE = 0xffffff;
+	public static final int BLACK = 0x000000;
+	public static final int AWHITE = 0xffffffff;
+	public static final int ABLACK = 0xff000000;
 
 	/**
 	 * From Wikipedia: Dilation is one of the basic operations in mathematical
@@ -37,41 +42,24 @@ public class BinaryImageProcessor {
 	public static BinaryImage dilate(BinaryImage input, boolean box) {
 		int width = input.getWidth();
 		int height = input.getHeight();
-		BinaryImage ret = new BinaryImage(width, height);
+		BinaryImage ret = new BinaryImage(height, width);
 
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
-				try {
-					if (input.get(i, j)) {
-						if (input.inBounds(i + 1, j))
-							ret.set(i + 1, j, true);
+				if (input.safeGet(i, j)) {
+					if (input.safeGet(i + 1, j) && input.safeGet(i - 1, j)
+							&& input.safeGet(i, j + 1)
+							&& input.safeGet(i, j - 1))
+						if (box && input.safeGet(i + 1, j + 1)
+								&& input.safeGet(i + 1, j - 1)
+								&& input.safeGet(i - 1, j + 1)
+								&& input.safeGet(i - 1, j - 1))
+							ret.set(i, j, true);
+						else
+							ret.set(i, j, true);
 
-						if (input.inBounds(i - 1, j))
-							ret.set(i - 1, j, true);
-
-						if (input.inBounds(i, j + 1))
-							ret.set(i, j + 1, true);
-
-						if (input.inBounds(i, j - 1))
-							ret.set(i, j - 1, true);
-						if (box) {
-							if (input.inBounds(i + 1, j + 1))
-								ret.set(i + 1, j + 1, true);
-
-							if (input.inBounds(i - 1, j + 1))
-								ret.set(i - 1, j + 1, true);
-
-							if (input.inBounds(i - 1, j + 1))
-								ret.set(i - 1, j + 1, true);
-
-							if (input.inBounds(i - 1, j - 1))
-								ret.set(i - 1, j - 1, true);
-						}
-						ret.set(i, j, true);
-					}
-				} catch (ArrayIndexOutOfBoundsException ex) {
-					continue;
 				}
+
 			}
 		}
 		return ret;
@@ -108,20 +96,21 @@ public class BinaryImageProcessor {
 		int height = input.getHeight();
 		BinaryImage ret = new BinaryImage(height, width);
 
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
 				try {
 					if (input.get(i, j)) {
-						if (input.get(i + 1, j) && input.get(i - 1, j)
-								&& input.get(i, j + 1) && input.get(i, j - 1))
-							if (box && input.get(i + 1, j + 1)
-									&& input.get(i + 1, j - 1)
-									&& input.get(i - 1, j + 1)
-									&& input.get(i - 1, j - 1))
-								ret.set(i, j, true);
-							else
-								ret.set(i, j, true);
-
+						ret.safeSet(i + 1, j, true);
+						ret.safeSet(i - 1, j, true);
+						ret.safeSet(i, j + 1, true);
+						ret.safeSet(i, j - 1, true);
+						if (box) {
+							ret.safeSet(i + 1, j + 1, true);
+							ret.safeSet(i - 1, j + 1, true);
+							ret.safeSet(i - 1, j + 1, true);
+							ret.safeSet(i - 1, j - 1, true);
+						}
+						ret.set(i, j, true);
 					}
 				} catch (ArrayIndexOutOfBoundsException ex) {
 					continue;
@@ -129,6 +118,56 @@ public class BinaryImageProcessor {
 			}
 		}
 		return ret;
+	}
+
+	/**
+	 * Does <code>iterations</code> of repeated erosions, uses <code>'t'</code>
+	 * as structure.
+	 * 
+	 * @param input
+	 * @param iterations
+	 * @return
+	 */
+	public static BinaryImage repeatedErode(BinaryImage input, int iterations) {
+		return repeatedErode(input, false, iterations);
+	}
+
+
+	/**
+	 * Does <code>iterations</code> of repeated erosions, uses <code>box</code>
+	 * as structure.
+	 * 
+	 * @param input
+	 * @param iterations
+	 * @return
+	 */
+	public static BinaryImage repeatedErode(BinaryImage input, boolean box,
+			int iterations) {
+		if (iterations == 1)
+			return erode(input, box);
+		else
+			return erode(repeatedErode(input, box, iterations - 1), box);
+	}
+
+
+	/**
+	 * Does <code>iterations</code> of repeated dilations, uses <code>'t'</code>
+	 * as structure.
+	 * 
+	 * @param input
+	 * @param iterations
+	 * @return
+	 */
+	public static BinaryImage repeatedDilate(BinaryImage input, int iterations) {
+		return repeatedDilate(input, false, iterations);
+	}
+
+	public static BinaryImage repeatedDilate(BinaryImage input, boolean box,
+			int iterations) {
+		if (iterations == 1)
+			return dilate(input, box);
+		else
+			return dilate(repeatedErode(input, box, iterations - 1), box);
 	}
 
 	/**
@@ -144,15 +183,15 @@ public class BinaryImageProcessor {
 	}
 
 	/**
-	 * A morphological operation that involves first dilating the input then
-	 * eroding it. It results in a BinaryImage that has had small 'blemishes'
+	 * A morphological operation that involves first eroding then dilating the
+	 * input. It results in a BinaryImage that has had small 'blemishes'
 	 * removed.
 	 * 
 	 * @param input
 	 * @return
 	 */
 	public static BinaryImage open(BinaryImage input, boolean box) {
-		return input.or(erode(dilate(input, box), box));
+		return input.or(dilate(erode(input, box), box));
 	}
 
 	/**
@@ -167,14 +206,14 @@ public class BinaryImageProcessor {
 	}
 
 	/**
-	 * A morphological operation that involves first eroding then dilating the
-	 * input. This results in an images that has its 'holes' filled up.
+	 * A morphological operation that involves first dilating the input then
+	 * eroding it. This results in an images that has its 'holes' filled up.
 	 * 
 	 * @param input
 	 * @return
 	 */
 	public static BinaryImage close(BinaryImage input, boolean box) {
-		return input.or(dilate(erode(input, box), box));
+		return input.or(erode(dilate(input, box), box));
 	}
 
 	/**
@@ -210,12 +249,10 @@ public class BinaryImageProcessor {
 	public static BufferedImage toImage(BinaryImage input) {
 		BufferedImage ret = new BufferedImage(input.getWidth(),
 				input.getHeight(), BufferedImage.TYPE_INT_RGB);
-		int white = 0xffffff;
-		int black = 0x000000;
 
 		for (int i = 0; i < input.getWidth(); i++) {
 			for (int j = 0; j < input.getHeight(); j++) {
-				ret.setRGB(i, j, input.get(j, i) ? black : white);
+				ret.setRGB(i, j, input.get(j, i) ? WHITE : BLACK);
 			}
 		}
 		return ret;

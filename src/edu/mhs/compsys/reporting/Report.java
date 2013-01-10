@@ -5,35 +5,28 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import edu.mhs.compsys.idt.Change;
+import edu.mhs.compsys.idt.StateTransition;
 
 public class Report {
 
-	private ArrayList<Integer> state1;
-	private ArrayList<Integer> state2;
-	private ArrayList<Change> changes;
+	private ArrayList<StateTransition> changes;
 
 	public Report() {
-		state1 = new ArrayList<>();
-		state2 = new ArrayList<>();
 		changes = new ArrayList<>();
 
 	}
 
-	public void addChange(int s1, int s2, Change ch) {
-		state1.add(s1);
-		state2.add(s2);
-		changes.add(ch);
+	public void addTransition(StateTransition input) {
+		changes.add(input);
 	}
 
 	/**
-	 * @return A raw text report of the state changes in the format:
-	 *         <code>[s1 s2][type=[class]:description @ bounds=[x=x, y=y, l=l, w=w]]</code>
+	 * @return A raw text report of the state changes in the standard format
 	 */
 	public String reportRaw() {
 		String ret = "";
-		for (int i = 0; i < state1.size(); i++) {
-			ret += String.format("[%s %s] %s \n", state1.get(i), state2.get(i),
-					changes.get(i));
+		for (StateTransition s : changes) {
+			ret += s.toString() + "\n";
 		}
 		return ret;
 	}
@@ -166,11 +159,14 @@ public class Report {
 
 		String ret = "";
 
-		for (int i = 0; i < state1.size(); i++) {
-			ret += String.format(
-					"<div class=\"sc-name fixed %s\" %s->%s : %s </div>\n",
-					changes.get(i).getType().getType(), state1.get(i),
-					state2.get(i), changes.get(i));
+		for (StateTransition c : changes) {
+			for (Change s : c.getChanges()) {
+				ret += String.format(
+						"<div class=\"sc-name fixed %s\" %s->%s : %s </div>\n",
+						s.getType().getType(), c.getState1(), c.getState2(), s
+								.getType().getDescription());
+			}
+
 		}
 
 		String template_end = "       <div class=\"footer fixed\">\r\n"
