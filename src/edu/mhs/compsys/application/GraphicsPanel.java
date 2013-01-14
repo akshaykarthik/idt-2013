@@ -107,6 +107,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
+		System.out.println("Memory Usage: " + (double) ((int) ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 100000)) / 10 + " MB");
 		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setFont(new Font("Calibri", 0, 20));
 		g.setColor(Color.black);
@@ -124,16 +125,26 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			{
 				// Image 1 --- quadrant: 2
 				g.drawString(files[imageNum].getName() + "        " + (imageNum + 1) + " of " + images.length, 10, 50);
-				g.drawImage(images[imageNum].getImage(), 10, 55, imgXSize, imgYSize, null);
+				g.drawImage(new ImageIcon(files[imageNum].getPath()).getImage(), 10, 55, imgXSize, imgYSize, null);
 
 				// Image 2 --- quadrant: 1
 				g.drawString(files[imageNum + 1].getName() + "        " + (imageNum + 2) + " of " + images.length, 10 + (imgWidth + 10), 50);
-				g.drawImage(images[imageNum + 1].getImage(), 10 + (imgWidth + 10), 55, imgXSize, imgYSize, null);
+				g.drawImage(new ImageIcon(files[imageNum + 1].getPath()).getImage(), 10 + (imgWidth + 10), 55, imgXSize, imgYSize, null);
 
 				// Change image --- quadrant: 3
-				g.drawImage(imageChanges[imageNum].getImage(), 10, 55 + imgYSize + 10, null);
+				g.drawImage(new ImageIcon(files[imageNum].getPath()).getImage(), 10, 55 + 10 + imgYSize, imgXSize, imgYSize, null);
+				// imgYSize + 10, null);
 
 				// Change Strings --- quadrant: 4
+				ArrayList<String> changeStrings = new ArrayList<String>();
+				changeStrings.add("Window was moved");
+				changeStrings.add("Text was edited.");
+				changeStrings.add("Something else happened");
+				changeStrings.add("Peter is cool");
+				for (int i = 0; i < changeStrings.size(); i++)
+				{
+					g.drawString(changeStrings.get(i), 20 + imgWidth, 89 + imgYSize + (i * 21));
+				}
 
 			}
 		}
@@ -226,8 +237,8 @@ public class GraphicsPanel extends JPanel implements ActionListener
 		boolean haveImages = true;
 		for (int i = 0; i < files.length; i++)
 		{
-			ImageIcon ii = new ImageIcon(files[i].getPath());
-			images[i] = ii;
+			// ImageIcon ii = new ImageIcon(files[i].getPath());
+			// images[i] = ii;
 			if (!files[i].getName().toUpperCase().endsWith(".PNG"))
 			{
 				errorCode = ERROR_NOT_AN_IMAGE;
@@ -266,38 +277,25 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			prev.addActionListener(this);
 			add(prev);
 			add(next);
-			resX = 1000;
-			resY = 850;
+			resX = 850;
+			resY = 800;
 			setSize(resX, resY);
 			jframe.setSize(resX, resY);
 			jframe.setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - jframe.getWidth() / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - jframe.getHeight() / 2);
 		}
 		if (haveImages)
 			drawImages = true;
-		// TODO: this is where the processing will be
-		// analyzer.analyze(images);
-		// analyzer.getChangeImages(imageChanges);
-		// analyzer.getChange
-		// once images are loaded, they are painted to the screen
 
 		if (haveImages && drawImages)
 		{
-			BufferedImage[] buff = new BufferedImage[images.length];
-			for (int i = 0; i < images.length; i++)
-			{
-				ImageIcon icon = images[i];
-				buff[i] = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_RGB);
-				Graphics g = buff[i].createGraphics();
-				icon.paintIcon(null, g, 0, 0);
-				g.dispose();
-			}
+			// TODO: this is where the processing will be
+			// analyzer.analyze(images);
+			// analyzer.getChangeImages(imageChanges);
+			// analyzer.getChange
+			// once images are loaded, they are painted to the screen
 
-			dataset = new Dataset(buff);
-			rec = new Recognizer(dataset);
-			rec.process();
-			ArrayList<BufferedImage> _d = rec.getDiff();
 			imageChanges = new ImageIcon[images.length - 1];
-			imageChanges = 
+
 		}
 		repaint();
 	}
