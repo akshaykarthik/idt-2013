@@ -1,6 +1,7 @@
 package edu.mhs.compsys.processing;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 
 import edu.mhs.compsys.idt.Change;
@@ -23,9 +24,9 @@ public class Recognizer
 	private ArrayList<BufferedImage>	diffs;
 	private ArrayList<IChangeProcessor>	processors;
 
-	public Recognizer(Dataset data)
+	public Recognizer(File[] files)
 	{
-		this.data = data;
+		data = new Dataset(files);
 		this.report = new Report();
 	}
 
@@ -57,7 +58,11 @@ public class Recognizer
 	{
 		return report;
 	}
-
+	public BufferedImage getChange(int index)
+	{
+		return BinaryImageProcessor.toImage(BinaryImageProcessor.fromDiff(data.get(index),
+				data.get(index + 1)));
+	}
 	public ArrayList<StateTransition> getChanges()
 	{
 		return changes;
