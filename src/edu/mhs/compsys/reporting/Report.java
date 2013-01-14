@@ -12,7 +12,7 @@ public class Report {
 	private ArrayList<StateTransition> changes;
 
 	public Report() {
-		changes = new ArrayList<>();
+		changes = new ArrayList<StateTransition>();
 
 	}
 

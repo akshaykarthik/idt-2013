@@ -43,11 +43,10 @@ public class GraphicsPanel extends JPanel implements ActionListener
 	private JButton				next, prev, helpButton;
 
 	private File[]				files;
-	private ImageIcon[]			images, imageChanges;
+	private ImageIcon[]			images;
 	private boolean				drawImages				= false, notAllImages;
 	private int					imageNum				= -1;
 	private int					resX					= 1000, resY = 500;
-	private Dataset				dataset;
 	private Recognizer			rec;
 
 	public static void main(String[] args)
@@ -118,7 +117,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			helpButton.setVisible(false);
 			resX = jframe.getWidth();
 			int imgWidth = (resX - 40) / 2;
-
+ 
 			int imgXSize = (int) (imgWidth);
 			int imgYSize = (int) ((1024.0 / 1280.0) * imgWidth);
 			if (images != null && images.length > 1 && images.length - 1 > imageNum)
@@ -132,7 +131,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 				g.drawImage(new ImageIcon(files[imageNum + 1].getPath()).getImage(), 10 + (imgWidth + 10), 55, imgXSize, imgYSize, null);
 
 				// Change image --- quadrant: 3
-				g.drawImage(new ImageIcon(files[imageNum].getPath()).getImage(), 10, 55 + 10 + imgYSize, imgXSize, imgYSize, null);
+				g.drawImage(rec.getChange(imageNum), 10, 55 + 10 + imgYSize, imgXSize, imgYSize, null);
 				// imgYSize + 10, null);
 
 				// Change Strings --- quadrant: 4
@@ -281,21 +280,15 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			resY = 800;
 			setSize(resX, resY);
 			jframe.setSize(resX, resY);
-			jframe.setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - jframe.getWidth() / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - jframe.getHeight() / 2);
+			jframe.setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - jframe.getWidth() / 2,
+					Toolkit.getDefaultToolkit().getScreenSize().height / 2 - jframe.getHeight() / 2);
 		}
 		if (haveImages)
 			drawImages = true;
 
 		if (haveImages && drawImages)
 		{
-			// TODO: this is where the processing will be
-			// analyzer.analyze(images);
-			// analyzer.getChangeImages(imageChanges);
-			// analyzer.getChange
-			// once images are loaded, they are painted to the screen
-
-			imageChanges = new ImageIcon[images.length - 1];
-
+			rec = new Recognizer(files);
 		}
 		repaint();
 	}
