@@ -252,7 +252,6 @@ public class GraphicsPanel extends JPanel implements ActionListener
 				errorCode = ERROR_WRONG_IMAGE_SIZE;
 				haveImages = false;
 			}
-
 		}
 
 		if (files.length < 2 && haveImages)
@@ -260,7 +259,6 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			errorCode = ERROR_TOO_FEW_IMAGES;
 			drawImages = false;
 			haveImages = false;
-
 		}
 		if (files.length > 0 && !haveImages)
 		{
@@ -268,7 +266,6 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			notAllImages = true;
 			drawImages = false;
 		}
-
 		if (haveImages && !drawImages)
 		{
 			imageNum = 0;
@@ -290,11 +287,8 @@ public class GraphicsPanel extends JPanel implements ActionListener
 		}
 		if (haveImages)
 			drawImages = true;
-
 		if (haveImages && drawImages)
-		{
 			rec = new Recognizer(files, config);
-		}
 		repaint();
 	}
 	private void next()
