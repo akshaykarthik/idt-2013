@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -25,8 +24,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-import edu.mhs.compsys.idt.Dataset;
 import edu.mhs.compsys.processing.Recognizer;
+import edu.mhs.compsys.utils.Config;
 
 public class GraphicsPanel extends JPanel implements ActionListener
 {
@@ -48,6 +47,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 	private int					imageNum				= -1;
 	private int					resX					= 1000, resY = 500;
 	private Recognizer			rec;
+	private Config				config;
 
 	public static void main(String[] args)
 
@@ -92,6 +92,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			}
 		});
 
+		config = new Config();
 		loadUI();
 
 	}
@@ -117,7 +118,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			helpButton.setVisible(false);
 			resX = jframe.getWidth();
 			int imgWidth = (resX - 40) / 2;
- 
+
 			int imgXSize = (int) (imgWidth);
 			int imgYSize = (int) ((1024.0 / 1280.0) * imgWidth);
 			if (images != null && images.length > 1 && images.length - 1 > imageNum)
@@ -288,7 +289,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 
 		if (haveImages && drawImages)
 		{
-			rec = new Recognizer(files);
+			rec = new Recognizer(files, config);
 		}
 		repaint();
 	}
