@@ -318,6 +318,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 		if (name.equals("Help Information") || name.equals("Help"))
 		{
 			HelpUI hui = new HelpUI();
+			hui.setFocusable(false);
 			hui.setVisible(true);
 		}
 		else if (name.equals("About"))
