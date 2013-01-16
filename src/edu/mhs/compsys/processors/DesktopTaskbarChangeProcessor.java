@@ -11,6 +11,7 @@ import edu.mhs.compsys.idt.Dataset;
 import edu.mhs.compsys.idt.StateTransition;
 import edu.mhs.compsys.processing.BinaryImage;
 import edu.mhs.compsys.processing.IChangeProcessor;
+import edu.mhs.compsys.utils.Config;
 
 /**
  * This Processor will recognize changes in the desktop and taskbar and quantify
@@ -19,6 +20,17 @@ import edu.mhs.compsys.processing.IChangeProcessor;
 public class DesktopTaskbarChangeProcessor implements IChangeProcessor {
 
 	private ArrayList<Change> _changes;
+	private Config cfg;
+
+	/**
+	 * Initialize the processor with the given config file.
+	 * 
+	 * @see edu.mhs.compsys.processing.IChangeProcessor#initialize(edu.mhs.compsys.utils.Config)
+	 */
+	@Override
+	public void initialize(Config cfg) {
+		this.cfg = cfg;
+	}
 
 	/**
 	 * @see edu.mhs.compsys.processing.IChangeProcessor#process(java.awt.image.
@@ -41,4 +53,5 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor {
 		// TODO Auto-generated method stub
 		return (Change[]) _changes.toArray();
 	}
+
 }

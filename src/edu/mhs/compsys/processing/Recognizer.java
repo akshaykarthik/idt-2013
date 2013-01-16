@@ -13,6 +13,7 @@ import edu.mhs.compsys.processors.WindowChangeProcessor;
 import edu.mhs.compsys.processors.WindowMenuProcessor;
 import edu.mhs.compsys.processors.WindowStateProcessor;
 import edu.mhs.compsys.reporting.Report;
+import edu.mhs.compsys.utils.Config;
 
 /**
  * The class that does all of the work. This class encapsulates all change
@@ -27,16 +28,18 @@ public class Recognizer {
 	private ArrayList<StateTransition> changes;
 	private ArrayList<BufferedImage> diffs;
 	private ArrayList<IChangeProcessor> processors;
+	private Config config;
 
 	/**
 	 * Creates a new Recognizer with the given files.
 	 * 
 	 * @param files
 	 */
-	public Recognizer(File[] files) {
+	public Recognizer(File[] files, Config cfg) {
 		try {
 			data = new Dataset(files);
 			report = new Report();
+			config = cfg;
 
 			processors = new ArrayList<IChangeProcessor>();
 			processors.add(new DesktopTaskbarChangeProcessor());
@@ -65,6 +68,7 @@ public class Recognizer {
 			StateTransition c = new StateTransition("State_" + i, "State_" + i
 					+ 1);
 			for (IChangeProcessor proc : processors) {
+				proc.initialize(config);
 				proc.process(data.get(i), data.get(i + 1), diff, changes, data);
 				for (Change ch : proc.getChanges()) {
 					c.addChange(ch);

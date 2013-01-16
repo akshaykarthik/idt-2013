@@ -6,12 +6,19 @@ import java.util.ArrayList;
 import edu.mhs.compsys.idt.Change;
 import edu.mhs.compsys.idt.Dataset;
 import edu.mhs.compsys.idt.StateTransition;
+import edu.mhs.compsys.utils.Config;
 
 /**
  * An interface to describe change processors. Mostly used so that testing will
  * be easier.
  */
 public interface IChangeProcessor {
+
+	/**
+	 * 
+	 * @param cfg
+	 */
+	void initialize(Config cfg);
 
 	/**
 	 * @param img
