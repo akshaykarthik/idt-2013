@@ -15,6 +15,7 @@ import edu.mhs.compsys.utils.Config;
 public interface IChangeProcessor {
 
 	/**
+	 * Creates a new ChangeProcessor that uses the given config file.
 	 * 
 	 * @param cfg
 	 */

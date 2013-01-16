@@ -2,6 +2,8 @@ package edu.mhs.compsys.processing;
 
 import java.awt.image.BufferedImage;
 
+import edu.mhs.compsys.idt.Bounds;
+
 /**
  * A utility class that provides methods for working with BinaryImages.
  * 
@@ -254,14 +256,34 @@ public class BinaryImageProcessor {
 	 * @return BufferedImage of the BinaryImage
 	 */
 	public static BufferedImage toImage(BinaryImage input) {
+		return toImage(input, WHITE, BLACK);
+	}
+
+	/**
+	 * This method takes a binaryImage and converts it into a BufferedImage to
+	 * save or print or show on a GUI.
+	 * 
+	 * @param input
+	 *            BinaryImage
+	 * @return BufferedImage of the BinaryImage
+	 */
+	public static BufferedImage toImage(BinaryImage input, int white, int black) {
 		BufferedImage ret = new BufferedImage(input.getWidth(),
 				input.getHeight(), BufferedImage.TYPE_INT_RGB);
 
 		for (int i = 0; i < input.getWidth(); i++) {
 			for (int j = 0; j < input.getHeight(); j++) {
-				ret.setRGB(i, j, input.get(j, i) ? WHITE : BLACK);
+				ret.setRGB(i, j, input.get(j, i) ? white : black);
 			}
 		}
 		return ret;
+	}
+
+	public static Bounds boundsOfChange(BinaryImage input, Bounds boundries) {
+		int x = 0;
+		int y = 0;
+		int l = 0;
+		int w = 0;
+		return new Bounds(x, y, l, w);
 	}
 }
