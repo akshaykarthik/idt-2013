@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -47,8 +48,7 @@ public class HelpUI extends JFrame
 		try
 		{
 			InputStream in;
-			in = new FileInputStream("./src/edu/mhs/compsys/application/HelpText.txt");
-			@SuppressWarnings("resource")
+			in = HelpUI.class.getResourceAsStream("HelpText.txt"); //new FileInputStream("./src/edu/mhs/compsys/application/HelpText.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
 			String line = "";
@@ -68,6 +68,7 @@ public class HelpUI extends JFrame
 		g.setFont(new Font("Calibri", 0, 20));
 
 		g.setColor(Color.BLACK);
+
 		for (int i = 0; i < helps.size(); i++)
 		{
 			g.drawString(helps.get(i), 50, 100 + (21 * i));
