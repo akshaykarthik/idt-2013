@@ -38,6 +38,7 @@ public class Config {
 		try {
 			Properties serv = new Properties();
 			serv.load(new FileReader(fileName));
+			
 			this.imageHeight = Integer
 					.parseInt(serv.getProperty("ImageHeight"));
 			this.imageWidth = Integer.parseInt(serv.getProperty("ImageWidth"));

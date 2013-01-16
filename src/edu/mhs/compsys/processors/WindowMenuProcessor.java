@@ -47,6 +47,8 @@ public class WindowMenuProcessor implements IChangeProcessor {
 			BinaryImage diff, ArrayList<StateTransition> changes, Dataset data) {
 		_changes = new ArrayList<Change>();
 		
+		
+		
 		// _changes.add(new Change(new Bounds(0, 0, 10, 10),
 		//		ClassificationType.WINDOW_MENU_CLOSE));
 

@@ -6,10 +6,13 @@ package edu.mhs.compsys.processors;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import edu.mhs.compsys.idt.Bounds;
 import edu.mhs.compsys.idt.Change;
+import edu.mhs.compsys.idt.ClassificationType;
 import edu.mhs.compsys.idt.Dataset;
 import edu.mhs.compsys.idt.StateTransition;
 import edu.mhs.compsys.processing.BinaryImage;
+import edu.mhs.compsys.processing.BinaryImageProcessor;
 import edu.mhs.compsys.processing.IChangeProcessor;
 import edu.mhs.compsys.utils.Config;
 
@@ -42,7 +45,12 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor {
 	public void process(BufferedImage img, BufferedImage img2,
 			BinaryImage diff, ArrayList<StateTransition> changes, Dataset data) {
 		_changes = new ArrayList<Change>();
-
+		Bounds imgChange = BinaryImageProcessor.boundsOfChange(
+				diff,
+				new Bounds(0, cfg.getImageHeight() - cfg.getTaskBarHeight(),
+						cfg.getImageWidth() - cfg.getDateWidth(), cfg
+								.getTaskBarHeight()));
+		_changes.add(new Change(imgChange, ClassificationType.TASKBAR_UPDATE));
 	}
 
 	/**
