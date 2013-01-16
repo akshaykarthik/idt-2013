@@ -6,7 +6,9 @@ package edu.mhs.compsys.processors;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import edu.mhs.compsys.idt.Bounds;
 import edu.mhs.compsys.idt.Change;
+import edu.mhs.compsys.idt.ClassificationType;
 import edu.mhs.compsys.idt.Dataset;
 import edu.mhs.compsys.idt.StateTransition;
 import edu.mhs.compsys.processing.BinaryImage;
@@ -44,6 +46,9 @@ public class WindowMenuProcessor implements IChangeProcessor {
 	public void process(BufferedImage img, BufferedImage img2,
 			BinaryImage diff, ArrayList<StateTransition> changes, Dataset data) {
 		_changes = new ArrayList<Change>();
+		
+		// _changes.add(new Change(new Bounds(0, 0, 10, 10),
+		//		ClassificationType.WINDOW_MENU_CLOSE));
 
 	}
 

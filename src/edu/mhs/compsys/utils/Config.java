@@ -17,6 +17,7 @@ public class Config {
 	private int xButtonWidth;
 	private int[][] colorOfX;
 	private int dateWidth;
+	private int desktopColor;
 
 	/**
 	 * Initializes new Config Class with default config file of Config.ini If
@@ -47,6 +48,8 @@ public class Config {
 			this.xButtonWidth = Integer.parseInt(serv
 					.getProperty("XButtonWidth"));
 			this.dateWidth = Integer.parseInt(serv.getProperty("DateWidth"));
+			this.desktopColor = Integer.parseInt(
+					serv.getProperty("DesktopColor"), 16);
 			this.colorOfX = new int[][] {
 					{ 0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff,
 							0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff,
@@ -104,6 +107,7 @@ public class Config {
 			this.xButtonHeight = 14;
 			this.xButtonWidth = 16;
 			this.dateWidth = 200;
+			this.desktopColor = 0x586EA5;
 			this.colorOfX = new int[][] {
 					{ 0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff,
 							0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff,
@@ -223,6 +227,15 @@ public class Config {
 	 */
 	public int[][] getColorOfX() {
 		return colorOfX;
+	}
+
+	/**
+	 * Returns the color of the desktop.
+	 * 
+	 * @return int desktopColor
+	 */
+	public int getDesktopColor() {
+		return desktopColor;
 	}
 
 }

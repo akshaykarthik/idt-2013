@@ -107,7 +107,7 @@ public class Recognizer {
 	}
 
 	/**
-	 * @return An arraylist of BufferedImages that are the differences between
+	 * @return An ArrayList of BufferedImages that are the differences between
 	 *         states.
 	 */
 	public ArrayList<BufferedImage> getDiff() {
