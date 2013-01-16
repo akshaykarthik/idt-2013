@@ -61,6 +61,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 		jf.pack();
 		jf.setLocation(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - jf.getWidth() / 2, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - jf.getHeight() / 2);
 		jf.setJMenuBar(gp.menu);
+		jf.setFocusable(true);
 
 	}
 
@@ -116,6 +117,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 		if (drawImages)
 		{
 			helpButton.setVisible(false);
+			helpButton.setFocusable(false);
 			resX = jframe.getWidth();
 			int imgWidth = (resX - 40) / 2;
 
@@ -244,8 +246,8 @@ public class GraphicsPanel extends JPanel implements ActionListener
 				errorCode = ERROR_NOT_AN_IMAGE;
 				haveImages = false;
 			}
-			else if (1280 != new ImageIcon(files[i].toString()).getImage().getWidth(null)
-					|| 1024 != new ImageIcon(files[i].toString()).getImage().getHeight(null))
+			else if (config.getImageWidth() != new ImageIcon(files[i].toString()).getImage().getWidth(null)
+					|| config.getImageHeight() != new ImageIcon(files[i].toString()).getImage().getHeight(null))
 			{
 				errorCode = ERROR_WRONG_IMAGE_SIZE;
 				haveImages = false;
@@ -273,8 +275,10 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			notAllImages = false;
 			next = new JButton("Next");
 			next.addActionListener(this);
+			next.setFocusable(false);
 			prev = new JButton("Prev.");
 			prev.addActionListener(this);
+			prev.setFocusable(false);
 			add(prev);
 			add(next);
 			resX = 850;
