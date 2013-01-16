@@ -7,6 +7,10 @@ import java.util.Date;
 import edu.mhs.compsys.idt.Change;
 import edu.mhs.compsys.idt.StateTransition;
 
+/**
+ * A utility class that will generate a report from a list of StateTransitions.
+ * It can output raw text or HTML.
+ */
 public class Report {
 
 	private ArrayList<StateTransition> changes;

@@ -5,6 +5,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * A configuration class that will enable the application to adapt to any number
+ * of environments.
+ */
 public class Config {
 	private int imageHeight;
 	private int imageWidth;

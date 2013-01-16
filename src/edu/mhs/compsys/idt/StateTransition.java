@@ -2,17 +2,29 @@ package edu.mhs.compsys.idt;
 
 import java.util.ArrayList;
 
+/**
+ * This class is a container for the Transition between two states. It consists
+ * of two <code>strings</code>, the name of the two states, and an
+ * <code>ArrayList</code> of <code>Changes</code>.
+ */
 public class StateTransition {
 	private String state1;
 	private String state2;
 	private ArrayList<Change> changes;
-	
-	public StateTransition(String s1, String s2){
+
+	/**
+	 * Creates a new {@link StateTransition} with <code>s1</code> as State1 and
+	 * <code>s2</code> as State2;
+	 * 
+	 * @param s1
+	 * @param s2
+	 */
+	public StateTransition(String s1, String s2) {
 		state1 = s1;
 		state2 = s2;
 		changes = new ArrayList<Change>();
 	}
-	
+
 	/**
 	 * @return the state1
 	 */
@@ -21,26 +33,10 @@ public class StateTransition {
 	}
 
 	/**
-	 * @param state1
-	 *            the state1 to set
-	 */
-	public void setState1(String state1) {
-		this.state1 = state1;
-	}
-
-	/**
 	 * @return the state2
 	 */
 	public String getState2() {
 		return state2;
-	}
-
-	/**
-	 * @param state2
-	 *            the state2 to set
-	 */
-	public void setState2(String state2) {
-		this.state2 = state2;
 	}
 
 	/**
@@ -60,6 +56,7 @@ public class StateTransition {
 
 	/**
 	 * Adds a change to the current stateTransition
+	 * 
 	 * @param in
 	 */
 	public void addChange(Change in) {

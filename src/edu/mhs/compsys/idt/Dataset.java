@@ -6,6 +6,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * This class encapsulates the list of files to be analyzed. This class simply
+ * holds an array of Files which can be converted to BufferedImage and then
+ * ImageIcon.
+ * 
+ */
 public class Dataset {
 	private File[] _data;
 
@@ -21,10 +27,10 @@ public class Dataset {
 	 * @param type
 	 *            The file type of the image
 	 * 
-	 * @param len
+	 * @param length
 	 *            the length of the image
 	 * 
-	 * @param the
+	 * @param width
 	 *            width of the image
 	 * @throws IOException
 	 */
@@ -87,8 +93,8 @@ public class Dataset {
 			// data.length
 			return (index < _data.length) ? ImageIO.read(_data[index]) : null;
 		} catch (IOException e) {
-			// returns null when the file isnt an image or there is no such file
-			// on the disk
+			// returns null when the file isn't an image or there is no such
+			// file the disk
 			return null;
 		}
 	}

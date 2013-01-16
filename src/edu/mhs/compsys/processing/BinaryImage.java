@@ -11,14 +11,6 @@ package edu.mhs.compsys.processing;
  * left
  * 
  **/
-/**
- * @author akr
- * 
- */
-/**
- * @author akr
- * 
- */
 public class BinaryImage {
 
 	private int _height = 0;
@@ -128,7 +120,6 @@ public class BinaryImage {
 	 * 
 	 * @param x
 	 * @param y
-	 * @param value
 	 */
 	public boolean safeGet(int x, int y) {
 		if (inBounds(x, y))
@@ -172,7 +163,8 @@ public class BinaryImage {
 	 * @param y
 	 * @param h
 	 * @param w
-	 * @return
+	 * @return A <code>subset</code> of the image from the given coordinates
+	 *         with the given size.
 	 * @throws ArrayIndexOutOfBoundsException
 	 */
 	public BinaryImage slice(int x, int y, int h, int w)
@@ -201,7 +193,7 @@ public class BinaryImage {
 	 * <code>false</code> and each <code>false</code> pixel to <code>true</code>
 	 * .
 	 * 
-	 * @return
+	 * @return A new BinaryImage that is the Inverse of this one.
 	 */
 	public BinaryImage inverse() {
 		BinaryImage ret = new BinaryImage(_height, _width);
@@ -220,7 +212,8 @@ public class BinaryImage {
 	 * 
 	 * @param other
 	 *            BinaryImage to OR
-	 * @return
+	 * @return A new BinaryImage that is equivalent to each pixel
+	 *         <code>||</code> with its counterpart.
 	 */
 	public BinaryImage or(BinaryImage other) {
 		BinaryImage ret = new BinaryImage(_height, _width);
@@ -239,7 +232,8 @@ public class BinaryImage {
 	 * 
 	 * @param other
 	 *            BinaryImage to AND
-	 * @return
+	 * @return A new BinaryImage that is equivalent to each pixel
+	 *         <code>&&</code> with its counterpart.
 	 */
 	public BinaryImage and(BinaryImage other) {
 		BinaryImage ret = new BinaryImage(_height, _width);
@@ -252,10 +246,10 @@ public class BinaryImage {
 	}
 
 	/**
-	 * Returns true if both Images have the same pixels, and the same size.
+	 * Checks whether the two BinaryImages show the same data.
 	 * 
 	 * @param other
-	 * @return
+	 * @return True if the images are the same, false otherwise.
 	 */
 	public boolean equals(BinaryImage other) {
 		if (this.getHeight() != other.getHeight()

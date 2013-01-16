@@ -3,7 +3,7 @@ package edu.mhs.compsys.processing;
 import java.awt.image.BufferedImage;
 
 /**
- * @author akr
+ * A utility class that provides methods for working with BinaryImages.
  * 
  */
 public class BinaryImageProcessor {
@@ -12,58 +12,6 @@ public class BinaryImageProcessor {
 	public static final int BLACK = 0x000000;
 	public static final int AWHITE = 0xffffffff;
 	public static final int ABLACK = 0xff000000;
-
-	/**
-	 * From Wikipedia: Dilation is one of the basic operations in mathematical
-	 * morphology. Originally developed for binary images, it has been expanded
-	 * first to grayscale images, and then to complete lattices. The dilation
-	 * operation usually uses a structuring element for probing and expanding
-	 * the shapes contained in the input image
-	 * 
-	 * @param input
-	 *            binary image that needs to be dilated
-	 * @return A binary image that has been dilated
-	 */
-	public static BinaryImage dilate(BinaryImage input) {
-		return dilate(input, false);
-	}
-
-	/**
-	 * From Wikipedia: Dilation is one of the basic operations in mathematical
-	 * morphology. Originally developed for binary images, it has been expanded
-	 * first to grayscale images, and then to complete lattices. The dilation
-	 * operation usually uses a structuring element for probing and expanding
-	 * the shapes contained in the input image
-	 * 
-	 * @param input
-	 *            binary image that needs to be dilated
-	 * @return A binary image that has been dilated
-	 */
-	public static BinaryImage dilate(BinaryImage input, boolean box) {
-		int width = input.getWidth();
-		int height = input.getHeight();
-		BinaryImage ret = new BinaryImage(height, width);
-
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
-				if (input.safeGet(i, j)) {
-					if (input.safeGet(i + 1, j) && input.safeGet(i - 1, j)
-							&& input.safeGet(i, j + 1)
-							&& input.safeGet(i, j - 1))
-						if (box && input.safeGet(i + 1, j + 1)
-								&& input.safeGet(i + 1, j - 1)
-								&& input.safeGet(i - 1, j + 1)
-								&& input.safeGet(i - 1, j - 1))
-							ret.set(i, j, true);
-						else
-							ret.set(i, j, true);
-
-				}
-
-			}
-		}
-		return ret;
-	}
 
 	/**
 	 * From wikipedia: Erosion is one of two fundamental operations (the other
@@ -121,17 +69,68 @@ public class BinaryImageProcessor {
 	}
 
 	/**
+	 * From Wikipedia: Dilation is one of the basic operations in mathematical
+	 * morphology. Originally developed for binary images, it has been expanded
+	 * first to grayscale images, and then to complete lattices. The dilation
+	 * operation usually uses a structuring element for probing and expanding
+	 * the shapes contained in the input image
+	 * 
+	 * @param input
+	 *            binary image that needs to be dilated
+	 * @return A binary image that has been dilated
+	 */
+	public static BinaryImage dilate(BinaryImage input) {
+		return dilate(input, false);
+	}
+
+	/**
+	 * From Wikipedia: Dilation is one of the basic operations in mathematical
+	 * morphology. Originally developed for binary images, it has been expanded
+	 * first to grayscale images, and then to complete lattices. The dilation
+	 * operation usually uses a structuring element for probing and expanding
+	 * the shapes contained in the input image
+	 * 
+	 * @param input
+	 *            binary image that needs to be dilated
+	 * @return A binary image that has been dilated
+	 */
+	public static BinaryImage dilate(BinaryImage input, boolean box) {
+		int width = input.getWidth();
+		int height = input.getHeight();
+		BinaryImage ret = new BinaryImage(height, width);
+
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				if (input.safeGet(i, j)) {
+					if (input.safeGet(i + 1, j) && input.safeGet(i - 1, j)
+							&& input.safeGet(i, j + 1)
+							&& input.safeGet(i, j - 1))
+						if (box && input.safeGet(i + 1, j + 1)
+								&& input.safeGet(i + 1, j - 1)
+								&& input.safeGet(i - 1, j + 1)
+								&& input.safeGet(i - 1, j - 1))
+							ret.set(i, j, true);
+						else
+							ret.set(i, j, true);
+
+				}
+
+			}
+		}
+		return ret;
+	}
+
+	/**
 	 * Does <code>iterations</code> of repeated erosions, uses <code>'t'</code>
 	 * as structure.
 	 * 
 	 * @param input
 	 * @param iterations
-	 * @return
+	 * @return The result of <code>iterations</code> of erosion.
 	 */
 	public static BinaryImage repeatedErode(BinaryImage input, int iterations) {
 		return repeatedErode(input, false, iterations);
 	}
-
 
 	/**
 	 * Does <code>iterations</code> of repeated erosions, uses <code>box</code>
@@ -139,7 +138,7 @@ public class BinaryImageProcessor {
 	 * 
 	 * @param input
 	 * @param iterations
-	 * @return
+	 * @return The result of <code>iterations</code> of erosion.
 	 */
 	public static BinaryImage repeatedErode(BinaryImage input, boolean box,
 			int iterations) {
@@ -149,19 +148,27 @@ public class BinaryImageProcessor {
 			return erode(repeatedErode(input, box, iterations - 1), box);
 	}
 
-
 	/**
 	 * Does <code>iterations</code> of repeated dilations, uses <code>'t'</code>
 	 * as structure.
 	 * 
 	 * @param input
 	 * @param iterations
-	 * @return
+	 * @return The result of <code>iterations</code> of dilation.
 	 */
 	public static BinaryImage repeatedDilate(BinaryImage input, int iterations) {
 		return repeatedDilate(input, false, iterations);
 	}
 
+	/**
+	 * Does <code>iterations</code> of repeated dilations, uses
+	 * <code>'box'</code> as structure.
+	 * 
+	 * @param input
+	 * @param box
+	 * @param iterations
+	 * @return The result of <code>iterations</code> of dilation.
+	 */
 	public static BinaryImage repeatedDilate(BinaryImage input, boolean box,
 			int iterations) {
 		if (iterations == 1)
@@ -176,7 +183,7 @@ public class BinaryImageProcessor {
 	 * removed.
 	 * 
 	 * @param input
-	 * @return
+	 * @return The image opened with a structure of 't'.
 	 */
 	public static BinaryImage open(BinaryImage input) {
 		return open(input, false);
@@ -188,7 +195,7 @@ public class BinaryImageProcessor {
 	 * removed.
 	 * 
 	 * @param input
-	 * @return
+	 * @return The image opened with the given structure.
 	 */
 	public static BinaryImage open(BinaryImage input, boolean box) {
 		return input.or(dilate(erode(input, box), box));
@@ -199,7 +206,7 @@ public class BinaryImageProcessor {
 	 * input. This results in an images that has its 'holes' filled up.
 	 * 
 	 * @param input
-	 * @return
+	 * @return The image closed with a structure of 't'.
 	 */
 	public static BinaryImage close(BinaryImage input) {
 		return close(input, false);
@@ -210,7 +217,7 @@ public class BinaryImageProcessor {
 	 * eroding it. This results in an images that has its 'holes' filled up.
 	 * 
 	 * @param input
-	 * @return
+	 * @return The image closed with a given structure.
 	 */
 	public static BinaryImage close(BinaryImage input, boolean box) {
 		return input.or(erode(dilate(input, box), box));

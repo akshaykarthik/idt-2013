@@ -1,5 +1,9 @@
 package edu.mhs.compsys.idt;
 
+/**
+ * This class encapsulates the bounds of a change. It contains a description of
+ * a box of change defined by <code>Bound{x, y, l, w};</code>
+ */
 public class Bounds {
 
 	private int x;
@@ -67,14 +71,29 @@ public class Bounds {
 		this.w = w;
 	}
 
+	/**
+	 * Creates a new <code>Bounds</code> object with the given parameters.
+	 * 
+	 * @param x
+	 *            The <code>x</code> coordinate.
+	 * @param y
+	 *            The <code>y</code> coordinate.
+	 * @param l
+	 *            The <code>length</code> of the change rectangle.
+	 * @param w
+	 *            The <code>width</code> of the change rectangle.
+	 */
 	public Bounds(int x, int y, int l, int w) {
-		super();
 		this.x = x;
 		this.y = y;
 		this.l = l;
 		this.w = w;
 	}
 
+	/**
+	 * Creates a new <code>Bounds</code> object with all values set to
+	 * <code>-1</code>.
+	 */
 	public Bounds() {
 		this.x = -1;
 		this.y = -1;
@@ -82,12 +101,12 @@ public class Bounds {
 		this.w = -1;
 	}
 
-	/*
-	 * Returns a visual representation of bounds of change
+	/**
+	 * Returns a visual representation of bounds of change The format is
+	 * <code>[x={x}, y={y}, l={l}, w={w}]</code>
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
-	@Override
 	public String toString() {
 		return String.format("[x=%s, y=%s, l=%s, w=%s]", x, y, l, w);
 	}
