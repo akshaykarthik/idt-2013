@@ -98,12 +98,14 @@ public class Bounds {
 		this.w = w;
 	}
 
+	
 	/**
 	 * Returns a visual representation of bounds of change The format is
 	 * <code>[x={x}, y={y}, l={l}, w={w}]</code>
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
+	
 	public String toString() {
 		return String.format("[x=%s, y=%s, l=%s, w=%s]", x, y, l, w);
 	}
