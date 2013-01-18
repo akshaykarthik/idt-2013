@@ -3,6 +3,7 @@ package edu.mhs.compsys.processing;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import edu.mhs.compsys.idt.Bounds;
 import edu.mhs.compsys.idt.Change;
 import edu.mhs.compsys.idt.Dataset;
 import edu.mhs.compsys.idt.StateTransition;
@@ -32,9 +33,12 @@ public interface IChangeProcessor {
 	 *            Past changes
 	 * @param data
 	 *            Other Images.
+	 * @param previousStateWindows
+	 * 			ArrayList of bounds of the windows in the previous state
 	 */
 	void process(BufferedImage img, BufferedImage img2, BinaryImage diff,
-			ArrayList<StateTransition> changes, Dataset data);
+			ArrayList<StateTransition> changes, Dataset data,
+			ArrayList<Bounds> previousStateWindows);
 
 	Change[] getChanges();
 

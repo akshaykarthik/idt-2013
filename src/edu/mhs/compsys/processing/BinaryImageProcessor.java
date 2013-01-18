@@ -323,6 +323,9 @@ public class BinaryImageProcessor {
 				}
 			}
 		}
+		if (x == b_x || y == b_y || l == b_l || w == b_w) {
+			return new Bounds();
+		}
 		return new Bounds(x, y, l, w);
 	}
 }
