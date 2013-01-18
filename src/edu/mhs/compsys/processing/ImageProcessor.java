@@ -10,8 +10,9 @@ import edu.mhs.compsys.utils.Config;
  * A utility class that provides methods for working with Images.
  * 
  */
-public class ImageProcessor {
-	Config cfg = new Config();
+public class ImageProcessor
+{
+	Config	cfg	= new Config();
 
 	/**
 	 * Finds a smaller image inside a given larger image.
@@ -22,7 +23,8 @@ public class ImageProcessor {
 	 *         smaller image for each instance of the smaller image.
 	 */
 	public static ArrayList<Point> findIn(BufferedImage bigImg,
-			BufferedImage smallImg) {
+			BufferedImage smallImg)
+	{
 		int count = 0;
 
 		int smallImgX = smallImg.getWidth();
@@ -31,12 +33,17 @@ public class ImageProcessor {
 		int bigImgY = bigImg.getHeight();
 
 		ArrayList<Point> locs = new ArrayList<Point>();
-		for (int y = 0; y < bigImgY - smallImgY; y++) {
-			for (int x = 0; x < bigImgX - smallImgX; x++) {
+		for (int y = 0; y < bigImgY - smallImgY; y++)
+		{
+			for (int x = 0; x < bigImgX - smallImgX; x++)
+			{
 
-				if ((bigImg.getRGB(x, y) == smallImg.getRGB(0, 0))) {
-					nestedLoop: for (int smallY = 0; smallY < smallImgY; smallY++) {
-						for (int smallX = 0; smallX < smallImgX; smallX++) {
+				if ((bigImg.getRGB(x, y) == smallImg.getRGB(0, 0)))
+				{
+					nestedLoop: for (int smallY = 0; smallY < smallImgY; smallY++)
+					{
+						for (int smallX = 0; smallX < smallImgX; smallX++)
+						{
 
 							if (smallImg.getRGB(smallX, smallY) == bigImg
 									.getRGB(smallX + x, smallY + y))
@@ -53,5 +60,6 @@ public class ImageProcessor {
 
 		return locs;
 	}
+	
 
 }

@@ -69,7 +69,8 @@ public class Recognizer {
 					+ 1);
 			for (IChangeProcessor proc : processors) {
 				proc.initialize(config);
-				proc.process(data.get(i), data.get(i + 1), diff, changes, data);
+				// TODO: process
+				// proc.process(data.get(i), data.get(i + 1), diff, changes, data);
 				for (Change ch : proc.getChanges()) {
 					c.addChange(ch);
 				}
@@ -113,4 +114,6 @@ public class Recognizer {
 	public ArrayList<BufferedImage> getDiff() {
 		return diffs;
 	}
+	
+		
 }
