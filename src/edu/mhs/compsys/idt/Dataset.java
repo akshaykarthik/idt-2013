@@ -16,6 +16,31 @@ public class Dataset {
 	private File[] _data;
 
 	/**
+	 * Constructs a Dataset given a folder. It reads all "png" images in that
+	 * folder with the specific image dimensions of (1280x1024)
+	 * 
+	 * @param folder
+	 * @throws IOException
+	 */
+	public Dataset(String folder) {
+		this(folder, "png");
+	}
+
+	/**
+	 * Constructs a dataset given a folder by adding all images in that folder.
+	 * 
+	 * It accepts all images of the given filetype whose size is (1280x1024)
+	 * 
+	 * @param folder
+	 *            The folder to search for images
+	 * @param type
+	 *            The file type of the image
+	 */
+	public Dataset(String folder, String type) {
+		this(folder, type, 1280, 1024);
+	}
+
+	/**
 	 * Constructs a dataset given a folder by adding all images in that folder.
 	 * 
 	 * It accepts all images of the given filetype whose size is (length x
@@ -37,31 +62,6 @@ public class Dataset {
 	public Dataset(String folder, String type, int length, int width) {
 		_data = (new File(folder)).listFiles();
 
-	}
-
-	/**
-	 * Constructs a dataset given a folder by adding all images in that folder.
-	 * 
-	 * It accepts all images of the given filetype whose size is (1280x1024)
-	 * 
-	 * @param folder
-	 *            The folder to search for images
-	 * @param type
-	 *            The file type of the image
-	 */
-	public Dataset(String folder, String type) {
-		this(folder, type, 1280, 1024);
-	}
-
-	/**
-	 * Constructs a Dataset given a folder. It reads all "png" images in that
-	 * folder with the specific image dimensions of (1280x1024)
-	 * 
-	 * @param folder
-	 * @throws IOException
-	 */
-	public Dataset(String folder) {
-		this(folder, "png");
 	}
 
 	/**

@@ -280,6 +280,18 @@ public class BinaryImageProcessor {
 	}
 
 	/**
+	 * Calculates the minimum bounding box of all changes within the whole image
+	 * 
+	 * @param input
+	 *            BinaryImage to be processed
+	 * @return A single Bounds object that returns the bounds of change.
+	 */
+	public static Bounds boundsOfChange(BinaryImage input) {
+		return boundsOfChange(input,
+				new Bounds(0, 0, input.getWidth(), input.getHeight()));
+	}
+
+	/**
 	 * Calculates the minimum bounding box of all changes within the given
 	 * Boundaries of the image.
 	 * 
@@ -304,7 +316,7 @@ public class BinaryImageProcessor {
 			for (int j = b_y; j < b_w; j++) {
 				if (input.safeGet(i, j)) {
 					x = (i < x) ? i : x;
-					y = (j < y) ? y : y;
+					y = (j < y) ? j : y;
 
 					l = (i > l) ? i : l;
 					w = (j > w) ? j : w;

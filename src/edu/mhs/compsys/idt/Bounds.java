@@ -12,6 +12,33 @@ public class Bounds {
 	private int w;
 
 	/**
+	 * Creates a new <code>Bounds</code> object with all values set to
+	 * <code>-1</code>.
+	 */
+	public Bounds() {
+		this(-1, -1, -1, -1);
+	}
+
+	/**
+	 * Creates a new <code>Bounds</code> object with the given parameters.
+	 * 
+	 * @param x
+	 *            The <code>x</code> coordinate.
+	 * @param y
+	 *            The <code>y</code> coordinate.
+	 * @param l
+	 *            The <code>length</code> of the change rectangle.
+	 * @param w
+	 *            The <code>width</code> of the change rectangle.
+	 */
+	public Bounds(int x, int y, int l, int w) {
+		this.x = x;
+		this.y = y;
+		this.l = l;
+		this.w = w;
+	}
+
+	/**
 	 * @return the x coordinate of the change
 	 */
 	public int getX() {
@@ -72,36 +99,6 @@ public class Bounds {
 	}
 
 	/**
-	 * Creates a new <code>Bounds</code> object with the given parameters.
-	 * 
-	 * @param x
-	 *            The <code>x</code> coordinate.
-	 * @param y
-	 *            The <code>y</code> coordinate.
-	 * @param l
-	 *            The <code>length</code> of the change rectangle.
-	 * @param w
-	 *            The <code>width</code> of the change rectangle.
-	 */
-	public Bounds(int x, int y, int l, int w) {
-		this.x = x;
-		this.y = y;
-		this.l = l;
-		this.w = w;
-	}
-
-	/**
-	 * Creates a new <code>Bounds</code> object with all values set to
-	 * <code>-1</code>.
-	 */
-	public Bounds() {
-		this.x = -1;
-		this.y = -1;
-		this.l = -1;
-		this.w = -1;
-	}
-
-	/**
 	 * Returns a visual representation of bounds of change The format is
 	 * <code>[x={x}, y={y}, l={l}, w={w}]</code>
 	 * 
@@ -111,4 +108,13 @@ public class Bounds {
 		return String.format("[x=%s, y=%s, l=%s, w=%s]", x, y, l, w);
 	}
 
+	/**
+	 * Returns equal if all coordinates are the same.
+	 * 
+	 * @param other
+	 * @return <code>true</code> if equal, <code>false</code> otherwise.
+	 */
+	public boolean equals(Bounds other) {
+		return (x == other.x && y == other.y && l == other.l && w == other.w);
+	}
 }

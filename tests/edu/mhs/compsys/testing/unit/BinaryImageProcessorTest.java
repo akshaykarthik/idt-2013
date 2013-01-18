@@ -1,11 +1,12 @@
 package edu.mhs.compsys.testing.unit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.mhs.compsys.idt.Bounds;
 import edu.mhs.compsys.processing.BinaryImage;
 import edu.mhs.compsys.processing.BinaryImageProcessor;
 
@@ -26,17 +27,8 @@ public class BinaryImageProcessorTest {
 
 	@Test
 	public void test() {
-		assertEquals(true, true);
-		System.out.println("--------b--------");
-		System.out.println(b);
-		System.out.println(BinaryImageProcessor.close(b));
-		System.out.println(BinaryImageProcessor.erode(b, false));
-		System.out.println(BinaryImageProcessor.erode(b, true));
-		System.out.println("--------a--------");
-		System.out.println(a);
-		System.out.println(BinaryImageProcessor.dilate(a));
-		System.out.println(BinaryImageProcessor.dilate(a, false));
-		System.out.println(BinaryImageProcessor.dilate(a, true));
+		assertEquals(BinaryImageProcessor.boundsOfChange(b), new Bounds(1, 1,
+				3, 3));
 	}
 
 }

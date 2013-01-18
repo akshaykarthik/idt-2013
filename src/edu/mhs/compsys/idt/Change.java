@@ -10,6 +10,15 @@ public class Change {
 	private ClassificationType type;
 
 	/**
+	 * @param bounds
+	 * @param type
+	 */
+	public Change(Bounds bounds, ClassificationType type) {
+		this.bounds = bounds;
+		this.type = type;
+	}
+
+	/**
 	 * @return the bounds
 	 */
 	public Bounds getBounds() {
@@ -36,15 +45,6 @@ public class Change {
 	 *            the type to set
 	 */
 	public void setType(ClassificationType type) {
-		this.type = type;
-	}
-
-	/**
-	 * @param bounds
-	 * @param type
-	 */
-	public Change(Bounds bounds, ClassificationType type) {
-		this.bounds = bounds;
 		this.type = type;
 	}
 
