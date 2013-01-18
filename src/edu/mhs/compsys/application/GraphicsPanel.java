@@ -24,6 +24,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import edu.mhs.compsys.idt.Change;
+import edu.mhs.compsys.idt.StateTransition;
 import edu.mhs.compsys.processing.Recognizer;
 import edu.mhs.compsys.utils.Config;
 
@@ -139,10 +141,21 @@ public class GraphicsPanel extends JPanel implements ActionListener
 
 				// Change Strings --- quadrant: 4
 				ArrayList<String> changeStrings = new ArrayList<String>();
-				changeStrings.add("Window was moved");
-				changeStrings.add("Text was edited.");
-				changeStrings.add("Something else happened");
-				changeStrings.add("Peter is cool");
+				ArrayList<StateTransition> changes = rec.getChanges();
+				try
+				{
+					StateTransition st = changes.get(imageNum);
+
+					for (Change ml : st.getChanges())
+					{
+						changeStrings.add(ml.toString());
+					}
+				}
+				catch (Exception ex)
+				{
+					changeStrings.add("No changes loaded!");
+				}
+
 				for (int i = 0; i < changeStrings.size(); i++)
 				{
 					g.drawString(changeStrings.get(i), 20 + imgWidth, 89 + imgYSize + (i * 21));
