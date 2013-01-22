@@ -26,9 +26,16 @@ public class BinaryImageProcessorTest {
 	}
 
 	@Test
+	public void testErosion() {
+		assertEquals(BinaryImageProcessor.erode(b, true), new BinaryImage(
+				"11111 11111 11111 11111 11111", " "));
+	}
+
+	@Test
 	public void test() {
-		assertEquals(BinaryImageProcessor.boundsOfChange(b), new Bounds(1, 1,
-				3, 3));
+		Bounds al = BinaryImageProcessor.boundsOfChange(b);
+		Bounds bl = new Bounds(1, 1, 3, 3);
+		assertEquals(al, bl);
 	}
 
 }

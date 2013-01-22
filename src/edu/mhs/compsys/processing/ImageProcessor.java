@@ -62,4 +62,23 @@ public class ImageProcessor
 	}
 	
 
+	/**
+	 * Takes an integer array and converts it into a bufferedimage with each
+	 * pixel being the value of the integer at the picture's index
+	 * 
+	 * @param input
+	 *            2d array
+	 * @return BufferedImage
+	 */
+	public static BufferedImage intArrayToBufferedImage(int[][] input) {
+		BufferedImage ret = new BufferedImage(input.length, input[0].length, 0,
+				null);
+		for (int i = 0; i < input.length; i++) {
+			for (int j = 0; j < input[0].length; j++) {
+				ret.setRGB(i, j, input[i][j]);
+			}
+		}
+		return ret;
+	}
+
 }
