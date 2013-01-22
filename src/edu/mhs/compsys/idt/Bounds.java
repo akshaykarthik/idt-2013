@@ -1,5 +1,7 @@
 package edu.mhs.compsys.idt;
 
+import java.awt.Point;
+
 /**
  * This class encapsulates the bounds of a change. It contains a description of
  * a box of change defined by <code>Bound{x, y, l, w};</code>
@@ -98,14 +100,16 @@ public class Bounds {
 		this.w = w;
 	}
 
-	
+	public Point getBotRight() {
+		return new Point(x + w, y + l);
+	}
+
 	/**
 	 * Returns a visual representation of bounds of change The format is
 	 * <code>[x={x}, y={y}, l={l}, w={w}]</code>
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
-	
 	public String toString() {
 		return String.format("[x=%s, y=%s, l=%s, w=%s]", x, y, l, w);
 	}

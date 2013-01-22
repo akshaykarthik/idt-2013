@@ -19,11 +19,20 @@ public class BoundsProcessor {
 		return false;
 	}
 
-	// do the bounds intesect
+	// do the bounds intersect
 	public static boolean intersect(Bounds a, Bounds b) {
-		// if(a.getX() + a.getWidth())
+		Point aRight = a.getBotRight();
+		Point bRight = b.getBotRight();
+		if ((int) aRight.getX() < b.getX())
+			return false;
+		if (a.getX() > (int) bRight.getX())
+			return false;
+		if ((int) aRight.getY() < b.getY())
+			return false;
+		if (a.getY() > bRight.getY())
+			return false;
 
-		return false;
+		return true;
 	}
 
 	// all is b in a
@@ -46,27 +55,40 @@ public class BoundsProcessor {
 		else {
 			topLeft = new Point(Math.min(a.getX(), b.getX()), Math.min(
 					a.getY(), b.getY()));
-			botRight = new Point(Math.max(a.getX() + a.getWidth(),
-					b.getX() + b.getWidth()), Math.max(
-					a.getY() + a.getLength(), b.getY() + b.getLength()));
+			botRight = new Point((int)Math.max(a.getBotRight().getX(),
+					(int) b.getBotRight().getX()), Math.max((int)
+					a.getBotRight().getY(), (int) b.getBotRight().getY()));
 			return new Bounds((int) topLeft.getX(), (int) topLeft.getY(),
 					(int) botRight.getX(), (int) botRight.getY());
 		}
 	}
 
 	public static Bounds union(ArrayList<Bounds> input) {
-		return new Bounds();
+		Bounds area = input.get(0);
+		for(int i = 1; i < input.size(); i++){
+			area = union(area, input.get(i));			
+		}
+		return area;
 	}
 
 	// The region bound by bounds a and bounds b
 	public static Bounds intersection(Bounds a, Bounds b) {
-		return new Bounds();
+		if (!intersect(a,b))
+			return new Bounds();
+		
+		int left = Math.max(a.getX(), b.getX());
+		int top = Math.max(a.getY(), b.getY());
+		int right = Math.min((int)a.getBotRight().getX(), (int)b.getBotRight().getX());
+		int bot = Math.min((int)a.getBotRight().getY(), (int)b.getBotRight().getY());
+		
+		return new Bounds(left, top, right - left, bot-top);
 	}
 
 	public static ArrayList<Point> findCorners(ArrayList<Bounds> windows) {
 		ArrayList<Point> corners = new ArrayList<Point>();
 		for (int i = 0; i < windows.size(); i++)
-
+			//If it's inside the region, don't add it
+			//If add corners of intersection + corners of window otherwise.
 			return corners;
 	}
 
