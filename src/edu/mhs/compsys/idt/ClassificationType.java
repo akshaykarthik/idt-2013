@@ -98,7 +98,7 @@ public enum ClassificationType {
 	/**
 	 * Returns visual change for classification
 	 * 
-	 * @return The description ofthe classification, in the specified IDT
+	 * @return The description of the classification, in the specified IDT
 	 *         format.
 	 */
 	public String getDescription() {
@@ -106,7 +106,7 @@ public enum ClassificationType {
 	}
 
 	/**
-	 * Returns css class for classification
+	 * Returns CSS class for classification
 	 * 
 	 * @return
 	 */
@@ -121,7 +121,6 @@ public enum ClassificationType {
 	 * @see java.lang.Enum#toString()
 	 */
 	public String toString() {
-
 		return String.format("[%s]:%s", type, description);
 	}
 }

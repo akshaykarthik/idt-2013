@@ -27,12 +27,20 @@ public class BinaryImageProcessorTest {
 
 	@Test
 	public void testErosion() {
-		assertEquals(BinaryImageProcessor.erode(b, true), new BinaryImage(
-				"11111 11111 11111 11111 11111", " "));
+		BinaryImage al = BinaryImageProcessor.erode(b, false);
+		BinaryImage bl = new BinaryImage("01110 11111 11111 11111 01110", " ");
+		assertEquals(al, bl);
 	}
 
 	@Test
-	public void test() {
+	public void testErosionBox() {
+		BinaryImage bl = BinaryImageProcessor.erode(b, true);
+		BinaryImage al = new BinaryImage("11111 11111 11111 11111 11111", " ");
+		assertEquals(al, bl);
+	}
+
+	@Test
+	public void testBoundsOfChange() {
 		Bounds al = BinaryImageProcessor.boundsOfChange(b);
 		Bounds bl = new Bounds(1, 1, 3, 3);
 		assertEquals(al, bl);

@@ -100,6 +100,30 @@ public class Bounds {
 		this.w = w;
 	}
 
+	/**
+	 * @return Top left point
+	 */
+	public Point getTopLeft() {
+		return new Point(x, y);
+	}
+
+	/**
+	 * @return Top right point
+	 */
+	public Point getTopRight() {
+		return new Point(x + w, y);
+	}
+
+	/**
+	 * @return Bottom left point
+	 */
+	public Point getBotLeft() {
+		return new Point(x, y + l);
+	}
+
+	/**
+	 * @return Bottom right point
+	 */
 	public Point getBotRight() {
 		return new Point(x + w, y + l);
 	}
@@ -115,6 +139,24 @@ public class Bounds {
 	}
 
 	/**
+	 * @param other
+	 *            Bounds
+	 * @return True if the encompassing area is the same, false otherwise.
+	 */
+	public boolean equalSize(Bounds other) {
+		return (l * w) == (other.l * other.w);
+	}
+
+	/**
+	 * @param other
+	 *            Bounds to compare to
+	 * @return True if dimensions are equal, false otherwise
+	 */
+	public boolean equalDimensions(Bounds other) {
+		return (l == other.l && w == other.w);
+	}
+
+	/**
 	 * Returns equal if all coordinates are the same.
 	 * 
 	 * @param other
@@ -122,5 +164,18 @@ public class Bounds {
 	 */
 	public boolean equals(Bounds other) {
 		return (x == other.x && y == other.y && l == other.l && w == other.w);
+	}
+
+	/**
+	 * 
+	 * Returns equal if all coordinates are the same.
+	 * 
+	 * @param other
+	 * @return <code>true</code> if equal, <code>false</code> otherwise.
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object other) {
+		return equals((Bounds) other);
 	}
 }

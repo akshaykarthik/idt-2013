@@ -56,7 +56,7 @@ public class BinaryImageProcessor {
 						ret.safeSet(i, j - 1, true);
 						if (box) {
 							ret.safeSet(i + 1, j + 1, true);
-							ret.safeSet(i - 1, j + 1, true);
+							ret.safeSet(i + 1, j - 1, true);
 							ret.safeSet(i - 1, j + 1, true);
 							ret.safeSet(i - 1, j - 1, true);
 						}

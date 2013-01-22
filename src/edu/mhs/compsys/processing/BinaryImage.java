@@ -263,6 +263,17 @@ public class BinaryImage {
 	}
 
 	/**
+	 * Checks whether the two BinaryImages show the same data.
+	 * 
+	 * @param other
+	 * @return True if the images are the same, false otherwise.
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object other) {
+		return equals((BinaryImage) other);
+	}
+
+	/**
 	 * Returns a string representation of the image with each <code>"1"</code>
 	 * being <code>true</code> and each <code>"0"</code> being
 	 * <code>false</code>.

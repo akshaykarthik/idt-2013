@@ -55,9 +55,9 @@ public class BoundsProcessor {
 		else {
 			topLeft = new Point(Math.min(a.getX(), b.getX()), Math.min(
 					a.getY(), b.getY()));
-			botRight = new Point((int)Math.max(a.getBotRight().getX(),
-					(int) b.getBotRight().getX()), Math.max((int)
-					a.getBotRight().getY(), (int) b.getBotRight().getY()));
+			botRight = new Point((int) Math.max(a.getBotRight().getX(), (int) b
+					.getBotRight().getX()), Math.max((int) a.getBotRight()
+					.getY(), (int) b.getBotRight().getY()));
 			return new Bounds((int) topLeft.getX(), (int) topLeft.getY(),
 					(int) botRight.getX(), (int) botRight.getY());
 		}
@@ -65,31 +65,35 @@ public class BoundsProcessor {
 
 	public static Bounds union(ArrayList<Bounds> input) {
 		Bounds area = input.get(0);
-		for(int i = 1; i < input.size(); i++){
-			area = union(area, input.get(i));			
+		for (int i = 1; i < input.size(); i++) {
+			area = union(area, input.get(i));
 		}
 		return area;
 	}
 
 	// The region bound by bounds a and bounds b
 	public static Bounds intersection(Bounds a, Bounds b) {
-		if (!intersect(a,b))
+		if (!intersect(a, b))
 			return new Bounds();
-		
+
 		int left = Math.max(a.getX(), b.getX());
 		int top = Math.max(a.getY(), b.getY());
-		int right = Math.min((int)a.getBotRight().getX(), (int)b.getBotRight().getX());
-		int bot = Math.min((int)a.getBotRight().getY(), (int)b.getBotRight().getY());
-		
-		return new Bounds(left, top, right - left, bot-top);
+		int right = Math.min((int) a.getBotRight().getX(), (int) b
+				.getBotRight().getX());
+		int bot = Math.min((int) a.getBotRight().getY(), (int) b.getBotRight()
+				.getY());
+
+		return new Bounds(left, top, right - left, bot - top);
 	}
 
 	public static ArrayList<Point> findCorners(ArrayList<Bounds> windows) {
 		ArrayList<Point> corners = new ArrayList<Point>();
-		for (int i = 0; i < windows.size(); i++)
-			//If it's inside the region, don't add it
-			//If add corners of intersection + corners of window otherwise.
-			return corners;
+		for (int i = 0; i < windows.size(); i++) {
+
+		}
+		// If it's inside the region, don't add it
+		// If add corners of intersection + corners of window otherwise.
+		return corners;
 	}
 
 }
