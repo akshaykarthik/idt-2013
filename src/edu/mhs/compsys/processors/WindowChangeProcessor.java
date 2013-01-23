@@ -11,6 +11,7 @@ import edu.mhs.compsys.idt.Change;
 import edu.mhs.compsys.idt.Dataset;
 import edu.mhs.compsys.idt.StateTransition;
 import edu.mhs.compsys.processing.BinaryImage;
+import edu.mhs.compsys.processing.BinaryImageProcessor;
 import edu.mhs.compsys.processing.IChangeProcessor;
 import edu.mhs.compsys.utils.Config;
 
@@ -45,7 +46,14 @@ public class WindowChangeProcessor implements IChangeProcessor {
 			BinaryImage diff, ArrayList<StateTransition> changes, Dataset data,
 			ArrayList<Bounds> previousStateWindows) {
 		_changes = new ArrayList<Change>();
-
+		Bounds[] windowChange = new Bounds[previousStateWindows.size()];
+		Bounds maxChange = new Bounds();
+		for (int i = 0; i<windowChange.length; i++){
+			windowChange[i] = BinaryImageProcessor.boundsOfChange(diff,new Bounds(windowChange[i].getX(), windowChange[i].getY(), windowChange[i].getLength() - 1, windowChange[i].getWidth() - 1));
+			if(maxChange.getLength()* maxChange.getWidth() < windowChange[i].getLength() * windowChange[i].getWidth())
+				maxChange = windowChange[i];
+		}
+			//Whichever one has more change is the one the change took place in.
 	}
 
 	/**
