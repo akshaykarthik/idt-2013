@@ -129,6 +129,13 @@ public class Bounds {
 	}
 
 	/**
+	 * @return Size of the boundary
+	 */
+	public int size() {
+		return l * w;
+	}
+
+	/**
 	 * Returns a visual representation of bounds of change The format is
 	 * <code>[x={x}, y={y}, l={l}, w={w}]</code>
 	 * 
