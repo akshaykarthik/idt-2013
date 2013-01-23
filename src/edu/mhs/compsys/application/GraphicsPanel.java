@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 
 import edu.mhs.compsys.idt.Change;
 import edu.mhs.compsys.idt.StateTransition;
+import edu.mhs.compsys.processing.ImageAreaIdentifier;
 import edu.mhs.compsys.processing.Recognizer;
 import edu.mhs.compsys.utils.Config;
 
@@ -136,7 +137,10 @@ public class GraphicsPanel extends JPanel implements ActionListener
 				g.drawImage(new ImageIcon(files[imageNum + 1].getPath()).getImage(), 10 + (imgWidth + 10), 55, imgXSize, imgYSize, null);
 
 				// Change image --- quadrant: 3
+				// put this back in
 				g.drawImage(rec.getChange(imageNum), 10, 55 + 10 + imgYSize, imgXSize, imgYSize, null);
+				// g.drawImage(ImageAreaIdentifier.getAreas(rec.getBinDiff().get(imageNum)),
+				// 10, 55 + 10 + imgYSize, imgXSize, imgYSize, null);
 				// imgYSize + 10, null);
 
 				// Change Strings --- quadrant: 4
