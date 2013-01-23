@@ -48,12 +48,16 @@ public class WindowChangeProcessor implements IChangeProcessor {
 		_changes = new ArrayList<Change>();
 		Bounds[] windowChange = new Bounds[previousStateWindows.size()];
 		Bounds maxChange = new Bounds();
+		int window = -1;
 		for (int i = 0; i<windowChange.length; i++){
 			windowChange[i] = BinaryImageProcessor.boundsOfChange(diff,new Bounds(windowChange[i].getX(), windowChange[i].getY(), windowChange[i].getLength() - 1, windowChange[i].getWidth() - 1));
-			if(maxChange.getLength()* maxChange.getWidth() < windowChange[i].getLength() * windowChange[i].getWidth())
+			if(maxChange.size() < windowChange[i].size()){
 				maxChange = windowChange[i];
+				window = i;
+			}
 		}
-			//Whichever one has more change is the one the change took place in.
+			//Find which area of the window it took place in.  Top portion is titlebar, then menubar, then application area. 
+		//if(maxChange.getX() > -1) _changes.add(new Change(maxChange, ClassificationType.))
 	}
 
 	/**
