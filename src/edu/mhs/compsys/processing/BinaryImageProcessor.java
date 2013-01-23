@@ -1,8 +1,11 @@
 package edu.mhs.compsys.processing;
 
+import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import edu.mhs.compsys.idt.Bounds;
+import edu.mhs.compsys.idt.BoundsProcessor;
 
 /**
  * A utility class that provides methods for working with BinaryImages.
@@ -296,30 +299,56 @@ public class BinaryImageProcessor {
 	 * Boundaries of the image.
 	 * 
 	 * @param input
-	 *            BinaryImage to be processed
-	 * @param boundries
+	 *            BinaryImage to be processed.
+	 * @param boundaries
 	 *            The boundary to search within.
 	 * @return A single Bounds object that returns the bounds of change.
 	 */
-	public static Bounds boundsOfChange(BinaryImage input, Bounds boundries) {
+	public static Bounds boundsOfChange(BinaryImage input, Bounds boundaries) {
+		return boundsOfChange(input, boundaries, new ArrayList<Bounds>());
+	}
+
+	/**
+	 * Calculates the minimum bounding box of all changes within the given
+	 * Boundaries of the image.
+	 * 
+	 * @param input
+	 *            BinaryImage to be processed.
+	 * @param boundaries
+	 *            The boundary to search within.
+	 * @param windows
+	 *            The boundaries to ignore.
+	 * @return A single Bounds object that returns the bounds of change.
+	 */
+	public static Bounds boundsOfChange(BinaryImage input, Bounds boundaries,
+			ArrayList<Bounds> windows) {
 		int x = Integer.MAX_VALUE;
 		int y = Integer.MAX_VALUE;
 		int l = Integer.MIN_VALUE;
 		int w = Integer.MIN_VALUE;
 
-		final int b_x = boundries.getX();
-		final int b_y = boundries.getY();
-		final int b_l = boundries.getLength();
-		final int b_w = boundries.getWidth();
+		final int b_x = boundaries.getX();
+		final int b_y = boundaries.getY();
+		final int b_l = boundaries.getLength();
+		final int b_w = boundaries.getWidth();
 
 		for (int i = b_x; i < b_l; i++) {
 			for (int j = b_y; j < b_w; j++) {
 				if (input.safeGet(i, j)) {
-					x = (i < x) ? i : x;
-					y = (j < y) ? j : y;
+					boolean set = true;
+					for (Bounds b : windows) {
+						if (BoundsProcessor.inBounds(new Point(i, j), b)) {
+							set = false;
+							break;
+						}
+					}
+					if (set) {
+						x = (i < x) ? i : x;
+						y = (j < y) ? j : y;
 
-					l = (i > l) ? i : l;
-					w = (j > w) ? j : w;
+						l = (i > l) ? i : l;
+						w = (j > w) ? j : w;
+					}
 				}
 			}
 		}
