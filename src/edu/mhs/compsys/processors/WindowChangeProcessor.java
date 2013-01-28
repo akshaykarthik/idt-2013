@@ -57,7 +57,15 @@ public class WindowChangeProcessor implements IChangeProcessor {
 			}
 		}
 			//Find which area of the window it took place in.  Top portion is titlebar, then menubar, then application area. 
-		//if(maxChange.getX() > -1) _changes.add(new Change(maxChange, ClassificationType.))
+//		if(maxChange.getY() >  ) {
+//			//application area.
+//		}
+		if(maxChange.getY() > 24){
+			// _changes.add(new Change(maxChange, ClassificationType.Menu)) //Go based on Y coord change. Menu
+		}
+		if(maxChange.getY() > -1){
+			//titlebar
+		}
 	}
 
 	/**

@@ -69,6 +69,17 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor {
 					ClassificationType.DESKTOP_ICON_CHANGE));
 
 		}
+		
+//		Bounds deskChange = BinaryImageProcessor.boundsOfChange(diff,
+//				 new Bounds(0, 0, cfg.getImageWidth() - 1, cfg.getImageHeight()
+//				 - cfg.getTaskBarHeight() - 1));
+//			int notInAnyWindows = 0;
+//			for(int i = 0; i < previousStateWindows.size(); i++){
+//				 if(!BoundsProcessor.intersect(previousStateWindows.get(i), deskChange))
+//					 notInAnyWindows++;		 
+//			}
+//			if(notInAnyWindows == previousStateWindows.size())
+//				_changes.add(new Change(deskChange, ClassificationType.DESKTOP_ICON_CHANGE));
 
 	}
 
