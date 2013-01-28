@@ -26,7 +26,6 @@ import javax.swing.JPanel;
 
 import edu.mhs.compsys.idt.Change;
 import edu.mhs.compsys.idt.StateTransition;
-import edu.mhs.compsys.processing.ImageAreaIdentifier;
 import edu.mhs.compsys.processing.Recognizer;
 import edu.mhs.compsys.utils.Config;
 
