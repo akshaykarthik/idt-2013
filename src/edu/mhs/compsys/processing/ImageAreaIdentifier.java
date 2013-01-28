@@ -12,11 +12,9 @@ public class ImageAreaIdentifier
 	 */
 	public static BufferedImage getAreas(BinaryImage i)
 	{
-
 		BufferedImage ret = new BufferedImage(i.getWidth(), i.getHeight(), BufferedImage.TYPE_INT_RGB);
-		int areaColor = 1;
-		int tempAreaColor = 1;
-
+		int areaColor = 10;
+		int tempAreaColor = 10;
 		// For loop count VI
 		for (int passes = 0; passes < 1; passes++)
 		{
@@ -37,9 +35,11 @@ public class ImageAreaIdentifier
 						}
 						for (int xx = 0; xx < 3; xx++)
 						{
-							for (int yy = 0; yy < 3F; yy++)
+							for (int yy = 0; yy < 3; yy++)
 							{
-								if (neighbors[xx][yy])
+								if (neighbors[xx][yy])// if the neighbor spot
+														// has a change it will
+														// be set to a color
 								{
 									if (ret.getRGB(xx, yy) == 0)// starting new
 																// color area
@@ -51,7 +51,7 @@ public class ImageAreaIdentifier
 									else
 									// found old color area and using that color
 									{
-										tempAreaColor = ret.getRGB(xx, yy);
+										tempAreaColor = ret.getRGB(x, y);
 										ret.setRGB(xx, yy, tempAreaColor);
 									}
 								}
