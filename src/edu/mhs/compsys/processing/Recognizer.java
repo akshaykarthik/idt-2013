@@ -13,6 +13,7 @@ import edu.mhs.compsys.processors.WindowChangeProcessor;
 import edu.mhs.compsys.processors.WindowMenuProcessor;
 import edu.mhs.compsys.processors.WindowStateProcessor;
 import edu.mhs.compsys.reporting.Report;
+import edu.mhs.compsys.testing.dummyChange;
 import edu.mhs.compsys.utils.Config;
 
 /**
@@ -38,6 +39,18 @@ public class Recognizer {
 	 * @param files
 	 */
 	public Recognizer(File[] files, Config cfg) {
+		this(files, cfg, false);
+	}
+
+	/**
+	 * Creates a new Recognizer with the given files. If debug is true, also
+	 * loads dummychanges
+	 * 
+	 * @param files
+	 * @param cfg
+	 * @param debug
+	 */
+	public Recognizer(File[] files, Config cfg, boolean debug) {
 		try {
 			data = new Dataset(files);
 			report = new Report();
@@ -49,13 +62,13 @@ public class Recognizer {
 			processors.add(new WindowMenuProcessor());
 			processors.add(new WindowChangeProcessor());
 
+			if (debug) {
+				processors.add(new dummyChange());
+			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void addRecognizer(IChangeProcessor d) {
-		processors.add(d);
 	}
 
 	/**
