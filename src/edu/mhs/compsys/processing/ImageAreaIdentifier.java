@@ -13,51 +13,58 @@ public class ImageAreaIdentifier
 	public static BufferedImage getAreas(BinaryImage i)
 	{
 		BufferedImage ret = new BufferedImage(i.getWidth(), i.getHeight(), BufferedImage.TYPE_INT_RGB);
-		int areaColor = 10;
-		int tempAreaColor = 10;
+		int areaColor = 1;
+		int tempAreaColor = 1;
 		// For loop count VI
+
+		for (int setX = 0; setX < i.getWidth(); setX++)
+		{
+			for (int setY = 0; setY < i.getHeight(); setY++)
+			{
+				ret.setRGB(setX, setY, 0);
+			}
+		}
+
 		for (int passes = 0; passes < 1; passes++)
 		{
-			for (int x = 0; x < i.getWidth(); x++)
+			for (int x = 1; x < i.getWidth() - 1; x++)
 			{
-				for (int y = 0; y < i.getHeight(); y++)
+				for (int y = 1; y < i.getHeight() - 1; y++)
 				{
-					if (i.get(x, y))
+					if (i.get(x, y))// a change is detected
 					{
 						boolean[][] neighbors = new boolean[3][3];
-
+						boolean foundOldColor = false;
 						for (int xx = 0; xx < 3; xx++)
 						{
 							for (int yy = 0; yy < 3; yy++)
 							{
-								neighbors[xx][yy] = i.get(x - 2 + xx, y - 2 + yy);
-							}
-						}
-						for (int xx = 0; xx < 3; xx++)
-						{
-							for (int yy = 0; yy < 3; yy++)
-							{
-								if (neighbors[xx][yy])// if the neighbor spot
-														// has a change it will
-														// be set to a color
+								neighbors[xx][yy] = i.get(x - 1 + xx, y - 1 + yy);
+								if (ret.getRGB(x - 1 + xx, y - 1 + yy) > 0)
 								{
-									if (ret.getRGB(xx, yy) == 0)// starting new
-																// color area
-									{
-										tempAreaColor = areaColor + 1;
-										areaColor++;
-										ret.setRGB(xx, yy, tempAreaColor);
-									}
-									else
-									// found old color area and using that color
-									{
-										tempAreaColor = ret.getRGB(x, y);
-										ret.setRGB(xx, yy, tempAreaColor);
-									}
+									foundOldColor = true;
+									tempAreaColor = ret.getRGB(x - 1 + xx, y - 1 + yy);
 								}
-
 							}
 						}
+
+						if (!foundOldColor)
+						{
+							areaColor++;
+							tempAreaColor = 0 + areaColor;
+						}
+
+						for (int paintX = -1; paintX < 2; paintX++)
+						{
+							for (int paintY = -1; paintY < 2; paintY++)
+							{
+								if (neighbors[1 + paintX][1 + paintY])
+								{
+									ret.setRGB(x + paintX, y + paintY, tempAreaColor);
+								}
+							}
+						}
+
 					}
 				}
 			}
