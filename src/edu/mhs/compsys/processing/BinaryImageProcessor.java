@@ -342,6 +342,7 @@ public class BinaryImageProcessor {
 							break;
 						}
 					}
+
 					if (set) {
 						x = (i < x) ? i : x;
 						y = (j < y) ? j : y;

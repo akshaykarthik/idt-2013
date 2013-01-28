@@ -46,20 +46,29 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor {
 			BinaryImage diff, ArrayList<StateTransition> changes, Dataset data,
 			ArrayList<Bounds> previousStateWindows) {
 		_changes = new ArrayList<Change>();
+
+		// Taskbar Change
 		Bounds taskChange = BinaryImageProcessor.boundsOfChange(
 				diff,
 				new Bounds(0, cfg.getImageHeight() - cfg.getTaskBarHeight(),
 						cfg.getTaskBarHeight() - 1, cfg.getImageWidth()
 								- cfg.getDateWidth() - 1));
-		if (taskChange.getX() > -1)
+
+		if (taskChange.getX() > -1) {
 			_changes.add(new Change(taskChange,
 					ClassificationType.TASKBAR_UPDATE));
+		}
 
-		// Bounds[] deskChange = new Bounds() [previousStateWindows.length() *
-		//
-		// BinaryImageProcessor.boundsOfChange(diff,
-		// new Bounds(0, 0, cfg.getImageWidth() - 1, cfg.getImageHeight()
-		// - cfg.getTaskBarHeight() - 1));
+		// Desktop Change
+		Bounds desktopChange = BinaryImageProcessor.boundsOfChange(diff,
+				new Bounds(0, 0, cfg.getImageHeight() - cfg.getTaskBarHeight(),
+						cfg.getImageWidth()), previousStateWindows);
+
+		if (desktopChange.getX() > -1) {
+			_changes.add(new Change(desktopChange,
+					ClassificationType.DESKTOP_ICON_CHANGE));
+
+		}
 
 	}
 
