@@ -1,20 +1,29 @@
 package edu.mhs.compsys.processing;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 public class ImageAreaIdentifier
-
 {
 
+	// WARNINGZZZZZZ - DONT USE THIS CLASS
+	// WARNINGZZZZZZ - DONT USE THIS CLASS
+	// WARNINGZZZZZZ - DONT USE THIS CLASS
+	// WARNINGZZZZZZ - DONT USE THIS CLASS
+	// WARNINGZZZZZZ - DONT USE THIS CLASS
+	// WARNINGZZZZZZ - DONT USE THIS CLASS
+	// WARNINGZZZZZZ - DONT USE THIS CLASS
+	// WARNINGZZZZZZ - DONT USE THIS CLASS
+	// WARNINGZZZZZZ - DONT USE THIS CLASS
 	/**
 	 * @param i
 	 * @return
 	 */
-	public static BufferedImage getAreas(BinaryImage i)
+	public static BufferedImage getColoredAreas(BinaryImage i)
 	{
 		BufferedImage ret = new BufferedImage(i.getWidth(), i.getHeight(), BufferedImage.TYPE_INT_RGB);
-		int areaColor = 1;
-		int tempAreaColor = 1;
+		int areaColor = Color.red.getRGB();
+		int tempAreaColor = 0 + areaColor;
 		// For loop count VI
 
 		for (int setX = 0; setX < i.getWidth(); setX++)
