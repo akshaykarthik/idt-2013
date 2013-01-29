@@ -63,7 +63,7 @@ public class WindowChangeProcessor implements IChangeProcessor {
 //		}
 		if(maxChange.getY() < 24){ //This will be anything inside the title bar.  Title bar click or title bar change.  Click will be the right most xx pixels.
 			
-			if(previousStateWindows.get(window).getWidth() - maxChange.getX() < 50)  //50 is a placeholder
+			if(previousStateWindows.get(window).getWidth() - maxChange.getX() < 56)  //56 pixels approx. from edge to minimize button edge.
 				 _changes.add(new Change(maxChange, ClassificationType.WINDOW_TITLE_BAR_CLICK));
 			else _changes.add(new Change(maxChange, ClassificationType.WINDOW_TITLE_CHANGE));
 		}

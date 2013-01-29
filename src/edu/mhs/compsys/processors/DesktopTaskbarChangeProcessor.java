@@ -61,8 +61,8 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor {
 
 		// Desktop Change
 		Bounds desktopChange = BinaryImageProcessor.boundsOfChange(diff,
-				new Bounds(0, 0, cfg.getImageHeight() - cfg.getTaskBarHeight(),
-						cfg.getImageWidth()), previousStateWindows);
+				new Bounds(0, 0, cfg.getImageHeight() - cfg.getTaskBarHeight() - 1,
+						cfg.getImageWidth() - 1), previousStateWindows);
 
 		if (desktopChange.getX() > -1) {
 			_changes.add(new Change(desktopChange,
@@ -73,12 +73,14 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor {
 //		Bounds deskChange = BinaryImageProcessor.boundsOfChange(diff,
 //				 new Bounds(0, 0, cfg.getImageWidth() - 1, cfg.getImageHeight()
 //				 - cfg.getTaskBarHeight() - 1));
-//			int notInAnyWindows = 0;
+//			boolean notInAnyWindows = true;
 //			for(int i = 0; i < previousStateWindows.size(); i++){
-//				 if(!BoundsProcessor.intersect(previousStateWindows.get(i), deskChange))
-//					 notInAnyWindows++;		 
+//				 if(BoundsProcessor.intersect(previousStateWindows.get(i), deskChange)){		
+//					 notInAnyWindows = false;
+//					 break;
+//				 }
 //			}
-//			if(notInAnyWindows == previousStateWindows.size())
+//			if(notInAnyWindows)
 //				_changes.add(new Change(deskChange, ClassificationType.DESKTOP_ICON_CHANGE));
 
 	}
