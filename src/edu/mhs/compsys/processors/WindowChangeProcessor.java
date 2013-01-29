@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import edu.mhs.compsys.idt.Bounds;
 import edu.mhs.compsys.idt.Change;
+import edu.mhs.compsys.idt.ClassificationType;
 import edu.mhs.compsys.idt.Dataset;
 import edu.mhs.compsys.idt.StateTransition;
 import edu.mhs.compsys.processing.BinaryImage;
@@ -60,12 +61,13 @@ public class WindowChangeProcessor implements IChangeProcessor {
 //		if(maxChange.getY() >  ) {
 //			//application area.
 //		}
-		if(maxChange.getY() > 24){
-			// _changes.add(new Change(maxChange, ClassificationType.Menu)) //Go based on Y coord change. Menu
+		if(maxChange.getY() < 24){ //This will be anything inside the title bar.  Title bar click or title bar change.  Click will be the right most xx pixels.
+			
+			if(previousStateWindows.get(window).getWidth() - maxChange.getX() < 50)  //50 is a placeholder
+				 _changes.add(new Change(maxChange, ClassificationType.WINDOW_TITLE_BAR_CLICK));
+			else _changes.add(new Change(maxChange, ClassificationType.WINDOW_TITLE_CHANGE));
 		}
-		if(maxChange.getY() > -1){
-			//titlebar
-		}
+
 	}
 
 	/**
