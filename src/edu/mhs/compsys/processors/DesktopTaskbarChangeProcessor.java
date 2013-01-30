@@ -48,40 +48,44 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor {
 		_changes = new ArrayList<Change>();
 
 		// Taskbar Change
-		Bounds taskChange = BinaryImageProcessor.boundsOfChange(
-				diff,
-				new Bounds(0, cfg.getImageHeight() - cfg.getTaskBarHeight(),
-						cfg.getTaskBarHeight() - 1, cfg.getImageWidth()
-								- cfg.getDateWidth() - 1));
+		Bounds taskbarBounds = new Bounds(0, cfg.getImageHeight()
+				- cfg.getTaskBarHeight(), cfg.getImageWidth(),
+				cfg.getTaskBarHeight());
 
-		if (taskChange.getX() > -1) {
+		Bounds taskChange = BinaryImageProcessor.boundsOfChange(diff,
+				taskbarBounds);
+		System.out.println(taskbarBounds);
+		System.out.println(taskChange);
+		if (taskChange.getX() < Integer.MAX_VALUE) {
 			_changes.add(new Change(taskChange,
 					ClassificationType.TASKBAR_UPDATE));
 		}
 
 		// Desktop Change
 		Bounds desktopChange = BinaryImageProcessor.boundsOfChange(diff,
-				new Bounds(0, 0, cfg.getImageHeight() - cfg.getTaskBarHeight() - 1,
-						cfg.getImageWidth() - 1), previousStateWindows);
+				new Bounds(0, 0, cfg.getImageHeight() - cfg.getTaskBarHeight()
+						- 1, cfg.getImageWidth() - 1), previousStateWindows);
 
-		if (desktopChange.getX() > -1) {
+		if (desktopChange.getX() < Integer.MAX_VALUE) {
 			_changes.add(new Change(desktopChange,
 					ClassificationType.DESKTOP_ICON_CHANGE));
 
 		}
-		
-//		Bounds deskChange = BinaryImageProcessor.boundsOfChange(diff,
-//				 new Bounds(0, 0, cfg.getImageWidth() - 1, cfg.getImageHeight()
-//				 - cfg.getTaskBarHeight() - 1));
-//			boolean notInAnyWindows = true;
-//			for(int i = 0; i < previousStateWindows.size(); i++){
-//				 if(BoundsProcessor.intersect(previousStateWindows.get(i), deskChange)){		
-//					 notInAnyWindows = false;
-//					 break;
-//				 }
-//			}
-//			if(notInAnyWindows)
-//				_changes.add(new Change(deskChange, ClassificationType.DESKTOP_ICON_CHANGE));
+
+		// Bounds deskChange = BinaryImageProcessor.boundsOfChange(diff,
+		// new Bounds(0, 0, cfg.getImageWidth() - 1, cfg.getImageHeight()
+		// - cfg.getTaskBarHeight() - 1));
+		// boolean notInAnyWindows = true;
+		// for(int i = 0; i < previousStateWindows.size(); i++){
+		// if(BoundsProcessor.intersect(previousStateWindows.get(i),
+		// deskChange)){
+		// notInAnyWindows = false;
+		// break;
+		// }
+		// }
+		// if(notInAnyWindows)
+		// _changes.add(new Change(deskChange,
+		// ClassificationType.DESKTOP_ICON_CHANGE));
 
 	}
 
@@ -90,8 +94,6 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor {
 	 */
 	@Override
 	public Change[] getChanges() {
-		// TODO Auto-generated method stub
-		return (Change[]) _changes.toArray();
+		return _changes.toArray(new Change[0]);
 	}
-
 }

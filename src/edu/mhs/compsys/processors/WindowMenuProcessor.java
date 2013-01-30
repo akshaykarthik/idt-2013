@@ -58,6 +58,6 @@ public class WindowMenuProcessor implements IChangeProcessor {
 	@Override
 	public Change[] getChanges() {
 		// TODO Auto-generated method stub
-		return (Change[]) _changes.toArray();
+		return _changes.toArray(new Change[0]);
 	}
 }

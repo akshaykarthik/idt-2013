@@ -243,7 +243,7 @@ public class BinaryImageProcessor {
 		BinaryImage ret = new BinaryImage(in1.getHeight(), in1.getWidth());
 		for (int i = 0; i < in1.getHeight(); i++) {
 			for (int j = 0; j < in1.getWidth(); j++) {
-				if (in1.getRGB(j, i) == in2.getRGB(j, i))
+				if (in1.getRGB(j, i) != in2.getRGB(j, i))
 					ret.set(i, j, true);
 			}
 		}
@@ -329,11 +329,11 @@ public class BinaryImageProcessor {
 
 		final int b_x = boundaries.getX();
 		final int b_y = boundaries.getY();
-		final int b_l = boundaries.getLength();
-		final int b_w = boundaries.getWidth();
+		final int b_w = boundaries.getLength();
+		final int b_l = boundaries.getWidth();
 
-		for (int i = b_x; i < b_l; i++) {
-			for (int j = b_y; j < b_w; j++) {
+		for (int i = b_x; i < b_x + b_l; i++) {
+			for (int j = b_y; j < b_y + b_w; j++) {
 				if (input.safeGet(i, j)) {
 					boolean set = true;
 					for (Bounds b : windows) {
@@ -344,18 +344,19 @@ public class BinaryImageProcessor {
 					}
 
 					if (set) {
-						x = (i < x) ? i : x;
-						y = (j < y) ? j : y;
-
-						l = (i > l) ? i : l;
-						w = (j > w) ? j : w;
+						x = Math.min(x, i);
+						y = Math.min(y, j);
+						l = Math.max(l, i);
+						w = Math.max(w, j);
 					}
 				}
 			}
 		}
+
 		if (x == b_x || y == b_y || l == b_l || w == b_w) {
 			return new Bounds();
 		}
+
 		return new Bounds(x, y, l, w);
 	}
 }

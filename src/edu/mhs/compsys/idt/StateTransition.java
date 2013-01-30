@@ -1,6 +1,7 @@
 package edu.mhs.compsys.idt;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * This class is a container for the Transition between two states. It consists
@@ -52,6 +53,10 @@ public class StateTransition {
 	 */
 	public void setChanges(ArrayList<Change> changes) {
 		this.changes = changes;
+	}
+
+	public void addChanges(Change[] in) {
+		this.changes.addAll(Arrays.asList(in));
 	}
 
 	/**

@@ -5,13 +5,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import edu.mhs.compsys.idt.Bounds;
 import edu.mhs.compsys.idt.Change;
 import edu.mhs.compsys.idt.Dataset;
 import edu.mhs.compsys.idt.StateTransition;
 import edu.mhs.compsys.processors.DesktopTaskbarChangeProcessor;
-import edu.mhs.compsys.processors.WindowChangeProcessor;
-import edu.mhs.compsys.processors.WindowMenuProcessor;
-import edu.mhs.compsys.processors.WindowStateProcessor;
 import edu.mhs.compsys.reporting.Report;
 import edu.mhs.compsys.testing.dummyChange;
 import edu.mhs.compsys.utils.Config;
@@ -58,9 +56,9 @@ public class Recognizer {
 
 			processors = new ArrayList<IChangeProcessor>();
 			processors.add(new DesktopTaskbarChangeProcessor());
-			processors.add(new WindowStateProcessor());
-			processors.add(new WindowMenuProcessor());
-			processors.add(new WindowChangeProcessor());
+			// processors.add(new WindowStateProcessor());
+			// processors.add(new WindowMenuProcessor());
+			// processors.add(new WindowChangeProcessor());
 
 			if (debug) {
 				processors.add(new dummyChange());
@@ -75,23 +73,25 @@ public class Recognizer {
 	 * Processes the images and populates differences.
 	 */
 	public void process() {
+		bindiffs = new ArrayList<BinaryImage>();
 		diffs = new ArrayList<BufferedImage>();
 		changes = new ArrayList<StateTransition>();
 
 		for (int i = 0; i < data.length() - 1; i++) {
-			BinaryImage diff = BinaryImageProcessor.fromDiff(data.get(i),
-					data.get(i + 1));
-
+			final BufferedImage data1 = data.get(i);
+			final BufferedImage data2 = data.get(i + 1);
+			BinaryImage diff = BinaryImageProcessor.fromDiff(data1, data2);
 			bindiffs.add(diff);
 			diffs.add(BinaryImageProcessor.toImage(diff));
 
-			StateTransition c = new StateTransition("State_" + i, "State_" + i
-					+ 1);
+			StateTransition c = new StateTransition("St_" + i, "St_" + i + 1);
+
 			for (IChangeProcessor proc : processors) {
 				proc.initialize(config);
 				// TODO: process
-				// proc.process(data.get(i), data.get(i + 1), diff, changes,
-				// data);
+				proc.process(data1, data2, diff, changes, data,
+						new ArrayList<Bounds>());
+				System.out.println(proc);
 				for (Change ch : proc.getChanges()) {
 					c.addChange(ch);
 				}

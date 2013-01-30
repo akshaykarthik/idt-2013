@@ -10,9 +10,8 @@ import edu.mhs.compsys.utils.Config;
  * A utility class that provides methods for working with Images.
  * 
  */
-public class ImageProcessor
-{
-	Config	cfg	= new Config();
+public class ImageProcessor {
+	Config cfg = new Config();
 
 	/**
 	 * Finds a smaller image inside a given larger image.
@@ -23,8 +22,7 @@ public class ImageProcessor
 	 *         smaller image for each instance of the smaller image.
 	 */
 	public static ArrayList<Point> findIn(BufferedImage bigImg,
-			BufferedImage smallImg)
-	{
+			BufferedImage smallImg) {
 		int count = 0;
 
 		int smallImgX = smallImg.getWidth();
@@ -33,18 +31,11 @@ public class ImageProcessor
 		int bigImgY = bigImg.getHeight();
 
 		ArrayList<Point> locs = new ArrayList<Point>();
-		for (int y = 0; y < bigImgY - smallImgY; y++)
-		{
-			for (int x = 0; x < bigImgX - smallImgX; x++)
-			{
-
-				if ((bigImg.getRGB(x, y) == smallImg.getRGB(0, 0)))
-				{
-					nestedLoop: for (int smallY = 0; smallY < smallImgY; smallY++)
-					{
-						for (int smallX = 0; smallX < smallImgX; smallX++)
-						{
-
+		for (int y = 0; y < bigImgY - smallImgY; y++) {
+			for (int x = 0; x < bigImgX - smallImgX; x++) {
+				if ((bigImg.getRGB(x, y) == smallImg.getRGB(0, 0))) {
+					nestedLoop: for (int smallY = 0; smallY < smallImgY; smallY++) {
+						for (int smallX = 0; smallX < smallImgX; smallX++) {
 							if (smallImg.getRGB(smallX, smallY) == bigImg
 									.getRGB(smallX + x, smallY + y))
 								count++;
@@ -60,7 +51,6 @@ public class ImageProcessor
 
 		return locs;
 	}
-	
 
 	/**
 	 * Takes an integer array and converts it into a bufferedimage with each
@@ -71,8 +61,9 @@ public class ImageProcessor
 	 * @return BufferedImage
 	 */
 	public static BufferedImage intArrayToBufferedImage(int[][] input) {
-		BufferedImage ret = new BufferedImage(input.length, input[0].length, 0,
-				null);
+		BufferedImage ret = new BufferedImage(input.length, input[0].length,
+				BufferedImage.TYPE_INT_RGB);
+		System.out.println(ret);
 		for (int i = 0; i < input.length; i++) {
 			for (int j = 0; j < input[0].length; j++) {
 				ret.setRGB(i, j, input[i][j]);
@@ -80,5 +71,4 @@ public class ImageProcessor
 		}
 		return ret;
 	}
-
 }

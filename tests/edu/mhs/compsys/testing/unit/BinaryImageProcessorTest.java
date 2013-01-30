@@ -41,7 +41,9 @@ public class BinaryImageProcessorTest {
 
 	@Test
 	public void testBoundsOfChange() {
+		System.out.println(b);
 		Bounds al = BinaryImageProcessor.boundsOfChange(b);
+		System.out.println(al);
 		Bounds bl = new Bounds(1, 1, 3, 3);
 		assertEquals(al, bl);
 	}

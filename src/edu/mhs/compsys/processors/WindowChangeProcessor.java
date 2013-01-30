@@ -47,25 +47,42 @@ public class WindowChangeProcessor implements IChangeProcessor {
 			BinaryImage diff, ArrayList<StateTransition> changes, Dataset data,
 			ArrayList<Bounds> previousStateWindows) {
 		_changes = new ArrayList<Change>();
-		Bounds[] windowChange = new Bounds[previousStateWindows.size()];
-		Bounds maxChange = new Bounds();
-		int window = -1;
-		for (int i = 0; i<windowChange.length; i++){
-			windowChange[i] = BinaryImageProcessor.boundsOfChange(diff,new Bounds(windowChange[i].getX(), windowChange[i].getY(), windowChange[i].getLength() - 1, windowChange[i].getWidth() - 1));
-			if(maxChange.size() < windowChange[i].size()){
-				maxChange = windowChange[i];
-				window = i;
+		if (previousStateWindows.size() > 0) {
+			Bounds[] windowChange = new Bounds[previousStateWindows.size()];
+			Bounds maxChange = new Bounds();
+			int window = -1;
+			for (int i = 0; i < windowChange.length; i++) {
+				windowChange[i] = BinaryImageProcessor.boundsOfChange(
+						diff,
+						new Bounds(windowChange[i].getX(), windowChange[i]
+								.getY(), windowChange[i].getLength() - 1,
+								windowChange[i].getWidth() - 1));
+				if (maxChange.size() < windowChange[i].size()) {
+					maxChange = windowChange[i];
+					window = i;
+				}
 			}
-		}
-			//Find which area of the window it took place in.  Top portion is titlebar, then menubar, then application area. 
-//		if(maxChange.getY() >  ) {
-//			//application area.
-//		}
-		if(maxChange.getY() < 24){ //This will be anything inside the title bar.  Title bar click or title bar change.  Click will be the right most xx pixels.
-			
-			if(previousStateWindows.get(window).getWidth() - maxChange.getX() < 56)  //56 pixels approx. from edge to minimize button edge.
-				 _changes.add(new Change(maxChange, ClassificationType.WINDOW_TITLE_BAR_CLICK));
-			else _changes.add(new Change(maxChange, ClassificationType.WINDOW_TITLE_CHANGE));
+			// Find which area of the window it took place in. Top portion is
+			// titlebar, then menubar, then application area.
+			// if(maxChange.getY() > ) {
+			// //application area.
+			// }
+			if (maxChange.getY() < 24) { // This will be anything inside the
+											// title
+											// bar. Title bar click or title bar
+											// change. Click will be the right
+											// most
+											// xx pixels.
+
+				if (previousStateWindows.get(window).getWidth()
+						- maxChange.getX() < 56)
+					// 56 pixels approx. from edge to minimize button edge.
+					_changes.add(new Change(maxChange,
+							ClassificationType.WINDOW_TITLE_BAR_CLICK));
+				else
+					_changes.add(new Change(maxChange,
+							ClassificationType.WINDOW_TITLE_CHANGE));
+			}
 		}
 
 	}
@@ -76,6 +93,6 @@ public class WindowChangeProcessor implements IChangeProcessor {
 	@Override
 	public Change[] getChanges() {
 		// TODO Auto-generated method stub
-		return (Change[]) _changes.toArray();
+		return _changes.toArray(new Change[0]);
 	}
 }
