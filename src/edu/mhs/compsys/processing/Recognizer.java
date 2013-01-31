@@ -80,20 +80,29 @@ public class Recognizer {
 		for (int i = 0; i < data.length() - 1; i++) {
 			final BufferedImage data1 = data.get(i);
 			final BufferedImage data2 = data.get(i + 1);
-			BinaryImage diff = BinaryImageProcessor.fromDiff(data1, data2);
+			final BinaryImage diff = BinaryImageProcessor
+					.fromDiff(data1, data2);
 			bindiffs.add(diff);
 			diffs.add(BinaryImageProcessor.toImage(diff));
 
-			StateTransition c = new StateTransition("St_" + i, "St_" + i + 1);
+			final StateTransition c = new StateTransition("St_" + i, "St_" + i
+					+ 1);
 
-			for (IChangeProcessor proc : processors) {
-				proc.initialize(config);
-				// TODO: process
-				proc.process(data1, data2, diff, changes, data,
-						new ArrayList<Bounds>());
-				for (Change ch : proc.getChanges()) {
-					c.addChange(ch);
-				}
+			for (final IChangeProcessor proc : processors) {
+				Thread th = new Thread(new Runnable() {
+					public void run() {
+						proc.initialize(config);
+						proc.process(data1, data2, diff, changes, data,
+								new ArrayList<Bounds>());
+						for (Change ch : proc.getChanges()) {
+							c.addChange(ch);
+						}
+
+					}
+				});
+				th.setName((i) + " " + (i + 1) + " "
+						+ proc.getClass().getName());
+				th.start();
 			}
 			changes.add(c);
 		}
