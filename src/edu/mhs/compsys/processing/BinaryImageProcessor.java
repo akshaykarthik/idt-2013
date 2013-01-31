@@ -329,7 +329,7 @@ public class BinaryImageProcessor {
 
 		final int b_x = boundaries.getX();
 		final int b_y = boundaries.getY();
-		final int b_w = boundaries.getLength();
+		final int b_w = boundaries.getHeight();
 		final int b_l = boundaries.getWidth();
 
 		for (int i = b_x; i < b_x + b_l; i++) {

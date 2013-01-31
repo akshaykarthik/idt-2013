@@ -55,7 +55,7 @@ public class WindowChangeProcessor implements IChangeProcessor {
 				windowChange[i] = BinaryImageProcessor.boundsOfChange(
 						diff,
 						new Bounds(windowChange[i].getX(), windowChange[i]
-								.getY(), windowChange[i].getLength() - 1,
+								.getY(), windowChange[i].getHeight() - 1,
 								windowChange[i].getWidth() - 1));
 				if (maxChange.size() < windowChange[i].size()) {
 					maxChange = windowChange[i];

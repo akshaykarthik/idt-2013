@@ -7,14 +7,14 @@ public class BoundsProcessor {
 	// is point in bounds
 	public static boolean inBounds(int x, int y, Bounds b) {
 		if (x >= b.getX() && x < b.getWidth() && y >= b.getY()
-				&& y < b.getLength())
+				&& y < b.getHeight())
 			return true;
 		return false;
 	}
 
 	public static boolean inBounds(Point p, Bounds b) {
 		if (p.getX() >= b.getX() && p.getX() < b.getWidth()
-				&& p.getY() >= b.getY() && p.getY() < b.getLength())
+				&& p.getY() >= b.getY() && p.getY() < b.getHeight())
 			return true;
 		return false;
 	}
@@ -38,7 +38,7 @@ public class BoundsProcessor {
 	// all is b in a
 	public static boolean inside(Bounds a, Bounds b) {
 		if (b.getX() <= a.getX() && b.getY() <= a.getY()
-				&& b.getWidth() < a.getWidth() && b.getLength() < a.getLength())
+				&& b.getWidth() < a.getWidth() && b.getHeight() < a.getHeight())
 			return true;
 		return false;
 	}

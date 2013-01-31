@@ -4,13 +4,13 @@ import java.awt.Point;
 
 /**
  * This class encapsulates the bounds of a change. It contains a description of
- * a box of change defined by <code>Bound{x, y, l, w};</code>
+ * a box of change defined by <code>Bound{x, y, h, w};</code>
  */
 public class Bounds {
 
 	private int x;
 	private int y;
-	private int l;
+	private int h;
 	private int w;
 
 	/**
@@ -28,15 +28,15 @@ public class Bounds {
 	 *            The <code>x</code> coordinate.
 	 * @param y
 	 *            The <code>y</code> coordinate.
-	 * @param l
-	 *            The <code>length</code> of the change rectangle.
+	 * @param h
+	 *            The <code>height</code> of the change rectangle.
 	 * @param w
 	 *            The <code>width</code> of the change rectangle.
 	 */
-	public Bounds(int x, int y, int l, int w) {
+	public Bounds(int x, int y, int h, int w) {
 		this.x = x;
 		this.y = y;
-		this.l = l;
+		this.h = h;
 		this.w = w;
 	}
 
@@ -71,18 +71,18 @@ public class Bounds {
 	}
 
 	/**
-	 * @return the length of the change
+	 * @return the height of the change
 	 */
-	public int getLength() {
-		return l;
+	public int getHeight() {
+		return h;
 	}
 
 	/**
-	 * @param l
-	 *            the length to set
+	 * @param h
+	 *            the height to set
 	 */
-	public void setLength(int l) {
-		this.l = l;
+	public void setHeight(int l) {
+		this.h = l;
 	}
 
 	/**
@@ -118,31 +118,31 @@ public class Bounds {
 	 * @return Bottom left point
 	 */
 	public Point getBotLeft() {
-		return new Point(x, y + l);
+		return new Point(x, y + h);
 	}
 
 	/**
 	 * @return Bottom right point
 	 */
 	public Point getBotRight() {
-		return new Point(x + w, y + l);
+		return new Point(x + w, y + h);
 	}
 
 	/**
 	 * @return Size of the boundary
 	 */
 	public int size() {
-		return l * w;
+		return h * w;
 	}
 
 	/**
 	 * Returns a visual representation of bounds of change The format is
-	 * <code>[x={x}, y={y}, l={l}, w={w}]</code>
+	 * <code>[x={x}, y={y}, h={h}, w={w}]</code>
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return String.format("[x=%s, y=%s, l=%s, w=%s]", x, y, l, w);
+		return String.format("[corner(%s, y=%s), size(%s, %s)]", x, y, h, w);
 	}
 
 	/**
@@ -151,7 +151,7 @@ public class Bounds {
 	 * @return True if the encompassing area is the same, false otherwise.
 	 */
 	public boolean equalSize(Bounds other) {
-		return (l * w) == (other.l * other.w);
+		return (h * w) == (other.h * other.w);
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class Bounds {
 	 * @return True if dimensions are equal, false otherwise
 	 */
 	public boolean equalDimensions(Bounds other) {
-		return (l == other.l && w == other.w);
+		return (h == other.h && w == other.w);
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class Bounds {
 	 * @return <code>true</code> if equal, <code>false</code> otherwise.
 	 */
 	public boolean equals(Bounds other) {
-		return (x == other.x && y == other.y && l == other.l && w == other.w);
+		return (x == other.x && y == other.y && h == other.h && w == other.w);
 	}
 
 	/**
