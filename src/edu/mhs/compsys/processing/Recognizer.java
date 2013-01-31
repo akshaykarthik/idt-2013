@@ -91,7 +91,6 @@ public class Recognizer {
 				// TODO: process
 				proc.process(data1, data2, diff, changes, data,
 						new ArrayList<Bounds>());
-				System.out.println(proc);
 				for (Change ch : proc.getChanges()) {
 					c.addChange(ch);
 				}
