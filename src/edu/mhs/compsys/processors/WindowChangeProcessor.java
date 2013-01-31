@@ -83,6 +83,8 @@ public class WindowChangeProcessor implements IChangeProcessor {
 					_changes.add(new Change(maxChange,
 							ClassificationType.WINDOW_TITLE_CHANGE));
 			}
+			if(maxChange.getY() > 73)
+				_changes.add(new Change(maxChange, ClassificationType.WINDOW_APPLICATION_AREA_UPDATE));
 		}
 
 	}
