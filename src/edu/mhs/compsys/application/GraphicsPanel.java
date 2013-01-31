@@ -13,8 +13,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -31,11 +33,11 @@ import edu.mhs.compsys.utils.Config;
 
 public class GraphicsPanel extends JPanel implements ActionListener
 {
-	private static final long	serialVersionUID		= 1L;
+	private static final long	serialVersionUID		= -2887317017183523795L;
 
-	private final int			ERROR_NOT_AN_IMAGE		= 1;
-	private final int			ERROR_WRONG_IMAGE_SIZE	= 2;
-	private final int			ERROR_TOO_FEW_IMAGES	= 3;
+	private static final int	ERROR_NOT_AN_IMAGE		= 1;
+	private static final int	ERROR_WRONG_IMAGE_SIZE	= 2;
+	private static final int	ERROR_TOO_FEW_IMAGES	= 3;
 	private int					errorCode				= 0;
 
 	private JFileChooser		jfc;
@@ -67,8 +69,13 @@ public class GraphicsPanel extends JPanel implements ActionListener
 				.getScreenSize().height / 2 - jf.getHeight() / 2);
 		jf.setJMenuBar(gp.menu);
 		jf.setFocusable(true);
+		try
+		{
+			jf.setIconImage(ImageIO.read(GraphicsPanel.class.getResourceAsStream("icon.png")));
+		}
+		catch (IOException e)
+		{}
 	}
-
 	/**
 	 * Constructor - Initializes the JFileChooser
 	 */
@@ -233,7 +240,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			g.drawString(
 					"For more help click \"Help > Help Information\" to open a help window.",
 					250, 240);
-			
+
 		}
 	}
 
