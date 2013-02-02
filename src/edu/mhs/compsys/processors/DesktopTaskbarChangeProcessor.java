@@ -49,26 +49,34 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor {
 
 		// Taskbar Change
 		Bounds taskbarBounds = new Bounds(0, cfg.getImageHeight()
-				- cfg.getTaskBarHeight(), cfg.getTaskBarHeight(),
-				cfg.getImageWidth());
+				- cfg.getTaskBarHeight() - 1, cfg.getTaskBarHeight() - 1,
+				cfg.getImageWidth() - cfg.getDateWidth() - 1);
 
-		Bounds taskChange = BinaryImageProcessor.boundsOfChange(diff,
-				taskbarBounds);
-		if (taskChange.getX() < Integer.MAX_VALUE) {
-			_changes.add(new Change(taskChange,
-					ClassificationType.TASKBAR_UPDATE));
+		Bounds taskChange = BinaryImageProcessor.boundsOfChange(diff, taskbarBounds);
+		System.out.println(taskbarBounds);
+		System.out.println(taskChange);
+		try {
+			System.out.println(diff.slice(taskbarBounds).toString(".", " "));
+		} catch (Exception ex) {
+			System.out.println(ex);
+			
 		}
+		if (taskChange.getX() > -1) {
+			_changes.add(new Change(taskChange, ClassificationType.TASKBAR_UPDATE));
+		 }
 
 		// Desktop Change
-		Bounds desktopChange = BinaryImageProcessor.boundsOfChange(diff,
-				new Bounds(0, 0, cfg.getImageHeight() - cfg.getTaskBarHeight()
-						- 1, cfg.getImageWidth() - 1), previousStateWindows);
 
-		if (desktopChange.getX() < Integer.MAX_VALUE) {
-			_changes.add(new Change(desktopChange,
-					ClassificationType.DESKTOP_ICON_CHANGE));
-
-		}
+		// Bounds desktopBounds = new Bounds(0, 0, cfg.getImageHeight()
+		// - cfg.getTaskBarHeight() - 1, cfg.getImageWidth() - 1);
+		// Bounds desktopChange = BinaryImageProcessor.boundsOfChange(diff,
+		// desktopBounds, previousStateWindows);
+		//
+		// if (desktopChange.getX() < Integer.MAX_VALUE) {
+		// _changes.add(new Change(desktopChange,
+		// ClassificationType.DESKTOP_ICON_CHANGE));
+		//
+		// }
 
 		// Bounds deskChange = BinaryImageProcessor.boundsOfChange(diff,
 		// new Bounds(0, 0, cfg.getImageWidth() - 1, cfg.getImageHeight()

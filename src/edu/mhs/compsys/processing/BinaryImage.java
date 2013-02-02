@@ -1,5 +1,7 @@
 package edu.mhs.compsys.processing;
 
+import edu.mhs.compsys.idt.Bounds;
+
 /**
  * A class for easy operations on binary images. This class is simply a
  * datastore and is not an actual image. It can however be converted to
@@ -178,6 +180,11 @@ public class BinaryImage {
 		return ret;
 	}
 
+
+	public BinaryImage slice(Bounds in) {
+		return slice(in.getX(), in.getY(), in.getHeight(), in.getWidth());
+	}
+	
 	/**
 	 * Flips the value at the given coordinates.
 	 * 
@@ -309,5 +316,6 @@ public class BinaryImage {
 		return ret.toString();
 
 	}
+
 
 }

@@ -24,6 +24,12 @@ public class BinaryImageTest {
 	}
 
 	@Test
+	public void testSlice(){
+		System.out.println(b);
+		System.out.println(b.slice(1, 1, 2, 2));
+	}
+	
+	@Test
 	public void testFlip() {
 		assertTrue(a.get(0, 0));
 		a.flip(0, 0);
