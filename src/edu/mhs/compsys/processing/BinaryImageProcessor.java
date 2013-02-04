@@ -322,41 +322,41 @@ public class BinaryImageProcessor {
 	 */
 	public static Bounds boundsOfChange(BinaryImage input, Bounds boundaries,
 			ArrayList<Bounds> windows) {
+		
+		BinaryImage ij = input.slice(boundaries);
 		int x = Integer.MAX_VALUE;
 		int y = Integer.MAX_VALUE;
-		int l = Integer.MIN_VALUE;
+		int h = Integer.MIN_VALUE;
 		int w = Integer.MIN_VALUE;
 
-		final int b_x = boundaries.getX();
-		final int b_y = boundaries.getY();
-		final int b_w = boundaries.getHeight();
-		final int b_l = boundaries.getWidth();
-
-		for (int i = b_x; i < b_x + b_l; i++) {
-			for (int j = b_y; j < b_y + b_w; j++) {
+		for (int i = 0; i < ij.getHeight(); i++) {
+			for (int j = 0; j < ij.getWidth(); j++) {
 				if (input.safeGet(i, j)) {
-					boolean set = true;
-					for (Bounds b : windows) {
-						if (BoundsProcessor.inBounds(new Point(i, j), b)) {
-							set = false;
-							break;
-						}
-					}
 
+					// checks if pixel is inside window, ignores if true
+					boolean set = true;
+//					
+//					if (windows.size() > 0) {
+//						for (Bounds b : windows) {
+//							if (BoundsProcessor.inBounds(new Point(i, j), b)) {
+//								set = false;
+//								break;
+//							}
+//						}
+//					}
+
+					// sets dimensions
 					if (set) {
 						x = Math.min(x, i);
 						y = Math.min(y, j);
-						l = Math.max(l, i);
+						h = Math.max(h, i);
 						w = Math.max(w, j);
 					}
 				}
 			}
 		}
 
-		if (x == b_x || y == b_y || l == b_l || w == b_w) {
-			return new Bounds();
-		}
-
-		return new Bounds(x, y, l, w);
+		return new Bounds(x + boundaries.getX(), y + boundaries.getY(),
+				h + boundaries.getHeight(), w + boundaries.getWidth());
 	}
 }

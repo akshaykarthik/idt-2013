@@ -124,9 +124,7 @@ public class BinaryImage {
 	 * @param y
 	 */
 	public boolean safeGet(int x, int y) {
-		if (inBounds(x, y))
-			return _data[x][y];
-		return false;
+		return inBounds(x, y) ? get(x, y) : false;
 	}
 
 	/**
@@ -172,19 +170,18 @@ public class BinaryImage {
 	public BinaryImage slice(int x, int y, int h, int w)
 			throws ArrayIndexOutOfBoundsException {
 		BinaryImage ret = new BinaryImage(h, w);
-		for (int i = 0; i < h; i++) {
-			for (int j = 0; j < w; j++) {
+		for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; j++) {
 				ret.set(i, j, get(x + i, y + j));
 			}
 		}
 		return ret;
 	}
 
-
 	public BinaryImage slice(Bounds in) {
 		return slice(in.getX(), in.getY(), in.getHeight(), in.getWidth());
 	}
-	
+
 	/**
 	 * Flips the value at the given coordinates.
 	 * 
@@ -316,6 +313,5 @@ public class BinaryImage {
 		return ret.toString();
 
 	}
-
 
 }
