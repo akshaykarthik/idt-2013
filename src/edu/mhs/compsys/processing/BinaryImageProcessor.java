@@ -329,21 +329,21 @@ public class BinaryImageProcessor {
 		int h = Integer.MIN_VALUE;
 		int w = Integer.MIN_VALUE;
 
-		for (int i = 0; i < ij.getHeight(); i++) {
-			for (int j = 0; j < ij.getWidth(); j++) {
+		for (int i = 0; i < ij.getWidth(); i++) {
+			for (int j = 0; j < ij.getHeight(); j++) {
 				if (input.safeGet(i, j)) {
 
 					// checks if pixel is inside window, ignores if true
 					boolean set = true;
-//					
-//					if (windows.size() > 0) {
-//						for (Bounds b : windows) {
-//							if (BoundsProcessor.inBounds(new Point(i, j), b)) {
-//								set = false;
-//								break;
-//							}
-//						}
-//					}
+					
+					if (windows.size() > 0) {
+						for (Bounds b : windows) {
+							if (BoundsProcessor.inBounds(new Point(i, j), b)) {
+								set = false;
+								break;
+							}
+						}
+					}
 
 					// sets dimensions
 					if (set) {
