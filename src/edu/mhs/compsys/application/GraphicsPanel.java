@@ -147,10 +147,12 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			helpButton.setVisible(false);
 			helpButton.setFocusable(false);
 			resX = jframe.getWidth();
-			int imgWidth = (resX - 40) / 2;
+
+			int imgWidth = (Math.min(resX, resY) - 40) / 2;
 
 			int imgXSize = (int) (imgWidth);
 			int imgYSize = (int) ((1024.0 / 1280.0) * imgWidth);
+
 			if (images != null && images.length > 1
 					&& images.length - 1 > imageNum)
 			{
@@ -243,7 +245,6 @@ public class GraphicsPanel extends JPanel implements ActionListener
 
 		}
 	}
-
 	private void addHelpButton()
 	{
 		helpButton.setVisible(true);
