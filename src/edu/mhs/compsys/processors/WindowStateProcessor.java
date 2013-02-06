@@ -45,8 +45,8 @@ public class WindowStateProcessor implements IChangeProcessor
 	 *      edu.mhs.compsys.idt.Dataset)
 	 */
 	@Override
-	public void process(BufferedImage img, BufferedImage img2,
-			BinaryImage diff, ArrayList<StateTransition> changes, Dataset data,
+	public void process(BufferedImage img, BufferedImage img2, BinaryImage diff,
+			ArrayList<StateTransition> changes, Dataset data,
 			ArrayList<Bounds> previousStateWindows)
 	{
 
@@ -59,7 +59,6 @@ public class WindowStateProcessor implements IChangeProcessor
 		boolean xButtonLost = true;
 		int imgxButtonCount = 0;
 		int img2xButtonCount = 0;
-
 		for (int x = 0; x < cfg.getImageWidth() - xButton.getWidth() - 1; x++)
 		{
 			for (int y = 0; y < cfg.getImageHeight() - xButton.getHeight() - 1; y++)
@@ -99,7 +98,7 @@ public class WindowStateProcessor implements IChangeProcessor
 				// /////
 
 				// xButton found in second image and not in first
-				if (img2.getRGB(x, y) == xButton.getRGB(x, y) && img.getRGB(x, y) != xButton.getRGB(x, y))
+				if (img2.getRGB(x, y) == xButton.getRGB(0, 0) && img.getRGB(x, y) != xButton.getRGB(0, 0))
 				{
 					for (int xx = x; xx < x + xButton.getWidth(); xx++)
 					{
@@ -111,7 +110,7 @@ public class WindowStateProcessor implements IChangeProcessor
 					}
 				}
 				// xButton found in both images in the same place
-				else if (img2.getRGB(x, y) == xButton.getRGB(x, y) && img.getRGB(x, y) == xButton.getRGB(x, y))
+				else if (img2.getRGB(x, y) == xButton.getRGB(0, 0) && img.getRGB(x, y) == xButton.getRGB(0, 0))
 				{
 					for (int xx = x; xx < x + xButton.getWidth(); xx++)
 					{
@@ -123,7 +122,7 @@ public class WindowStateProcessor implements IChangeProcessor
 					}
 				}
 				// xButton found in first but not second image
-				else if (img2.getRGB(x, y) != xButton.getRGB(x, y) && img.getRGB(x, y) == xButton.getRGB(x, y))
+				else if (img2.getRGB(x, y) != xButton.getRGB(0, 0) && img.getRGB(x, y) == xButton.getRGB(0, 0))
 				{
 					for (int xx = x; xx < x + xButton.getWidth(); xx++)
 					{
@@ -136,7 +135,6 @@ public class WindowStateProcessor implements IChangeProcessor
 				}
 			}
 		}
-
 		if (newXButtonFound && imgxButtonCount < img2xButtonCount)
 		{
 			// find bounds first
@@ -154,6 +152,7 @@ public class WindowStateProcessor implements IChangeProcessor
 			_changes.add(new Change(BinaryImageProcessor.boundsOfChange(diff),
 					ClassificationType.WINDOW_CLOSE));
 		}
+		System.out.println("counts here dawg: " + imgxButtonCount + " " + img2xButtonCount);
 
 	}
 

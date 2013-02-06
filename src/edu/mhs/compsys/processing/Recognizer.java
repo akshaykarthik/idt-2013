@@ -11,6 +11,7 @@ import edu.mhs.compsys.idt.Dataset;
 import edu.mhs.compsys.idt.StateTransition;
 import edu.mhs.compsys.processors.DesktopTaskbarChangeProcessor;
 import edu.mhs.compsys.processors.WindowMenuProcessor;
+import edu.mhs.compsys.processors.WindowStateProcessor;
 import edu.mhs.compsys.reporting.Report;
 import edu.mhs.compsys.testing.dummyChange;
 import edu.mhs.compsys.utils.Config;
@@ -60,8 +61,9 @@ public class Recognizer
 			config = cfg;
 
 			processors = new ArrayList<IChangeProcessor>();
+			
 			processors.add(new DesktopTaskbarChangeProcessor());
-			// processors.add(new WindowStateProcessor());
+			processors.add(new WindowStateProcessor());
 			processors.add(new WindowMenuProcessor());
 			// processors.add(new WindowChangeProcessor());
 

@@ -48,7 +48,6 @@ public class ImageProcessor {
 				}
 			}
 		}
-
 		return locs;
 	}
 
