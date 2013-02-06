@@ -54,15 +54,106 @@ public class WindowStateProcessor implements IChangeProcessor
 		BufferedImage xButton = ImageProcessor.intArrayToBufferedImage(cfg
 				.getColorOfX());
 
-		_changes.add(new Change(BinaryImageProcessor.boundsOfChange(diff),
-				ClassificationType.WINDOW_OPEN));
-		/*
-		 * ArrayList<Point> windowCorners = ImageProcessor.findIn(img2,
-		 * xButton);
-		 * 
-		 * for (Point p : windowCorners) { _changes.add(new Change(new Bounds(0,
-		 * 0, p.x, p.y), ClassificationType.WINDOW_OPEN)); }
-		 */
+		boolean newXButtonFound = true;
+		boolean sameXButtonFound = true;
+		boolean xButtonLost = true;
+		int imgxButtonCount = 0;
+		int img2xButtonCount = 0;
+
+		for (int x = 0; x < cfg.getImageWidth() - xButton.getWidth() - 1; x++)
+		{
+			for (int y = 0; y < cfg.getImageHeight() - xButton.getHeight() - 1; y++)
+			{
+
+				// checking for xButtons in img
+				boolean fullXButtonFound = true;
+				for (int xx = x; xx < x + xButton.getWidth(); xx++)
+				{
+					for (int yy = y; yy < y + xButton.getHeight(); yy++)
+					{
+						if (img.getRGB(xx, yy) != xButton.getRGB(xx - x, yy - y))
+						{
+							fullXButtonFound = false;
+						}
+					}
+				}
+				if (fullXButtonFound)
+					imgxButtonCount++;
+				// checking for xButtons in img2
+				fullXButtonFound = true;
+				for (int xx = x; xx < x + xButton.getWidth(); xx++)
+				{
+					for (int yy = y; yy < y + xButton.getHeight(); yy++)
+					{
+						if (img2.getRGB(xx, yy) != xButton.getRGB(xx - x, yy - y))
+						{
+							fullXButtonFound = false;
+						}
+					}
+				}
+				if (fullXButtonFound)
+					imgxButtonCount++;
+
+				// /////
+				// /////
+				// /////
+
+				// xButton found in second image and not in first
+				if (img2.getRGB(x, y) == xButton.getRGB(x, y) && img.getRGB(x, y) != xButton.getRGB(x, y))
+				{
+					for (int xx = x; xx < x + xButton.getWidth(); xx++)
+					{
+						for (int yy = y; yy < y + xButton.getHeight(); yy++)
+						{
+							if (img2.getRGB(xx, yy) != xButton.getRGB(xx - x, yy - y))
+								newXButtonFound = false;
+						}
+					}
+				}
+				// xButton found in both images in the same place
+				else if (img2.getRGB(x, y) == xButton.getRGB(x, y) && img.getRGB(x, y) == xButton.getRGB(x, y))
+				{
+					for (int xx = x; xx < x + xButton.getWidth(); xx++)
+					{
+						for (int yy = y; yy < y + xButton.getHeight(); yy++)
+						{
+							if (img2.getRGB(xx, yy) != xButton.getRGB(xx - x, yy - y))
+								sameXButtonFound = false;
+						}
+					}
+				}
+				// xButton found in first but not second image
+				else if (img2.getRGB(x, y) != xButton.getRGB(x, y) && img.getRGB(x, y) == xButton.getRGB(x, y))
+				{
+					for (int xx = x; xx < x + xButton.getWidth(); xx++)
+					{
+						for (int yy = y; yy < y + xButton.getHeight(); yy++)
+						{
+							if (img.getRGB(xx, yy) != xButton.getRGB(xx - x, yy - y))
+								xButtonLost = false;
+						}
+					}
+				}
+			}
+		}
+
+		if (newXButtonFound && imgxButtonCount < img2xButtonCount)
+		{
+			// find bounds first
+			_changes.add(new Change(BinaryImageProcessor.boundsOfChange(diff),
+					ClassificationType.WINDOW_OPEN));
+		}
+		else if (sameXButtonFound && imgxButtonCount == img2xButtonCount)
+		{
+			// check if window size has changed
+			_changes.add(new Change(BinaryImageProcessor.boundsOfChange(diff),
+					ClassificationType.WINDOW_RESIZE));
+		}
+		else if (xButtonLost && imgxButtonCount > img2xButtonCount)
+		{
+			_changes.add(new Change(BinaryImageProcessor.boundsOfChange(diff),
+					ClassificationType.WINDOW_CLOSE));
+		}
 
 	}
 
