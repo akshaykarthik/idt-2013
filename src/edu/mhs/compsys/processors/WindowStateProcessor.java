@@ -3,7 +3,6 @@
  */
 package edu.mhs.compsys.processors;
 
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -22,10 +21,11 @@ import edu.mhs.compsys.utils.Config;
  * This Processor will recognize changes in windows and quantify those. This
  * will quantify WINDOW_OPEN, WINDOW_CLOSE, WINDOW_RESIZE, WINDOW_MOVE
  */
-public class WindowStateProcessor implements IChangeProcessor {
+public class WindowStateProcessor implements IChangeProcessor
+{
 
-	private ArrayList<Change> _changes;
-	private Config cfg;
+	private ArrayList<Change>	_changes;
+	private Config				cfg;
 
 	/**
 	 * Initialize the processor with the given config file.
@@ -33,7 +33,8 @@ public class WindowStateProcessor implements IChangeProcessor {
 	 * @see edu.mhs.compsys.processing.IChangeProcessor#initialize(edu.mhs.compsys.utils.Config)
 	 */
 	@Override
-	public void initialize(Config cfg) {
+	public void initialize(Config cfg)
+	{
 		this.cfg = cfg;
 	}
 
@@ -46,7 +47,8 @@ public class WindowStateProcessor implements IChangeProcessor {
 	@Override
 	public void process(BufferedImage img, BufferedImage img2,
 			BinaryImage diff, ArrayList<StateTransition> changes, Dataset data,
-			ArrayList<Bounds> previousStateWindows) {
+			ArrayList<Bounds> previousStateWindows)
+	{
 
 		_changes = new ArrayList<Change>();
 		BufferedImage xButton = ImageProcessor.intArrayToBufferedImage(cfg
@@ -68,7 +70,8 @@ public class WindowStateProcessor implements IChangeProcessor {
 	 * @see edu.mhs.compsys.processing.IChangeProcessor#getChanges()
 	 */
 	@Override
-	public Change[] getChanges() {
+	public Change[] getChanges()
+	{
 		// TODO Auto-generated method stub
 		return _changes.toArray(new Change[0]);
 	}
