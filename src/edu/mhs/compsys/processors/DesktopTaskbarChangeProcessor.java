@@ -49,17 +49,13 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor {
 
 		// Taskbar Change
 		Bounds taskbarBounds = new Bounds(0, cfg.getImageHeight()
-				- cfg.getTaskBarHeight() - 1, cfg.getTaskBarHeight() - 1,
-				cfg.getImageWidth() - cfg.getDateWidth() - 1);
+				- cfg.getTaskBarHeight() - 1, cfg.getTaskBarHeight(),
+				cfg.getImageWidth() - cfg.getDateWidth());
 
 		Bounds taskChange = BinaryImageProcessor.boundsOfChange(diff,
 				taskbarBounds);
-		System.out.println(taskbarBounds);
-		System.out.println(taskChange);
 
-		System.out.println(diff.slice(taskbarBounds).toString(".", " "));
-		
-		if (taskChange.getX() > -1) {
+		if (taskChange.getX() < Integer.MAX_VALUE) {
 			_changes.add(new Change(taskChange,
 					ClassificationType.TASKBAR_UPDATE));
 		}

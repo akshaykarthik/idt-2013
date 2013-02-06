@@ -142,7 +142,7 @@ public class Bounds {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return String.format("[corner(%s, %s), size(%s, %s)]", x, y, h, w);
+		return String.format("[x=%s, y=%s, h=%s, w=%s]", x, y, h, w);
 	}
 
 	/**

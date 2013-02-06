@@ -1,6 +1,5 @@
 package edu.mhs.compsys.processing;
 
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -322,29 +321,26 @@ public class BinaryImageProcessor {
 	 */
 	public static Bounds boundsOfChange(BinaryImage input, Bounds boundaries,
 			ArrayList<Bounds> windows) {
-		
-		BinaryImage ij = input.slice(boundaries);
+
 		int x = Integer.MAX_VALUE;
 		int y = Integer.MAX_VALUE;
 		int h = Integer.MIN_VALUE;
 		int w = Integer.MIN_VALUE;
 
-		for (int i = 0; i < ij.getWidth(); i++) {
-			for (int j = 0; j < ij.getHeight(); j++) {
-				if (input.safeGet(i, j)) {
-
+		for (int i = 0; i < input.getWidth(); i++) {
+			for (int j = 0; j < input.getHeight(); j++) {
+				if (input.safeGet(i, j)
+						&& BoundsProcessor.inBounds(i, j, boundaries)) {
 					// checks if pixel is inside window, ignores if true
 					boolean set = true;
-					
 					if (windows.size() > 0) {
 						for (Bounds b : windows) {
-							if (BoundsProcessor.inBounds(new Point(i, j), b)) {
+							if (BoundsProcessor.inBounds(i, j, b)) {
 								set = false;
 								break;
 							}
 						}
 					}
-
 					// sets dimensions
 					if (set) {
 						x = Math.min(x, i);
@@ -356,7 +352,6 @@ public class BinaryImageProcessor {
 			}
 		}
 
-		return new Bounds(x + boundaries.getX(), y + boundaries.getY(),
-				h + boundaries.getHeight(), w + boundaries.getWidth());
+		return new Bounds(x, y, h - x, w - y);
 	}
 }

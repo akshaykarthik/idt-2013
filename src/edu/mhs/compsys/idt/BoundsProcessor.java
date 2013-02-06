@@ -6,17 +6,12 @@ import java.util.ArrayList;
 public class BoundsProcessor {
 	// is point in bounds
 	public static boolean inBounds(int x, int y, Bounds b) {
-		if (x >= b.getX() && x < b.getWidth() && y >= b.getY()
-				&& y < b.getHeight())
-			return true;
-		return false;
+		return (x >= b.getX() && x < b.getX() + b.getWidth() && y >= b.getY() && y < b
+				.getY() + b.getHeight());
 	}
 
 	public static boolean inBounds(Point p, Bounds b) {
-		if (p.getX() >= b.getX() && p.getX() < b.getWidth()
-				&& p.getY() >= b.getY() && p.getY() < b.getHeight())
-			return true;
-		return false;
+		return inBounds(p.x, p.y, b);
 	}
 
 	// do the bounds intersect

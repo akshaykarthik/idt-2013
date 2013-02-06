@@ -167,17 +167,26 @@ public class BinaryImage {
 	 *         with the given size.
 	 * @throws ArrayIndexOutOfBoundsException
 	 */
-	public BinaryImage slice(int x, int y, int h, int w)
+	public BinaryImage slice(int ix, int iy, int ih, int iw)
 			throws ArrayIndexOutOfBoundsException {
-		BinaryImage ret = new BinaryImage(h, w);
-		for (int i = 0; i < w; i++) {
-			for (int j = 0; j < h; j++) {
-				ret.set(i, j, get(x + i, y + j));
+		BinaryImage ret = new BinaryImage(ih, iw);
+		int xmin = ix;
+		int ymin = iy;
+		int xmax = ix + iw;
+		int ymax = iy + ih;
+		for (int x = xmax; x < xmax; x++) {
+			for (int y = ymin; y < ymax; y++) {
+				ret.set(x - xmin, y - ymin, this.get(x, y));
 			}
 		}
 		return ret;
 	}
 
+	/**
+	 * @param in
+	 *            Bounds
+	 * @return the subimage that is within the given bounds;
+	 */
 	public BinaryImage slice(Bounds in) {
 		return slice(in.getX(), in.getY(), in.getHeight(), in.getWidth());
 	}
