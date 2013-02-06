@@ -235,7 +235,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 				addHelpButton();
 			}
 			g.drawString(
-					"Click \"File > Open Images\" to load the images. Or use Ctrl + O.",
+					"Click \"File > Open Images\" to load the images.",
 					250, 220);
 			g.drawString(
 					"For more help click \"Help > Help Information\" to open a help window.",

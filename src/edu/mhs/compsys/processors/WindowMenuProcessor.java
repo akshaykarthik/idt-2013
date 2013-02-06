@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import edu.mhs.compsys.idt.Bounds;
 import edu.mhs.compsys.idt.Change;
+import edu.mhs.compsys.idt.ClassificationType;
 import edu.mhs.compsys.idt.Dataset;
 import edu.mhs.compsys.idt.StateTransition;
 import edu.mhs.compsys.processing.BinaryImage;
@@ -51,17 +52,20 @@ public class WindowMenuProcessor implements IChangeProcessor
 		_changes = new ArrayList<Change>();
 
 		int minX = 1280, minY = 1024, maxX = 0, maxY = 0;
+		boolean foundSomething=false;
 		
 		for (int boundNum = previousStateWindows.size() - 1; boundNum >= 0; boundNum++)//go through the windows from the previous change
 		{
 			for (int windX = previousStateWindows.get(boundNum).getX(); windX < previousStateWindows.get(boundNum).getWidth() + previousStateWindows.get(boundNum).getX(); windX++)
 			{
-				//checkHeight is the ammout of the top of the window to check for changes to be window changes
+				// checkHeight is the ammout of the top of the window to check
+				// for changes to be window changes
 				int checkHeight = Math.min(150, previousStateWindows.get(boundNum).getHeight());
 				for (int windY = previousStateWindows.get(boundNum).getY(); windY < checkHeight; windY++)
 				{
 					if (diff.get(windX, windY))
 					{
+						foundSomething=true;
 						minX = Math.min(minX, windX);
 						minY = Math.min(minY, windY);
 						maxX = Math.max(maxX, windX);
@@ -71,7 +75,24 @@ public class WindowMenuProcessor implements IChangeProcessor
 			}
 		}
 
-		 _changes.add(new Change(new Bounds(minX, minY, maxX-minX, maxY-minY),		 ClassificationType.WINDOW_MENU_CLOSE));
+		//XXX not sure if I should use == or .equals
+		if(foundSomething)
+		{//it shouldnt be _changes but the list of changes from the last images if they exist but idk how 2 do
+			
+			
+			
+			
+//		if ((_changes.size()>=1 && _changes.get(changes.size() - 1).getType() == ClassificationType.WINDOW_MENU_ITEM_SELECTED)
+//				||(_changes.size()>1 && _changes.get(changes.size()-2).getType() == ClassificationType.WINDOW_MENU_ITEM_SELECTED))//find out if a menu event already happened
+//			_changes.add(new Change(new Bounds(minX, minY, maxX - minX, maxY - minY), ClassificationType.WINDOW_MENU_CLOSE));
+//		
+//		else if ((_changes.size()>=1 && _changes.get(changes.size() - 1).getType() == ClassificationType.WINDOW_MENU_OPEN)
+//				||(_changes.size()>1 && _changes.get(changes.size()-2).getType() == ClassificationType.WINDOW_MENU_OPEN))//find out if a menu event already happened
+//			_changes.add(new Change(new Bounds(minX, minY, maxX - minX, maxY - minY), ClassificationType.WINDOW_MENU_ITEM_SELECTED));
+//		
+//		else
+//			_changes.add(new Change(new Bounds(minX, minY, maxX - minX, maxY - minY), ClassificationType.WINDOW_MENU_OPEN));
+		}
 
 	}
 	/**
