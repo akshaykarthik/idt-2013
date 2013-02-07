@@ -86,27 +86,32 @@ public class WindowStateProcessor implements IChangeProcessor
 					width = across - y;
 					// now that corners are found, chekc all positions for
 					// continuity with a percentage of error margin
-					int totalPixels = 0;
-					int truePixels = 0;
-					for (int windX = 0; windX < width; windX++)
+					if (Math.min(height, width) > 60)
 					{
-						for (int windY = 0; windY < height; windY++)
+						int totalPixels = 0;
+						int truePixels = 0;
+						for (int windX = 0; windX < width; windX++)
 						{
-							if (diff.get(windX + x, windY + y))
-								truePixels++;
-							totalPixels++;
+							for (int windY = 0; windY < height; windY++)
+							{
+								if (diff.get(windX + x, windY + y))
+									truePixels++;
+								totalPixels++;
+							}
 						}
-					}
-					// this "if" is just a buffer zone in case not all of the
-					// window has new colors. Also prevents finding icons or
-					// task bar changes
-					if ((double) (truePixels / totalPixels) > .9D && Math.min(width, height) > 250)
-					{
-						newWindow = true;
-						newWindowX = x;
-						newWindowY = y;
-						newWindowWidth = width;
-						newWindowHeight = height;
+						// this "if" is just a buffer zone in case not all of
+						// the
+						// window has new colors. Also prevents finding icons or
+						// task bar changes
+
+						if (totalPixels > 0 && (double) (truePixels / totalPixels) > .9D && Math.min(width, height) > 250)
+						{
+							newWindow = true;
+							newWindowX = x;
+							newWindowY = y;
+							newWindowWidth = width;
+							newWindowHeight = height;
+						}
 					}
 				}
 			}
