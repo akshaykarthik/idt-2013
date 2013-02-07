@@ -54,9 +54,9 @@ public class WindowStateProcessor implements IChangeProcessor
 
 		boolean newWindow = false;
 		int newWindowX = 0, newWindowY = 0, newWindowWidth = 0, newWindowHeight = 0;
-		for (int x = 0; x < cfg.getImageWidth(); x++)
+		for (int x = 0; x < cfg.getImageWidth(); x++)//for some reason this gives an out of bounds exception
 		{
-			for (int y = 0; y < cfg.getImageHeight(); y++)
+			for (int y = 0; y < cfg.getImageHeight(); y++)//out of bounds exception here too
 			{
 				if (diff.get(x, y))
 				{
