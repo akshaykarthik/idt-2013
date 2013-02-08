@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import edu.mhs.compsys.idt.Bounds;
+import edu.mhs.compsys.idt.BoundsProcessor;
 import edu.mhs.compsys.idt.Change;
 import edu.mhs.compsys.idt.ClassificationType;
 import edu.mhs.compsys.idt.Dataset;
@@ -22,11 +23,10 @@ import edu.mhs.compsys.utils.Config;
  * This Processor will recognize changes in windows and quantify those. This
  * will quantify WINDOW_OPEN, WINDOW_CLOSE, WINDOW_RESIZE, WINDOW_MOVE
  */
-public class WindowStateProcessor implements IChangeProcessor
-{
+public class WindowStateProcessor implements IChangeProcessor {
 
-	private ArrayList<Change>	_changes;
-	private Config				cfg;
+	private ArrayList<Change> _changes;
+	private Config cfg;
 
 	/**
 	 * Initialize the processor with the given config file.
@@ -34,8 +34,7 @@ public class WindowStateProcessor implements IChangeProcessor
 	 * @see edu.mhs.compsys.processing.IChangeProcessor#initialize(edu.mhs.compsys.utils.Config)
 	 */
 	@Override
-	public void initialize(Config cfg)
-	{
+	public void initialize(Config cfg) {
 		this.cfg = cfg;
 	}
 
@@ -48,8 +47,7 @@ public class WindowStateProcessor implements IChangeProcessor
 	@Override
 	public void process(BufferedImage img, BufferedImage img2,
 			BinaryImage diff, ArrayList<StateTransition> changes, Dataset data,
-			ArrayList<Bounds> previousStateWindows)
-	{
+			ArrayList<Bounds> previousStateWindows) {
 
 		DesktopTaskbarChangeProcessor dTbChange = new DesktopTaskbarChangeProcessor();
 		dTbChange.process(img, img2, diff, changes, data, previousStateWindows);
@@ -60,8 +58,7 @@ public class WindowStateProcessor implements IChangeProcessor
 				ClassificationType.TASKBAR_UPDATE))// IF THERE IS A TASKBAR
 													// UPDATE AND A DESKTOP ICON
 													// UPDATE
-			for (int i = 0; i < changes.size(); i++)
-			{
+			for (int i = 0; i < changes.size(); i++) {
 				if (Arrays.asList(dTbChange.getChanges()).contains(
 						ClassificationType.DESKTOP_ICON_CHANGE))
 					_changes.add(new Change(BinaryImageProcessor
@@ -78,6 +75,25 @@ public class WindowStateProcessor implements IChangeProcessor
 
 		// If the window has 1 corner remaining the same or the entire image is
 		// a change, it's a window resize. LARGE IF STATEMENT
+		Bounds difBounds = BinaryImageProcessor.boundsOfChange(diff);
+		for (int i = 0; i < previousStateWindows.size(); i++) {
+			Bounds window = previousStateWindows.get(i);
+			if ((window.getTopLeft() == difBounds.getTopLeft()
+					|| window.getTopRight() == difBounds.getTopRight()
+					|| window.getBotLeft() == difBounds.getBotLeft() || window
+					.getBotRight() == difBounds.getBotRight())
+					&& (BoundsProcessor.inside(window, difBounds) || BoundsProcessor
+							.inside(difBounds, window)))
+				_changes.add(new Change(difBounds,
+						ClassificationType.WINDOW_RESIZE));
+			if (difBounds.getX() == 0
+					&& difBounds.getY() == 0
+					&& difBounds.getWidth() == cfg.getImageWidth() - 1
+					&& dfiBounds.getHeight() == cfg.getImageHeight()
+							- cfg.getTaskBarHeight() - 1)
+				_changes.add(new Change(difBounds,
+						ClassificationType.WINDOW_RESIZE));
+		}
 		/*
 		 * ArrayList<Point> windowCorners = ImageProcessor.findIn(img2,
 		 * xButton);
@@ -92,8 +108,7 @@ public class WindowStateProcessor implements IChangeProcessor
 	 * @see edu.mhs.compsys.processing.IChangeProcessor#getChanges()
 	 */
 	@Override
-	public Change[] getChanges()
-	{
+	public Change[] getChanges() {
 		// TODO Auto-generated method stub
 		return _changes.toArray(new Change[0]);
 	}
