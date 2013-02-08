@@ -5,7 +5,6 @@ package edu.mhs.compsys.processors;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import edu.mhs.compsys.idt.Bounds;
 import edu.mhs.compsys.idt.Change;
@@ -47,48 +46,194 @@ public class WindowStateProcessor implements IChangeProcessor
 	 *      edu.mhs.compsys.idt.Dataset)
 	 */
 	@Override
-	public void process(BufferedImage img, BufferedImage img2,
-			BinaryImage diff, ArrayList<StateTransition> changes, Dataset data,
+	public void process(BufferedImage img, BufferedImage img2, BinaryImage diff,
+			ArrayList<StateTransition> changes, Dataset data,
 			ArrayList<Bounds> previousStateWindows)
 	{
 
-		DesktopTaskbarChangeProcessor dTbChange = new DesktopTaskbarChangeProcessor();
-		dTbChange.process(img, img2, diff, changes, data, previousStateWindows);
 		_changes = new ArrayList<Change>();
-		BufferedImage xButton = ImageProcessor.intArrayToBufferedImage(cfg
-				.getColorOfX());
-		if (Arrays.asList(dTbChange.getChanges()).contains(
-				ClassificationType.TASKBAR_UPDATE))// IF THERE IS A TASKBAR
-													// UPDATE AND A DESKTOP ICON
-													// UPDATE
-			for (int i = 0; i < changes.size(); i++)
+
+		boolean newWindow = false;
+		int newWindowX = 0, newWindowY = 0, newWindowWidth = 0, newWindowHeight = 0;
+		for (int x = 0; x < cfg.getImageWidth(); x++)//for some reason this gives an out of bounds exception
+		{
+			for (int y = 0; y < cfg.getImageHeight(); y++)//out of bounds exception here too
 			{
-				if (Arrays.asList(dTbChange.getChanges()).contains(
-						ClassificationType.DESKTOP_ICON_CHANGE))
-					_changes.add(new Change(BinaryImageProcessor
-							.boundsOfChange(diff),
-							ClassificationType.WINDOW_OPEN));
+				if (diff.get(x, y))
+				{
+					// start looking for corners and see if they line up
+					// looking down
+					int down = x;
+					int height;
+					while (diff.get(x, down))// just keeps looking until it
+												// finds a corner vertically
+					{
+						down++;
+					}
+					if (down > x)
+						down--;
+					height = down - x;
 
-				else if (changes.get(changes.size() - 1).getChange(i).getType()
-						.toString()
-						.equals(ClassificationType.WINDOW_TITLE_BAR_CLICK))
-					_changes.add(new Change(BinaryImageProcessor
-							.boundsOfChange(diff),
-							ClassificationType.WINDOW_CLOSE));
+					// looking across
+					int across = y;
+					int width;
+					while (diff.get(across, y))// just keeps looking untill it
+												// finds a corner horizontally
+					{
+						across++;
+					}
+					if (across > y)
+						across--;
+					width = across - y;
+					// now that corners are found, chekc all positions for
+					// continuity with a percentage of error margin
+					if (Math.min(height, width) > 60)
+					{
+						int totalPixels = 0;
+						int truePixels = 0;
+						for (int windX = 0; windX < width; windX++)
+						{
+							for (int windY = 0; windY < height; windY++)
+							{
+								if (diff.get(windX + x, windY + y))
+									truePixels++;
+								totalPixels++;
+							}
+						}
+						// this "if" is just a buffer zone in case not all of
+						// the
+						// window has new colors. Also prevents finding icons or
+						// task bar changes
+
+						if (totalPixels > 0 && (double) (truePixels / totalPixels) > .9D && Math.min(width, height) > 250)
+						{
+							newWindow = true;
+							newWindowX = x;
+							newWindowY = y;
+							newWindowWidth = width;
+							newWindowHeight = height;
+						}
+					}
+				}
 			}
+		}
 
-		// If the window has 1 corner remaining the same or the entire image is
-		// a change, it's a window resize. LARGE IF STATEMENT
-		/*
-		 * ArrayList<Point> windowCorners = ImageProcessor.findIn(img2,
-		 * xButton);
-		 * 
-		 * for (Point p : windowCorners) { _changes.add(new Change(new Bounds(0,
-		 * 0, p.x, p.y), ClassificationType.WINDOW_OPEN)); }
-		 */
+		if (newWindow)
+		{
+			Bounds newWindowBounds = new Bounds(newWindowX, newWindowY, newWindowHeight, newWindowWidth);
+			_changes.add(new Change(BinaryImageProcessor.boundsOfChange(diff, newWindowBounds), ClassificationType.WINDOW_OPEN));
+		}
+
+		// ClassificationType.WINDOW_OPEN)); // BufferedImage xButton =
+		// ImageProcessor.intArrayToBufferedImage(cfg
+		// .getColorOfX());
+		// boolean newXButtonFound = true;
+		// boolean sameXButtonFound = true;
+		// boolean xButtonLost = true;
+		// int imgxButtonCount = 0;
+		// int img2xButtonCount = 0;
+		// for (int x = 0; x < cfg.getImageWidth() - xButton.getWidth() - 1;
+		// x++)
+		// {
+		// for (int y = 0; y < cfg.getImageHeight() - xButton.getHeight() - 1;
+		// y++)
+		// {
+		//
+		// // checking for xButtons in img
+		// boolean fullXButtonFound = true;
+		// for (int xx = x; xx < x + xButton.getWidth(); xx++)
+		// {
+		// for (int yy = y; yy < y + xButton.getHeight(); yy++)
+		// {
+		// if (img.getRGB(xx, yy) != xButton.getRGB(xx - x, yy - y))
+		// {
+		// fullXButtonFound = false;
+		// }
+		// }
+		// }
+		// if (fullXButtonFound)
+		// imgxButtonCount++;
+		// // checking for xButtons in img2
+		// fullXButtonFound = true;
+		// for (int xx = x; xx < x + xButton.getWidth(); xx++)
+		// {
+		// for (int yy = y; yy < y + xButton.getHeight(); yy++)
+		// {
+		// if (img2.getRGB(xx, yy) != xButton.getRGB(xx - x, yy - y))
+		// {
+		// fullXButtonFound = false;
+		// }
+		// }
+		// }
+		// if (fullXButtonFound)
+		// imgxButtonCount++;
+		//
+		// // /////
+		// // /////
+		// // /////
+		//
+		// // xButton found in second image and not in first
+		// if (img2.getRGB(x, y) == xButton.getRGB(0, 0) && img.getRGB(x, y) !=
+		// xButton.getRGB(0, 0))
+		// {
+		// for (int xx = x; xx < x + xButton.getWidth(); xx++)
+		// {
+		// for (int yy = y; yy < y + xButton.getHeight(); yy++)
+		// {
+		// if (img2.getRGB(xx, yy) != xButton.getRGB(xx - x, yy - y))
+		// newXButtonFound = false;
+		// }
+		// }
+		// }
+		// // xButton found in both images in the same place
+		// else if (img2.getRGB(x, y) == xButton.getRGB(0, 0) && img.getRGB(x,
+		// y) == xButton.getRGB(0, 0))
+		// {
+		// for (int xx = x; xx < x + xButton.getWidth(); xx++)
+		// {
+		// for (int yy = y; yy < y + xButton.getHeight(); yy++)
+		// {
+		// if (img2.getRGB(xx, yy) != xButton.getRGB(xx - x, yy - y))
+		// sameXButtonFound = false;
+		// }
+		// }
+		// }
+		// // xButton found in first but not second image
+		// else if (img2.getRGB(x, y) != xButton.getRGB(0, 0) && img.getRGB(x,
+		// y) == xButton.getRGB(0, 0))
+		// {
+		// for (int xx = x; xx < x + xButton.getWidth(); xx++)
+		// {
+		// for (int yy = y; yy < y + xButton.getHeight(); yy++)
+		// {
+		// if (img.getRGB(xx, yy) != xButton.getRGB(xx - x, yy - y))
+		// xButtonLost = false;
+		// }
+		// }
+		// }
+		// }
+		// }
+		// if (newXButtonFound && imgxButtonCount < img2xButtonCount)
+		// {
+		// // find bounds first
+		// _changes.add(new Change(BinaryImageProcessor.boundsOfChange(diff),
+		// ClassificationType.WINDOW_OPEN));
+		// }
+		// else if (sameXButtonFound && imgxButtonCount == img2xButtonCount)
+		// {
+		// // check if window size has changed
+		// _changes.add(new Change(BinaryImageProcessor.boundsOfChange(diff),
+		// ClassificationType.WINDOW_RESIZE));
+		// }
+		// else if (xButtonLost && imgxButtonCount > img2xButtonCount)
+		// {
+		// _changes.add(new Change(BinaryImageProcessor.boundsOfChange(diff),
+		// ClassificationType.WINDOW_CLOSE));
+		// }
+		// System.out.println("counts here dawg: " + imgxButtonCount + " " +
+		// img2xButtonCount);
 
 	}
-
 	/**
 	 * @see edu.mhs.compsys.processing.IChangeProcessor#getChanges()
 	 */

@@ -62,11 +62,19 @@ public class Recognizer
 			config = cfg;
 
 			processors = new ArrayList<IChangeProcessor>();
+<<<<<<< HEAD
 
 			processors.add(new DesktopTaskbarChangeProcessor());
 			processors.add(new WindowStateProcessor());
 			processors.add(new WindowMenuProcessor());
 			processors.add(new WindowChangeProcessor());
+=======
+			
+			processors.add(new DesktopTaskbarChangeProcessor());
+			processors.add(new WindowStateProcessor());
+			processors.add(new WindowMenuProcessor());
+			// processors.add(new WindowChangeProcessor());
+>>>>>>> parent of 5e81f26... might be backwards progress -_-
 
 			if (debug)
 			{
