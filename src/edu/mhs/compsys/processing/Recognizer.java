@@ -63,7 +63,7 @@ public class Recognizer
 
 			processors = new ArrayList<IChangeProcessor>();
 
-			processors.add(new DesktopTaskbarChangeProcessor());
+			processors.add(new DesktopTaskbarChangeProcessor());// DONE (like your mom)
 			processors.add(new WindowStateProcessor());
 			processors.add(new WindowChangeProcessor());
 			processors.add(new WindowMenuProcessor());

@@ -24,10 +24,11 @@ import edu.mhs.compsys.utils.Config;
  * This Processor will recognize changes in windows and quantify those. This
  * will quantify WINDOW_OPEN, WINDOW_CLOSE, WINDOW_RESIZE, WINDOW_MOVE
  */
-public class WindowStateProcessor implements IChangeProcessor {
+public class WindowStateProcessor implements IChangeProcessor
+{
 
-	private ArrayList<Change> _changes;
-	private Config cfg;
+	private ArrayList<Change>	_changes;
+	private Config				cfg;
 
 	/**
 	 * Initialize the processor with the given config file.
@@ -35,7 +36,8 @@ public class WindowStateProcessor implements IChangeProcessor {
 	 * @see edu.mhs.compsys.processing.IChangeProcessor#initialize(edu.mhs.compsys.utils.Config)
 	 */
 	@Override
-	public void initialize(Config cfg) {
+	public void initialize(Config cfg)
+	{
 		this.cfg = cfg;
 	}
 
@@ -48,7 +50,8 @@ public class WindowStateProcessor implements IChangeProcessor {
 	@Override
 	public void process(BufferedImage img, BufferedImage img2,
 			BinaryImage diff, ArrayList<StateTransition> changes, Dataset data,
-			ArrayList<Bounds> previousStateWindows) {
+			ArrayList<Bounds> previousStateWindows)
+	{
 
 		DesktopTaskbarChangeProcessor dTbChange = new DesktopTaskbarChangeProcessor();
 		dTbChange.process(img, img2, diff, changes, data, previousStateWindows);
@@ -59,7 +62,8 @@ public class WindowStateProcessor implements IChangeProcessor {
 				ClassificationType.TASKBAR_UPDATE))// IF THERE IS A TASKBAR
 													// UPDATE AND A DESKTOP ICON
 													// UPDATE
-			for (int i = 0; i < changes.size(); i++) {
+			for (int i = 0; i < changes.size(); i++)
+			{
 				if (Arrays.asList(dTbChange.getChanges()).contains(
 						ClassificationType.DESKTOP_ICON_CHANGE))
 					_changes.add(new Change(BinaryImageProcessor
@@ -77,12 +81,13 @@ public class WindowStateProcessor implements IChangeProcessor {
 		// If the window has 1 corner remaining the same or the entire image is
 		// a change, it's a window resize. LARGE IF STATEMENT
 		Bounds difBounds = BinaryImageProcessor.boundsOfChange(diff);
-		for (int i = 0; i < previousStateWindows.size(); i++) {
+		for (int i = 0; i < previousStateWindows.size(); i++)
+		{
 			Bounds window = previousStateWindows.get(i);
-			if ((window.getTopLeft() .equals( difBounds.getTopLeft())
-					|| window.getTopRight() .equals( difBounds.getTopRight())
-					|| window.getBotLeft() .equals( difBounds.getBotLeft()) || window
-					.getBotRight() .equals( difBounds.getBotRight()))
+			if ((window.getTopLeft().equals(difBounds.getTopLeft())
+					|| window.getTopRight().equals(difBounds.getTopRight())
+					|| window.getBotLeft().equals(difBounds.getBotLeft()) || window
+					.getBotRight().equals(difBounds.getBotRight()))
 					&& (BoundsProcessor.inside(window, difBounds) || BoundsProcessor
 							.inside(difBounds, window)))
 				_changes.add(new Change(difBounds,
@@ -94,10 +99,10 @@ public class WindowStateProcessor implements IChangeProcessor {
 							- cfg.getTaskBarHeight() - 1)
 				_changes.add(new Change(difBounds,
 						ClassificationType.WINDOW_RESIZE));
-			if(difBounds.size() == window.size() && !difBounds.getTopLeft().equals(window.getTopLeft()))
+			if (difBounds.size() == window.size() && !difBounds.getTopLeft().equals(window.getTopLeft()))
 				_changes.add(new Change(difBounds, ClassificationType.WINDOW_MOVE));
 		}
-		
+
 		/*
 		 * ArrayList<Point> windowCorners = ImageProcessor.findIn(img2,
 		 * xButton);
@@ -112,13 +117,62 @@ public class WindowStateProcessor implements IChangeProcessor {
 	 * @see edu.mhs.compsys.processing.IChangeProcessor#getChanges()
 	 */
 	@Override
-	public Change[] getChanges() {
+	public Change[] getChanges()
+	{
 		// TODO Auto-generated method stub
 		return _changes.toArray(new Change[0]);
 	}
 	public void proProcess(BufferedImage img1, BufferedImage img2, BinaryImage diff, ArrayList<ChangeBundle> prevChanges)
 	{
 		_changes = new ArrayList<Change>();
+		boolean somethingHappened = false;
+		int startX = 0, startY = 0, endX = 0, endY = 0;
+		startY = cfg.getTaskBarHeight();
+
+		// bounds of change to be returned
+		Bounds bounds = new Bounds(0, startY, cfg.getImageWidth(), cfg.getTaskBarHeight());
+
+		boolean[][] checked = new boolean[cfg.getImageWidth()][cfg.getImageHeight()];// stops
+																						// overlaps
+		for (int x = 0; x < checked.length; x++)
+			for (int y = 0; y < checked[0].length; y++)
+				checked[x][y] = false;
+
+		for (int x = 0; x < cfg.getImageWidth(); x++)// total checking X area
+		{
+			for (int y = 0; y < cfg.getImageHeight(); y++)// total checking Y
+															// area
+			{
+				if (diff.get(x, y) &&
+						!checked[x][y])// if an unchecked part
+				{
+					checked[x][y] = true;
+					somethingHappened = true;
+
+					startX = x;
+					startY = y;
+
+					int width = 0;
+					int height = 0;
+
+					for (int w = 0; w < cfg.getImageWidth() - x - 1; w++)
+					{
+						if (checked[w][y])
+							width++;
+					}
+					for (int h = 0; h < cfg.getImageHeight() - y - 1; h++)
+					{
+						if (checked[x][h])
+							height++;
+					}
+					endX = startX + width;
+					endY = startY + height;
+				}
+			}
+		}
+
+		if (somethingHappened)
+			_changes.add(new Change(new Bounds(startX, cfg.getImageHeight() - startY, endX - startX, endY - startY), ClassificationType.TASKBAR_UPDATE));
 
 	}
 	public ArrayList<Change> getPROChanges()
