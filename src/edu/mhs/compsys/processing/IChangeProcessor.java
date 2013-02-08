@@ -13,7 +13,8 @@ import edu.mhs.compsys.utils.Config;
  * An interface to describe change processors. Mostly used so that testing will
  * be easier.
  */
-public interface IChangeProcessor {
+public interface IChangeProcessor
+{
 
 	/**
 	 * Creates a new ChangeProcessor that uses the given config file.
@@ -34,12 +35,13 @@ public interface IChangeProcessor {
 	 * @param data
 	 *            Other Images.
 	 * @param previousStateWindows
-	 * 			ArrayList of bounds of the windows in the previous state
+	 *            ArrayList of bounds of the windows in the previous state
 	 */
 	void process(BufferedImage img, BufferedImage img2, BinaryImage diff,
 			ArrayList<StateTransition> changes, Dataset data,
 			ArrayList<Bounds> previousStateWindows);
 
 	Change[] getChanges();
-
+	
+	void proProcess(BufferedImage img, BufferedImage img2, BinaryImage diff, ArrayList<ChangeBundle> prevChanges);
 }

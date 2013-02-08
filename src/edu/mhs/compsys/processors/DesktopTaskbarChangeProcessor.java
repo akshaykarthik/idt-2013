@@ -55,7 +55,7 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor {
 		Bounds taskChange = BinaryImageProcessor.boundsOfChange(diff,
 				taskbarBounds);
 
-		if (taskChange.getX() < Integer.MAX_VALUE) {
+		if (taskChange.getX() >-1) {
 			_changes.add(new Change(taskChange,
 					ClassificationType.TASKBAR_UPDATE));
 		}
