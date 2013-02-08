@@ -27,8 +27,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import edu.mhs.compsys.idt.Change;
-import edu.mhs.compsys.idt.StateTransition;
-import edu.mhs.compsys.processing.Recognizer;
+import edu.mhs.compsys.processing.proRecognizer;
 import edu.mhs.compsys.utils.Config;
 
 public class GraphicsPanel extends JPanel implements ActionListener
@@ -50,7 +49,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 	private boolean				drawImages				= false, notAllImages;
 	private int					imageNum				= -1;
 	private int					resX					= 1000, resY = 500;
-	private Recognizer			rec;
+	private proRecognizer		rec;
 	private Config				config;
 	private boolean				ctrl					= false;
 
@@ -173,7 +172,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 
 				// Change image --- quadrant: 3
 				// put this back in
-				g.drawImage(rec.getChange(imageNum), 10, 55 + 10 + imgYSize,
+				g.drawImage(rec.getChangeImage(imageNum), 10, 55 + 10 + imgYSize,
 						imgXSize, imgYSize, null);
 				// g.drawImage(ImageAreaIdentifier.getAreas(rec.getBinDiff().get(imageNum)),
 				// 10, 55 + 10 + imgYSize, imgXSize, imgYSize, null);
@@ -181,21 +180,25 @@ public class GraphicsPanel extends JPanel implements ActionListener
 
 				// Change Strings --- quadrant: 4
 				ArrayList<String> changeStrings = new ArrayList<String>();
-				ArrayList<StateTransition> changes = rec.getChanges();
-				try
+				// ArrayList<StateTransition> changes = rec.getChanges();
+				// try
+				// {
+				// StateTransition st = changes.get(imageNum);
+				// for (Change ml : st.getChanges())
+				// {
+				// changeStrings.add(ml.getType().getDescription() + " @ "
+				// + ml.getBounds().toString());
+				// }
+				// }
+				// catch (Exception ex)
+				// {
+				// changeStrings.add("No changes loaded!");
+				// }
+				ArrayList<Change> chg = rec.getChanges(imageNum);
+				for (int i = 0; i < chg.size(); i++)
 				{
-					StateTransition st = changes.get(imageNum);
-					for (Change ml : st.getChanges())
-					{
-						changeStrings.add(ml.getType().getDescription() + " @ "
-								+ ml.getBounds().toString());
-					}
+					changeStrings.add(chg.get(i).getType().getDescription() + " at " + chg.get(i).getBounds().toString());
 				}
-				catch (Exception ex)
-				{
-					changeStrings.add("No changes loaded!");
-				}
-
 				for (int i = 0; i < changeStrings.size(); i++)
 				{
 					g.drawString(changeStrings.get(i), 20 + imgWidth, 89
@@ -362,7 +365,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			drawImages = true;
 		if (haveImages && drawImages)
 		{
-			rec = new Recognizer(files, config);
+			rec = new proRecognizer(files, config);
 			rec.process();
 		}
 		repaint();

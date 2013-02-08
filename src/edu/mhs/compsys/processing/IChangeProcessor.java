@@ -43,5 +43,7 @@ public interface IChangeProcessor
 
 	Change[] getChanges();
 	
+	ArrayList<Change> getPROChanges();
+
 	void proProcess(BufferedImage img, BufferedImage img2, BinaryImage diff, ArrayList<ChangeBundle> prevChanges);
 }
