@@ -243,7 +243,7 @@ public class BinaryImageProcessor {
 		for (int i = 0; i < in1.getHeight(); i++) {
 			for (int j = 0; j < in1.getWidth(); j++) {
 				if (in1.getRGB(j, i) != in2.getRGB(j, i))
-					ret.set(i, j, true);
+					ret.set(j, i, true);
 			}
 		}
 		return ret;
@@ -275,7 +275,7 @@ public class BinaryImageProcessor {
 
 		for (int i = 0; i < input.getWidth(); i++) {
 			for (int j = 0; j < input.getHeight(); j++) {
-				ret.setRGB(i, j, input.get(j, i) ? white : black);
+				ret.setRGB(i, j, input.get(i, j) ? white : black);
 			}
 		}
 		return ret;

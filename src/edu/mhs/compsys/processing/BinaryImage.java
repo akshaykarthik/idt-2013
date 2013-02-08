@@ -113,7 +113,7 @@ public class BinaryImage {
 	 * @throws ArrayIndexOutOfBoundsException
 	 */
 	public boolean get(int x, int y) throws ArrayIndexOutOfBoundsException {
-		return _data[y][x];
+		return _data[x][y];
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class BinaryImage {
 	 */
 	public void set(int x, int y, boolean value)
 			throws ArrayIndexOutOfBoundsException {
-		_data[y][x] = value;
+		_data[x][y] = value;
 	}
 
 	/**

@@ -110,28 +110,52 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor
 	{
 		_changes = new ArrayList<Change>();
 
-		boolean somthingHappened = false;
+		boolean somethingHappened = false;
 		int startX = 0, startY = 0, endX = 0, endY = 0;
-		startY = cfg.getImageHeight() - cfg.getTaskBarHeight();
+		startY = cfg.getTaskBarHeight();
 		Bounds bounds = new Bounds(0, startY, cfg.getImageWidth(), cfg.getTaskBarHeight());
-		boolean[][] checked = new boolean[bounds.getWidth()][bounds.getHeight()];
+
+		boolean[][] checked = new boolean[cfg.getImageWidth()][cfg.getImageHeight()];
 		for (int x = 0; x < checked.length; x++)
 			for (int y = 0; y < checked[0].length; y++)
 				checked[x][y] = false;
-		
-		for (int x = 0; x < cfg.getImageWidth(); x++)
+
+		int taskBarStartY = cfg.getImageHeight() - cfg.getTaskBarHeight();
+
+		for (int x = 0; x < cfg.getImageWidth()-cfg.getDateWidth(); x++)
 		{
-			for (int y = startY; y < cfg.getImageHeight(); y++)
+			for (int y = 0; y < cfg.getTaskBarHeight(); y++)
 			{
-				if (diff.get(x, y) && !)
+				if (diff.get(x, taskBarStartY + y) &&
+						!checked[x][y])
+				{
+					checked[x][y] = true;
+					somethingHappened = true;
+
+					startX = x;
+					startY = y;
+
+					int width = 0;
+					int height = 0;
+
+					for (int w = 0; w < cfg.getImageWidth() - x - 1; w++)
 					{
-					
-					somthingHappened = true;
+						if (checked[w][y])
+							width++;
 					}
+					for (int h = 0; h < cfg.getImageHeight() - y - 1; h++)
+					{
+						if (checked[x][h])
+							height++;
+					}
+					endX = startX + width;
+					endY = startY + height;
+				}
 			}
 		}
-		if (somthingHappened)
-			_changes.add(new Change(new Bounds(startX, startY, endX - startX, endY - startY), ClassificationType.DESKTOP_ICON_CHANGE));
+
+		if (somethingHappened)
+			_changes.add(new Change(new Bounds(startX, cfg.getImageHeight() - startY, endX - startX, endY - startY), ClassificationType.TASKBAR_UPDATE));
 	}
 	public ArrayList<Change> getPROChanges()
 	{
