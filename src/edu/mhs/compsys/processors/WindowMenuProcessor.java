@@ -12,6 +12,7 @@ import edu.mhs.compsys.idt.ClassificationType;
 import edu.mhs.compsys.idt.Dataset;
 import edu.mhs.compsys.idt.StateTransition;
 import edu.mhs.compsys.processing.BinaryImage;
+import edu.mhs.compsys.processing.ChangeBundle;
 import edu.mhs.compsys.processing.IChangeProcessor;
 import edu.mhs.compsys.utils.Config;
 
@@ -107,5 +108,18 @@ public class WindowMenuProcessor implements IChangeProcessor
 	{
 		// TODO Auto-generated method stub
 		return _changes.toArray(new Change[0]);
+	}
+
+	@Override
+	public ArrayList<Change> getPROChanges()
+	{
+	return _changes;
+	}
+
+	@Override
+	public void proProcess(BufferedImage img, BufferedImage img2, BinaryImage diff, ArrayList<ChangeBundle> prevChanges)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }
