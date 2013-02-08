@@ -12,6 +12,7 @@ import edu.mhs.compsys.idt.ClassificationType;
 import edu.mhs.compsys.idt.Dataset;
 import edu.mhs.compsys.idt.StateTransition;
 import edu.mhs.compsys.processing.BinaryImage;
+import edu.mhs.compsys.processing.ChangeBundle;
 import edu.mhs.compsys.processing.IChangeProcessor;
 import edu.mhs.compsys.utils.Config;
 
@@ -52,9 +53,16 @@ public class WindowMenuProcessor implements IChangeProcessor
 		_changes = new ArrayList<Change>();
 
 		int minX = 1280, minY = 1024, maxX = 0, maxY = 0;
-		boolean foundSomething=false;
-		
-		for (int boundNum = previousStateWindows.size() - 1; boundNum >= 0; boundNum++)//go through the windows from the previous change
+		boolean foundSomething = false;
+
+		for (int boundNum = previousStateWindows.size() - 1; boundNum >= 0; boundNum++)// go
+																						// through
+																						// the
+																						// windows
+																						// from
+																						// the
+																						// previous
+																						// change
 		{
 			for (int windX = previousStateWindows.get(boundNum).getX(); windX < +previousStateWindows.get(boundNum).getX() + previousStateWindows.get(boundNum).getWidth() + previousStateWindows.get(boundNum).getX(); windX++)
 			{
@@ -107,5 +115,16 @@ public class WindowMenuProcessor implements IChangeProcessor
 	{
 		// TODO Auto-generated method stub
 		return _changes.toArray(new Change[0]);
+	}
+
+	public void proProcess(BufferedImage img1, BufferedImage img2, BinaryImage diff, ArrayList<ChangeBundle> prevChanges)
+	{
+		_changes = new ArrayList<Change>();
+
+	}
+
+	public ArrayList<Change> getPROChanges()
+	{
+		return _changes;
 	}
 }

@@ -28,10 +28,10 @@ public class BinaryImage {
 	public BinaryImage(int height, int width) {
 		this._height = height;
 		this._width = width;
-		_data = new boolean[height][width];
-		for (int i = 0; i < _data.length; i++)
-			for (int j = 0; j < _data[0].length; j++)
-				_data[i][j] = false;
+		_data = new boolean[width][height];
+		for(int x=0; x<width; x++)
+			for(int y=0; y<height; y++)
+				_data[x][y]=false;
 	}
 
 	/**
@@ -72,8 +72,8 @@ public class BinaryImage {
 	public BinaryImage clone() {
 		BinaryImage b = new BinaryImage(_height, _width);
 
-		for (int i = 0; i < _data.length; i++)
-			for (int j = 0; j < _data[0].length; j++)
+		for (int i = 0; i < _width; i++)
+			for (int j = 0; j < _height; j++)
 				b.set(i, j, get(i, j));
 		return b;
 	}
@@ -113,7 +113,7 @@ public class BinaryImage {
 	 * @throws ArrayIndexOutOfBoundsException
 	 */
 	public boolean get(int x, int y) throws ArrayIndexOutOfBoundsException {
-		return _data[x][y];
+		return _data[y][x];
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class BinaryImage {
 	 */
 	public void set(int x, int y, boolean value)
 			throws ArrayIndexOutOfBoundsException {
-		_data[x][y] = value;
+		_data[y][x] = value;
 	}
 
 	/**

@@ -10,6 +10,7 @@ import edu.mhs.compsys.idt.Change;
 import edu.mhs.compsys.idt.Dataset;
 import edu.mhs.compsys.idt.StateTransition;
 import edu.mhs.compsys.processors.DesktopTaskbarChangeProcessor;
+import edu.mhs.compsys.processors.WindowChangeProcessor;
 import edu.mhs.compsys.processors.WindowMenuProcessor;
 import edu.mhs.compsys.processors.WindowStateProcessor;
 import edu.mhs.compsys.reporting.Report;
@@ -28,7 +29,7 @@ public class Recognizer
 	private Dataset						data;
 	private Report						report;
 	private ArrayList<StateTransition>	changes;
-
+	private ArrayList<ChangeBundle>		changeBundles;
 	private ArrayList<BinaryImage>		bindiffs;
 	private ArrayList<BufferedImage>	diffs;
 	private ArrayList<IChangeProcessor>	processors;
@@ -61,11 +62,11 @@ public class Recognizer
 			config = cfg;
 
 			processors = new ArrayList<IChangeProcessor>();
-			
+
 			processors.add(new DesktopTaskbarChangeProcessor());
 			processors.add(new WindowStateProcessor());
+			processors.add(new WindowChangeProcessor());
 			processors.add(new WindowMenuProcessor());
-			// processors.add(new WindowChangeProcessor());
 
 			if (debug)
 			{
@@ -123,7 +124,45 @@ public class Recognizer
 			changes.add(c);
 		}
 	}
+	public void proprocess()
+	{
+		changeBundles = new ArrayList<ChangeBundle>();
+		bindiffs = new ArrayList<BinaryImage>();
+		diffs = new ArrayList<BufferedImage>();
 
+		for (int i = 0; i < data.length() - 1; i++)
+		{
+			final BufferedImage img1 = data.get(i);
+			final BufferedImage img2 = data.get(i + 1);
+			final BinaryImage diff = BinaryImageProcessor
+					.fromDiff(img1, img2);
+			bindiffs.add(diff);
+			diffs.add(BinaryImageProcessor.toImage(diff));
+
+			final ChangeBundle newCB = new ChangeBundle();
+
+			for (final IChangeProcessor proc : processors)
+			{
+				Thread th = new Thread(new Runnable()
+				{
+					public void run()
+					{
+						proc.initialize(config);
+						proc.proProcess(img1, img2, diff, changeBundles);
+
+
+						newCB.addChanges(proc.getPROChanges());
+
+					}
+				});
+				th.setName("PROTek_THREAD " + (i) + " " + (i + 1) + " "
+						+ proc.getClass().getName());
+				th.start();
+			}
+			changeBundles.add(newCB);
+
+		}
+	}
 	/**
 	 * Getter method for this Recognizer's Report
 	 * 
@@ -132,6 +171,11 @@ public class Recognizer
 	public Report getReport()
 	{
 		return report;
+	}
+	public ChangeBundle getChangeBundle(int index)
+	{
+		System.out.println();
+		return changeBundles.get(index);
 	}
 
 	/**

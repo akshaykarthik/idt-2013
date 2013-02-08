@@ -13,6 +13,7 @@ import edu.mhs.compsys.idt.Dataset;
 import edu.mhs.compsys.idt.StateTransition;
 import edu.mhs.compsys.processing.BinaryImage;
 import edu.mhs.compsys.processing.BinaryImageProcessor;
+import edu.mhs.compsys.processing.ChangeBundle;
 import edu.mhs.compsys.processing.IChangeProcessor;
 import edu.mhs.compsys.utils.Config;
 
@@ -97,5 +98,16 @@ public class WindowChangeProcessor implements IChangeProcessor {
 	public Change[] getChanges() {
 		// TODO Auto-generated method stub
 		return _changes.toArray(new Change[0]);
+	}
+
+	public void proProcess(BufferedImage img1, BufferedImage img2, BinaryImage diff, ArrayList<ChangeBundle> prevChanges)
+	{
+		_changes = new ArrayList<Change>();
+
+	}
+
+	public ArrayList<Change> getPROChanges()
+	{
+		return _changes;
 	}
 }
