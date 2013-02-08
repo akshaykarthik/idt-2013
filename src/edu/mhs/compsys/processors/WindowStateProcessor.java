@@ -78,10 +78,10 @@ public class WindowStateProcessor implements IChangeProcessor {
 		Bounds difBounds = BinaryImageProcessor.boundsOfChange(diff);
 		for (int i = 0; i < previousStateWindows.size(); i++) {
 			Bounds window = previousStateWindows.get(i);
-			if ((window.getTopLeft() == difBounds.getTopLeft()
-					|| window.getTopRight() == difBounds.getTopRight()
-					|| window.getBotLeft() == difBounds.getBotLeft() || window
-					.getBotRight() == difBounds.getBotRight())
+			if ((window.getTopLeft() .equals( difBounds.getTopLeft())
+					|| window.getTopRight() .equals( difBounds.getTopRight())
+					|| window.getBotLeft() .equals( difBounds.getBotLeft()) || window
+					.getBotRight() .equals( difBounds.getBotRight()))
 					&& (BoundsProcessor.inside(window, difBounds) || BoundsProcessor
 							.inside(difBounds, window)))
 				_changes.add(new Change(difBounds,
@@ -93,7 +93,10 @@ public class WindowStateProcessor implements IChangeProcessor {
 							- cfg.getTaskBarHeight() - 1)
 				_changes.add(new Change(difBounds,
 						ClassificationType.WINDOW_RESIZE));
+			if(difBounds.size() == window.size() && !difBounds.getTopLeft().equals(window.getTopLeft()))
+				_changes.add(new Change(difBounds, ClassificationType.WINDOW_MOVE));
 		}
+		
 		/*
 		 * ArrayList<Point> windowCorners = ImageProcessor.findIn(img2,
 		 * xButton);
