@@ -150,7 +150,6 @@ public class Recognizer
 					{
 						proc.initialize(config);
 						proc.proProcess(img1, img2, diff, changeBundles);
-
 						newCB.addChanges(proc.getPROChanges());
 
 					}
@@ -174,7 +173,6 @@ public class Recognizer
 	}
 	public ChangeBundle getChangeBundle(int index)
 	{
-		System.out.println();
 		return changeBundles.get(index);
 	}
 

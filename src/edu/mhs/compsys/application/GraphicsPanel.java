@@ -182,6 +182,8 @@ public class GraphicsPanel extends JPanel implements ActionListener
 				// put this back in
 				g.drawImage(rec.getChange(imageNum), 10, 55 + 10 + imgYSize,
 						imgXSize, imgYSize, null);
+				
+				
 				// g.drawImage(ImageAreaIdentifier.getAreas(rec.getBinDiff().get(imageNum)),
 				// 10, 55 + 10 + imgYSize, imgXSize, imgYSize, null);
 				// imgYSize + 10, null);

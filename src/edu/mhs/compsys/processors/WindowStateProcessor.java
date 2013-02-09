@@ -204,31 +204,96 @@ public class WindowStateProcessor implements IChangeProcessor
 				biggestBounds = areas.get(i);
 
 		}
-		boolean windowAlreadyThere = false;
-		for (int i = 0; i < prevChanges.size(); i++)
+		int minDimension = Math.min(biggestBounds.getWidth(), biggestBounds.getHeight());
+		boolean addedIcon = false;
+		if (!boundsInPrevWindow(biggestBounds, prevChanges))
 		{
-			for (int j = 0; j < prevChanges.get(i).size(); j++)
+			if (minDimension > 300)
 			{
-				if ((prevChanges.get(i).get(j).getType().equals(ClassificationType.WINDOW_OPEN) || prevChanges.get(i).get(j).getType().equals(ClassificationType.WINDOW_RESIZE) || prevChanges.get(i).get(j).getType().equals(ClassificationType.WINDOW_MOVE)) &&
-						prevChanges.get(i).get(j).getBounds().getX() == biggestBounds.getX() && prevChanges.get(i).get(j).getBounds().getY() == biggestBounds.getY())
-					windowAlreadyThere = true;
+				if (taskbarOpen(prevChanges) && taskbarChangesExist(prevChanges))
+				{
+					_changes.add(new Change(biggestBounds, ClassificationType.WINDOW_OPEN));
+					if (pastIconSelect(prevChanges))
+					{
+						addedIcon = true;
+						_changes.add(new Change(pastIcon(prevChanges), ClassificationType.DESKTOP_ICON_CHANGE));
+					}
+				}
 
 			}
-		}
-		if (!windowAlreadyThere)
-		{
-			if (Math.min(biggestBounds.getWidth(), biggestBounds.getHeight()) > 300 && (taskbarOpen(prevChanges)))
-				_changes.add(new Change(biggestBounds, ClassificationType.WINDOW_OPEN));
-			else
-				_changes.add(new Change(biggestBounds, ClassificationType.WINDOW_RESIZE));
+			if (!addedIcon && minDimension < 300 && !boundsInPrevWindow(biggestBounds, prevChanges))
+			{
+				_changes.add(new Change(biggestBounds, ClassificationType.DESKTOP_ICON_CHANGE));
+			}
 		}
 		else
+		// in previous window
 		{
-			//
-			// if()
+			if (!(taskbarOpen(prevChanges)) && taskbarChangesExist(prevChanges))
+			{
+				_changes.add(new Change(biggestBounds, ClassificationType.WINDOW_CLOSE));
+				// or resize
+			}
 		}
 
 	}
+	private boolean taskbarChangesExist(ArrayList<ChangeBundle> c)
+	{
+		boolean ret = false;
+		for (int i = 0; i < c.size(); i++)
+		{
+			for (int j = 0; j < c.get(i).size(); j++)
+			{
+				if (c.get(i).get(j).getType().equals(ClassificationType.TASKBAR_UPDATE_CLOSE) || c.get(i).get(j).getType().equals(ClassificationType.TASKBAR_UPDATE_OPEN))
+					ret = true;
+			}
+		}
+		return ret;
+	}
+	private boolean boundsInPrevWindow(Bounds b, ArrayList<ChangeBundle> c)
+	{
+		boolean windowAlreadyThere = false;
+		for (int i = 0; i < c.size(); i++)
+		{
+			for (int j = 0; j < c.get(i).size(); j++)
+			{
+				if ((c.get(i).get(j).getType().equals(ClassificationType.WINDOW_OPEN) || c.get(i).get(j).getType().equals(ClassificationType.WINDOW_RESIZE) || c.get(i).get(j).getType().equals(ClassificationType.WINDOW_MOVE)) &&
+						b.overlaps(c.get(i).get(j).getBounds()))
+				{
+					windowAlreadyThere = true;
+				}
+			}
+		}
+		return windowAlreadyThere;
+	}
+	private Bounds pastIcon(ArrayList<ChangeBundle> c)
+	{
+		Bounds latest = new Bounds();
+		for (int i = 0; i < c.size(); i++)
+		{
+			for (int j = 0; j < c.get(i).size(); j++)
+			{
+				if (c.get(i).get(j).getType().equals(ClassificationType.DESKTOP_ICON_CHANGE))
+					latest = c.get(i).get(j).getBounds();
+			}
+		}
+		return latest;
+	}
+
+	private boolean pastIconSelect(ArrayList<ChangeBundle> c)
+	{
+		int numSelects = 0;
+		for (int i = 0; i < c.size(); i++)
+		{
+			for (int j = 0; j < c.get(i).size(); j++)
+			{
+				if (c.get(i).get(j).getType().equals(ClassificationType.DESKTOP_ICON_CHANGE))
+					numSelects++;
+			}
+		}
+		return (numSelects % 2) == 0;
+	}
+
 	private boolean taskbarOpen(ArrayList<ChangeBundle> c)
 	{
 		int latestOpen = -1;
@@ -256,6 +321,7 @@ public class WindowStateProcessor implements IChangeProcessor
 		}
 		return ret;
 	}
+
 	public ArrayList<Change> getPROChanges()
 	{
 		if (_changes == null)
