@@ -59,6 +59,11 @@ public class StateTransition {
 		this.changes.addAll(Arrays.asList(in));
 	}
 
+	public void addChanges(ArrayList<Change> in) {
+		this.changes.addAll(in);
+	}
+	
+
 	/**
 	 * Adds a change to the current stateTransition
 	 * 
