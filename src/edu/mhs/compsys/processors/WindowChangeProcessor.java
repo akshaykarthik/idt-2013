@@ -100,14 +100,57 @@ public class WindowChangeProcessor implements IChangeProcessor {
 		return _changes.toArray(new Change[0]);
 	}
 
-	public void proProcess(BufferedImage img1, BufferedImage img2, BinaryImage diff, ArrayList<ChangeBundle> prevChanges)
-	{
+	public void proProcess(BufferedImage img1, BufferedImage img2,
+			BinaryImage diff, ArrayList<ChangeBundle> prevChanges,
+			ArrayList<Bounds> previousStateWindows) {
 		_changes = new ArrayList<Change>();
+		
+		if (previousStateWindows.size() > 0) {
+			Bounds[] windowChange = new Bounds[previousStateWindows.size()];
+			Bounds maxChange = new Bounds();
+			int window = -1;
+			for (int i = 0; i < windowChange.length; i++) {
+				windowChange[i] = BinaryImageProcessor.boundsOfChange(
+						diff,
+						new Bounds(windowChange[i].getX(), windowChange[i]
+								.getY(), windowChange[i].getHeight() - 1,
+								windowChange[i].getWidth() - 1));
+				if (maxChange.size() < windowChange[i].size()) {
+					maxChange = windowChange[i];
+					window = i;
+				}
+			}
+			if (maxChange.getY() < 24) { // This will be anything inside the
+				// title
+				// bar. Title bar click or title bar
+				// change. Click will be the right
+				// most
+				// xx pixels.
+
+				if (previousStateWindows.get(window).getWidth()
+						- maxChange.getX() < 56)
+					// 56 pixels approx. from edge to minimize button edge.
+					_changes.add(new Change(maxChange,
+							ClassificationType.WINDOW_TITLE_BAR_CLICK));
+				else
+					_changes.add(new Change(maxChange,
+							ClassificationType.WINDOW_TITLE_CHANGE));
+			}
+			if (maxChange.getY() > 73)
+				_changes.add(new Change(maxChange,
+						ClassificationType.WINDOW_APPLICATION_AREA_UPDATE));
+		}
 
 	}
 
-	public ArrayList<Change> getPROChanges()
-	{
+	public ArrayList<Change> getPROChanges() {
 		return _changes;
+	}
+
+	@Override
+	public void proProcess(BufferedImage img1, BufferedImage img2,
+			BinaryImage diff, ArrayList<ChangeBundle> prevChanges) {
+		// TODO Auto-generated method stub
+		
 	}
 }
