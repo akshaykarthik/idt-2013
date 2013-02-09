@@ -125,7 +125,7 @@ public class WindowStateProcessor implements IChangeProcessor
 	public void proProcess(BufferedImage img1, BufferedImage img2, BinaryImage diff, ArrayList<ChangeBundle> prevChanges)
 	{
 		_changes = new ArrayList<Change>();
-	
+
 		int checkWidth = cfg.getImageWidth();
 		int checkHeight = cfg.getImageHeight() - cfg.getTaskBarHeight();
 
@@ -179,7 +179,19 @@ public class WindowStateProcessor implements IChangeProcessor
 								maxy++;
 						}
 					}
-					areas.add(new Bounds(minx, miny, maxy - miny, maxx - minx));
+					boolean addNew = true;
+					Bounds newB = new Bounds(minx, miny, maxy - miny, maxx - minx);
+					for (int i = 0; i < areas.size(); i++)
+					{
+						if (newB.overlaps(areas.get(i)))
+							;
+						{
+							areas.get(i).merge(newB);
+							addNew = false;
+						}
+					}
+					if (addNew)
+						areas.add(newB);
 				}
 			}
 		}
@@ -207,6 +219,11 @@ public class WindowStateProcessor implements IChangeProcessor
 	}
 	public ArrayList<Change> getPROChanges()
 	{
+		if(_changes==null)
+			{
+			System.out.println(this.getClass()+".getPROChanges returned null");
+			return new ArrayList<Change>();
+			}
 		return _changes;
 	}
 }

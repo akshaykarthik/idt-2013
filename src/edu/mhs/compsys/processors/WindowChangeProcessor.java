@@ -22,10 +22,11 @@ import edu.mhs.compsys.utils.Config;
  * will return WINDOW_APPLICATION_AREA_UPDATE, WINDOW_TITLE_BAR_CLICK, and
  * WINDOW_TITLE_CHANGE
  */
-public class WindowChangeProcessor implements IChangeProcessor {
+public class WindowChangeProcessor implements IChangeProcessor
+{
 
-	private ArrayList<Change> _changes;
-	private Config cfg;
+	private ArrayList<Change>	_changes;
+	private Config				cfg;
 
 	/**
 	 * Initialize the processor with the given config file.
@@ -33,7 +34,8 @@ public class WindowChangeProcessor implements IChangeProcessor {
 	 * @see edu.mhs.compsys.processing.IChangeProcessor#initialize(edu.mhs.compsys.utils.Config)
 	 */
 	@Override
-	public void initialize(Config cfg) {
+	public void initialize(Config cfg)
+	{
 		this.cfg = cfg;
 	}
 
@@ -46,19 +48,23 @@ public class WindowChangeProcessor implements IChangeProcessor {
 	@Override
 	public void process(BufferedImage img, BufferedImage img2,
 			BinaryImage diff, ArrayList<StateTransition> changes, Dataset data,
-			ArrayList<Bounds> previousStateWindows) {
+			ArrayList<Bounds> previousStateWindows)
+	{
 		_changes = new ArrayList<Change>();
-		if (previousStateWindows.size() > 0) {
+		if (previousStateWindows.size() > 0)
+		{
 			Bounds[] windowChange = new Bounds[previousStateWindows.size()];
 			Bounds maxChange = new Bounds();
 			int window = -1;
-			for (int i = 0; i < windowChange.length; i++) {
+			for (int i = 0; i < windowChange.length; i++)
+			{
 				windowChange[i] = BinaryImageProcessor.boundsOfChange(
 						diff,
 						new Bounds(windowChange[i].getX(), windowChange[i]
 								.getY(), windowChange[i].getHeight() - 1,
 								windowChange[i].getWidth() - 1));
-				if (maxChange.size() < windowChange[i].size()) {
+				if (maxChange.size() < windowChange[i].size())
+				{
 					maxChange = windowChange[i];
 					window = i;
 				}
@@ -68,59 +74,8 @@ public class WindowChangeProcessor implements IChangeProcessor {
 			// if(maxChange.getY() > ) {
 			// //application area.
 			// }
-			if (maxChange.getY() < 24) { // This will be anything inside the
-											// title
-											// bar. Title bar click or title bar
-											// change. Click will be the right
-											// most
-											// xx pixels.
-
-				if (previousStateWindows.get(window).getWidth()
-						- maxChange.getX() < 56)
-					// 56 pixels approx. from edge to minimize button edge.
-					_changes.add(new Change(maxChange,
-							ClassificationType.WINDOW_TITLE_BAR_CLICK));
-				else
-					_changes.add(new Change(maxChange,
-							ClassificationType.WINDOW_TITLE_CHANGE));
-			}
-			if (maxChange.getY() > 73)
-				_changes.add(new Change(maxChange,
-						ClassificationType.WINDOW_APPLICATION_AREA_UPDATE));
-		}
-
-	}
-
-	/**
-	 * @see edu.mhs.compsys.processing.IChangeProcessor#getChanges()
-	 */
-	@Override
-	public Change[] getChanges() {
-		// TODO Auto-generated method stub
-		return _changes.toArray(new Change[0]);
-	}
-
-	public void proProcess(BufferedImage img1, BufferedImage img2,
-			BinaryImage diff, ArrayList<ChangeBundle> prevChanges,
-			ArrayList<Bounds> previousStateWindows) {
-		_changes = new ArrayList<Change>();
-		
-		if (previousStateWindows.size() > 0) {
-			Bounds[] windowChange = new Bounds[previousStateWindows.size()];
-			Bounds maxChange = new Bounds();
-			int window = -1;
-			for (int i = 0; i < windowChange.length; i++) {
-				windowChange[i] = BinaryImageProcessor.boundsOfChange(
-						diff,
-						new Bounds(windowChange[i].getX(), windowChange[i]
-								.getY(), windowChange[i].getHeight() - 1,
-								windowChange[i].getWidth() - 1));
-				if (maxChange.size() < windowChange[i].size()) {
-					maxChange = windowChange[i];
-					window = i;
-				}
-			}
-			if (maxChange.getY() < 24) { // This will be anything inside the
+			if (maxChange.getY() < 24)
+			{ // This will be anything inside the
 				// title
 				// bar. Title bar click or title bar
 				// change. Click will be the right
@@ -143,14 +98,79 @@ public class WindowChangeProcessor implements IChangeProcessor {
 
 	}
 
-	public ArrayList<Change> getPROChanges() {
+	/**
+	 * @see edu.mhs.compsys.processing.IChangeProcessor#getChanges()
+	 */
+	@Override
+	public Change[] getChanges()
+	{
+		// TODO Auto-generated method stub
+		return _changes.toArray(new Change[0]);
+	}
+
+	public void proProcess(BufferedImage img1, BufferedImage img2,
+			BinaryImage diff, ArrayList<ChangeBundle> prevChanges,
+			ArrayList<Bounds> previousStateWindows)
+	{
+		_changes = new ArrayList<Change>();
+
+		if (previousStateWindows.size() > 0)
+		{
+			Bounds[] windowChange = new Bounds[previousStateWindows.size()];
+			Bounds maxChange = new Bounds();
+			int window = -1;
+			for (int i = 0; i < windowChange.length; i++)
+			{
+				windowChange[i] = BinaryImageProcessor.boundsOfChange(
+						diff,
+						new Bounds(windowChange[i].getX(), windowChange[i]
+								.getY(), windowChange[i].getHeight() - 1,
+								windowChange[i].getWidth() - 1));
+				if (maxChange.size() < windowChange[i].size())
+				{
+					maxChange = windowChange[i];
+					window = i;
+				}
+			}
+			if (maxChange.getY() < 24)
+			{ // This will be anything inside the
+				// title
+				// bar. Title bar click or title bar
+				// change. Click will be the right
+				// most
+				// xx pixels.
+
+				if (previousStateWindows.get(window).getWidth()
+						- maxChange.getX() < 56)
+					// 56 pixels approx. from edge to minimize button edge.
+					_changes.add(new Change(maxChange,
+							ClassificationType.WINDOW_TITLE_BAR_CLICK));
+				else
+					_changes.add(new Change(maxChange,
+							ClassificationType.WINDOW_TITLE_CHANGE));
+			}
+			if (maxChange.getY() > 73)
+				_changes.add(new Change(maxChange,
+						ClassificationType.WINDOW_APPLICATION_AREA_UPDATE));
+		}
+
+	}
+
+	public ArrayList<Change> getPROChanges()
+	{
+		if(_changes==null)
+			{
+			System.out.println(this.getClass()+".getPROChanges returned null");
+			return new ArrayList<Change>();
+			}
 		return _changes;
 	}
 
 	@Override
 	public void proProcess(BufferedImage img1, BufferedImage img2,
-			BinaryImage diff, ArrayList<ChangeBundle> prevChanges) {
+			BinaryImage diff, ArrayList<ChangeBundle> prevChanges)
+	{
 		// TODO Auto-generated method stub
-		
+
 	}
 }

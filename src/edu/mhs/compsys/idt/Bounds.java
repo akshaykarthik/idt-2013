@@ -1,6 +1,7 @@
 package edu.mhs.compsys.idt;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 
 /**
  * This class encapsulates the bounds of a change. It contains a description of
@@ -202,6 +203,23 @@ public class Bounds
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
+	public boolean overlaps(Bounds b)
+	{
+		Rectangle rect1 = new Rectangle(x, y, w, h);
+		Rectangle rect2 = new Rectangle(b.x, b.y, b.w, b.h);
+		return rect1.intersects(rect2);
+	}
+	public void merge(Bounds b)
+	{
+		Rectangle rect1 = new Rectangle(x, y, w, h);
+		Rectangle rect2 = new Rectangle(b.x, b.y, b.w, b.h);
+		Rectangle rect3 = rect1.union(rect2);
+		x = rect3.x;
+		y = rect3.y;
+		w = rect3.width;
+		h = rect3.height;
+
+	}
 	public boolean equals(Object other)
 	{
 		return equals((Bounds) other);

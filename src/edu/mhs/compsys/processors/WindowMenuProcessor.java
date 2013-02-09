@@ -120,11 +120,15 @@ public class WindowMenuProcessor implements IChangeProcessor
 	public void proProcess(BufferedImage img1, BufferedImage img2, BinaryImage diff, ArrayList<ChangeBundle> prevChanges)
 	{
 		_changes = new ArrayList<Change>();
-
 	}
 
 	public ArrayList<Change> getPROChanges()
 	{
+		if(_changes==null)
+			{
+			System.out.println(this.getClass()+".getPROChanges returned null");
+			return new ArrayList<Change>();
+			}
 		return _changes;
 	}
 }

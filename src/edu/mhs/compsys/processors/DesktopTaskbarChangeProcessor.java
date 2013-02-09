@@ -163,6 +163,11 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor
 	}
 	public ArrayList<Change> getPROChanges()
 	{
+		if(_changes==null)
+			{
+			System.out.println(this.getClass()+".getPROChanges returned null");
+			return new ArrayList<Change>();
+			}
 		return _changes;
 	}
 }

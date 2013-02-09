@@ -63,7 +63,8 @@ public class Recognizer
 
 			processors = new ArrayList<IChangeProcessor>();
 
-			processors.add(new DesktopTaskbarChangeProcessor());// DONE (like your mom)
+			processors.add(new DesktopTaskbarChangeProcessor());// DONE (like
+																// your mom)
 			processors.add(new WindowStateProcessor());
 			processors.add(new WindowChangeProcessor());
 			processors.add(new WindowMenuProcessor());
@@ -149,7 +150,6 @@ public class Recognizer
 					{
 						proc.initialize(config);
 						proc.proProcess(img1, img2, diff, changeBundles);
-
 
 						newCB.addChanges(proc.getPROChanges());
 
