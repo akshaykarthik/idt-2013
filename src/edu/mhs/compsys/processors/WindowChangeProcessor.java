@@ -158,19 +158,17 @@ public class WindowChangeProcessor implements IChangeProcessor
 
 	public ArrayList<Change> getPROChanges()
 	{
-		if(_changes==null)
-			{
-			System.out.println(this.getClass()+".getPROChanges returned null");
+		if (_changes == null)
+		{
+			System.out.println(this.getClass() + ".getPROChanges returned null");
 			return new ArrayList<Change>();
-			}
+		}
 		return _changes;
 	}
 
-	@Override
 	public void proProcess(BufferedImage img1, BufferedImage img2,
 			BinaryImage diff, ArrayList<ChangeBundle> prevChanges)
 	{
-		// TODO Auto-generated method stub
-
+		_changes = new ArrayList<Change>();
 	}
 }

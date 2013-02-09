@@ -63,7 +63,7 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor
 		if (taskChange.getX() > -1)
 		{
 			_changes.add(new Change(taskChange,
-					ClassificationType.TASKBAR_UPDATE));
+					ClassificationType.TASKBAR_UPDATE_OPEN));
 		}
 
 		// Desktop Change
@@ -159,15 +159,22 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor
 		}
 
 		if (somethingHappened)
-			_changes.add(new Change(new Bounds(startX, cfg.getImageHeight() - startY, endY - startY, endX - startX), ClassificationType.TASKBAR_UPDATE));
+			if (previousTaskbarChange(prevChanges))
+				_changes.add(new Change(new Bounds(startX, cfg.getImageHeight() - startY, endY - startY, endX - startX), ClassificationType.TASKBAR_UPDATE_CLOSE));
+			else
+				_changes.add(new Change(new Bounds(startX, cfg.getImageHeight() - startY, endY - startY, endX - startX), ClassificationType.TASKBAR_UPDATE_OPEN));
+	}
+	private boolean previousTaskbarChange(ArrayList<ChangeBundle> c)
+	{
+		return false;
 	}
 	public ArrayList<Change> getPROChanges()
 	{
-		if(_changes==null)
-			{
-			System.out.println(this.getClass()+".getPROChanges returned null");
+		if (_changes == null)
+		{
+			System.out.println(this.getClass() + ".getPROChanges returned null");
 			return new ArrayList<Change>();
-			}
+		}
 		return _changes;
 	}
 }

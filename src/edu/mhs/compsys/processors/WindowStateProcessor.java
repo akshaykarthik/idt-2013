@@ -59,9 +59,11 @@ public class WindowStateProcessor implements IChangeProcessor
 		BufferedImage xButton = ImageProcessor.intArrayToBufferedImage(cfg
 				.getColorOfX());
 		if (Arrays.asList(dTbChange.getChanges()).contains(
-				ClassificationType.TASKBAR_UPDATE))// IF THERE IS A TASKBAR
-													// UPDATE AND A DESKTOP ICON
-													// UPDATE
+				ClassificationType.TASKBAR_UPDATE_OPEN) || Arrays.asList(dTbChange.getChanges()).contains(
+				ClassificationType.TASKBAR_UPDATE_CLOSE))// IF THERE IS A
+															// TASKBAR
+			// UPDATE AND A DESKTOP ICON
+			// UPDATE
 			for (int i = 0; i < changes.size(); i++)
 			{
 				if (Arrays.asList(dTbChange.getChanges()).contains(
@@ -208,22 +210,41 @@ public class WindowStateProcessor implements IChangeProcessor
 			for (int j = 0; j < prevChanges.get(i).size(); j++)
 			{
 				if ((prevChanges.get(i).get(j).getType().equals(ClassificationType.WINDOW_OPEN) || prevChanges.get(i).get(j).getType().equals(ClassificationType.WINDOW_RESIZE) || prevChanges.get(i).get(j).getType().equals(ClassificationType.WINDOW_MOVE)) &&
-						prevChanges.get(i).get(j).getBounds().getX()== biggestBounds.getX() && prevChanges.get(i).get(j).getBounds().getY() == biggestBounds.getY())
+						prevChanges.get(i).get(j).getBounds().getX() == biggestBounds.getX() && prevChanges.get(i).get(j).getBounds().getY() == biggestBounds.getY())
 					windowAlreadyThere = true;
 
 			}
 		}
 		if (!windowAlreadyThere)
 		{
-			if (Math.min(biggestBounds.getWidth(), biggestBounds.getHeight()) > 300)
+			if (Math.min(biggestBounds.getWidth(), biggestBounds.getHeight()) > 300 && (taskbarOpen(prevChanges)))
 				_changes.add(new Change(biggestBounds, ClassificationType.WINDOW_OPEN));
+			else
+				_changes.add(new Change(biggestBounds, ClassificationType.WINDOW_RESIZE));
 		}
 		else
 		{
-			//check is size changes
-			//if()
+			//
+			// if()
 		}
 
+	}
+	private boolean taskbarOpen(ArrayList<ChangeBundle> c)
+	{
+		int latestOpen = -1;
+		int latestClose = -1;
+		for (int i = 0; i < c.size(); i++)
+		{
+			for (int j = 0; j < c.get(i).size(); j++)
+			{
+				if (c.get(i).get(j).getType() == ClassificationType.TASKBAR_UPDATE_OPEN)
+					latestOpen = i;
+				else if (c.get(i).get(j).getType() == ClassificationType.TASKBAR_UPDATE_CLOSE)
+					latestClose = i;
+
+			}
+		}
+		return latestOpen > latestClose;
 	}
 	private boolean notContained(int x, int y, ArrayList<Bounds> bnds)
 	{
