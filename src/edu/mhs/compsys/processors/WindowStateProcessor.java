@@ -130,20 +130,25 @@ public class WindowStateProcessor implements IChangeProcessor
 		startY = cfg.getTaskBarHeight();
 
 		// bounds of change to be returned
-		Bounds bounds = new Bounds(0, startY, cfg.getImageWidth(), cfg.getTaskBarHeight());
+		Bounds bounds = new Bounds(-1, -1, -1, -1);
 
-		boolean[][] checked = new boolean[cfg.getImageWidth()][cfg.getImageHeight()];// stops
-																						// overlaps
+		int checkAreaStartX = 0;
+		int checkAreaStartY = 0;
+		int checkWidth = cfg.getImageWidth();
+		int checkHeight = cfg.getImageHeight() - cfg.getTaskBarHeight();
+
+		boolean[][] checked = new boolean[checkWidth][checkHeight];// stops
+																	// overlaps
 		for (int x = 0; x < checked.length; x++)
 			for (int y = 0; y < checked[0].length; y++)
 				checked[x][y] = false;
 
-		for (int x = 0; x < cfg.getImageWidth(); x++)// total checking X area
+		for (int x = 0; x < checkWidth; x++)// total checking X area
 		{
-			for (int y = 0; y < cfg.getImageHeight(); y++)// total checking Y
-															// area
+			for (int y = 0; y < checkHeight; y++)// total checking Y
+													// area
 			{
-				if (diff.get(x, y) &&
+				if (diff.get(x + checkAreaStartX, y + checkAreaStartY) &&
 						!checked[x][y])// if an unchecked part
 				{
 					checked[x][y] = true;
@@ -155,15 +160,23 @@ public class WindowStateProcessor implements IChangeProcessor
 					int width = 0;
 					int height = 0;
 
-					for (int w = 0; w < cfg.getImageWidth() - x - 1; w++)
+					// checking for the current width of change
+					boolean stopHeightCheck = false;
+					for (int w = 0; w < checkWidth - x - 1; w++)
 					{
 						if (checked[w][y])
 							width++;
+						else
+							stopHeightCheck = true;
 					}
-					for (int h = 0; h < cfg.getImageHeight() - y - 1; h++)
+					// checking for the curent height of change
+					boolean stopWidthCheck = false;
+					for (int h = 0; h < checkHeight - y - 1; h++)
 					{
 						if (checked[x][h])
 							height++;
+						else
+							stopWidthCheck = true;
 					}
 					endX = startX + width;
 					endY = startY + height;
@@ -172,7 +185,7 @@ public class WindowStateProcessor implements IChangeProcessor
 		}
 
 		if (somethingHappened)
-			_changes.add(new Change(new Bounds(startX, cfg.getImageHeight() - startY, endX - startX, endY - startY), ClassificationType.TASKBAR_UPDATE));
+			_changes.add(new Change(new Bounds(startX, startY, endY - startY, endX - startX), ClassificationType.WINDOW_OPEN));
 
 	}
 	public ArrayList<Change> getPROChanges()

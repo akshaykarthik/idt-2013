@@ -122,7 +122,7 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor
 
 		int taskBarStartY = cfg.getImageHeight() - cfg.getTaskBarHeight();
 
-		for (int x = 0; x < cfg.getImageWidth()-cfg.getDateWidth(); x++)
+		for (int x = 0; x < cfg.getImageWidth() - cfg.getDateWidth(); x++)
 		{
 			for (int y = 0; y < cfg.getTaskBarHeight(); y++)
 			{
@@ -137,16 +137,20 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor
 
 					int width = 0;
 					int height = 0;
-
 					for (int w = 0; w < cfg.getImageWidth() - x - 1; w++)
 					{
 						if (checked[w][y])
 							width++;
+						else
+							w = Integer.MAX_VALUE;
 					}
+
 					for (int h = 0; h < cfg.getImageHeight() - y - 1; h++)
 					{
 						if (checked[x][h])
 							height++;
+						else
+							h = Integer.MAX_VALUE;
 					}
 					endX = startX + width;
 					endY = startY + height;
@@ -155,7 +159,7 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor
 		}
 
 		if (somethingHappened)
-			_changes.add(new Change(new Bounds(startX, cfg.getImageHeight() - startY, endX - startX, endY - startY), ClassificationType.TASKBAR_UPDATE));
+			_changes.add(new Change(new Bounds(startX, cfg.getImageHeight() - startY, endY - startY, endX - startX), ClassificationType.TASKBAR_UPDATE));
 	}
 	public ArrayList<Change> getPROChanges()
 	{
