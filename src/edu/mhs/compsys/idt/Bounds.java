@@ -1,23 +1,26 @@
 package edu.mhs.compsys.idt;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 
 /**
  * This class encapsulates the bounds of a change. It contains a description of
  * a box of change defined by <code>Bound{x, y, h, w};</code>
  */
-public class Bounds {
+public class Bounds
+{
 
-	private int x;
-	private int y;
-	private int h;
-	private int w;
+	private int	x;
+	private int	y;
+	private int	h;
+	private int	w;
 
 	/**
 	 * Creates a new <code>Bounds</code> object with all values set to
 	 * <code>-1</code>.
 	 */
-	public Bounds() {
+	public Bounds()
+	{
 		this(-1, -1, -1, -1);
 	}
 
@@ -33,7 +36,8 @@ public class Bounds {
 	 * @param w
 	 *            The <code>width</code> of the change rectangle.
 	 */
-	public Bounds(int x, int y, int h, int w) {
+	public Bounds(int x, int y, int h, int w)
+	{
 		this.x = x;
 		this.y = y;
 		this.h = h;
@@ -43,7 +47,8 @@ public class Bounds {
 	/**
 	 * @return the x coordinate of the change
 	 */
-	public int getX() {
+	public int getX()
+	{
 		return x;
 	}
 
@@ -51,14 +56,16 @@ public class Bounds {
 	 * @param x
 	 *            the x coordinate to set
 	 */
-	public void setX(int x) {
+	public void setX(int x)
+	{
 		this.x = x;
 	}
 
 	/**
 	 * @return the y coordinate of the change
 	 */
-	public int getY() {
+	public int getY()
+	{
 		return y;
 	}
 
@@ -66,14 +73,16 @@ public class Bounds {
 	 * @param y
 	 *            the y coordinate to set
 	 */
-	public void setY(int y) {
+	public void setY(int y)
+	{
 		this.y = y;
 	}
 
 	/**
 	 * @return the height of the change
 	 */
-	public int getHeight() {
+	public int getHeight()
+	{
 		return h;
 	}
 
@@ -81,14 +90,16 @@ public class Bounds {
 	 * @param h
 	 *            the height to set
 	 */
-	public void setHeight(int l) {
+	public void setHeight(int l)
+	{
 		this.h = l;
 	}
 
 	/**
 	 * @return the width of the change
 	 */
-	public int getWidth() {
+	public int getWidth()
+	{
 		return w;
 	}
 
@@ -96,42 +107,48 @@ public class Bounds {
 	 * @param w
 	 *            the width to set
 	 */
-	public void setWidth(int w) {
+	public void setWidth(int w)
+	{
 		this.w = w;
 	}
 
 	/**
 	 * @return Top left point
 	 */
-	public Point getTopLeft() {
+	public Point getTopLeft()
+	{
 		return new Point(x, y);
 	}
 
 	/**
 	 * @return Top right point
 	 */
-	public Point getTopRight() {
+	public Point getTopRight()
+	{
 		return new Point(x + w, y);
 	}
 
 	/**
 	 * @return Bottom left point
 	 */
-	public Point getBotLeft() {
+	public Point getBotLeft()
+	{
 		return new Point(x, y + h);
 	}
 
 	/**
 	 * @return Bottom right point
 	 */
-	public Point getBotRight() {
+	public Point getBotRight()
+	{
 		return new Point(x + w, y + h);
 	}
 
 	/**
 	 * @return Size of the boundary
 	 */
-	public int size() {
+	public int size()
+	{
 		return h * w;
 	}
 
@@ -141,7 +158,8 @@ public class Bounds {
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
-	public String toString() {
+	public String toString()
+	{
 		return String.format("[x=%s, y=%s, h=%s, w=%s]", x, y, h, w);
 	}
 
@@ -150,7 +168,8 @@ public class Bounds {
 	 *            Bounds
 	 * @return True if the encompassing area is the same, false otherwise.
 	 */
-	public boolean equalSize(Bounds other) {
+	public boolean equalSize(Bounds other)
+	{
 		return (h * w) == (other.h * other.w);
 	}
 
@@ -159,7 +178,8 @@ public class Bounds {
 	 *            Bounds to compare to
 	 * @return True if dimensions are equal, false otherwise
 	 */
-	public boolean equalDimensions(Bounds other) {
+	public boolean equalDimensions(Bounds other)
+	{
 		return (h == other.h && w == other.w);
 	}
 
@@ -169,7 +189,8 @@ public class Bounds {
 	 * @param other
 	 * @return <code>true</code> if equal, <code>false</code> otherwise.
 	 */
-	public boolean equals(Bounds other) {
+	public boolean equals(Bounds other)
+	{
 		return (x == other.x && y == other.y && h == other.h && w == other.w);
 	}
 
@@ -182,7 +203,32 @@ public class Bounds {
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	public boolean equals(Object other) {
+	public boolean overlaps(Bounds b)
+	{
+		Rectangle rect1 = new Rectangle(x, y, w, h);
+		Rectangle rect2 = new Rectangle(b.x, b.y, b.w, b.h);
+		return rect1.intersects(rect2);
+	}
+	public void merge(Bounds b)
+	{
+		if (overlaps(b))
+		{
+			Rectangle rect1 = new Rectangle(x, y, w, h);
+			Rectangle rect2 = new Rectangle(b.x, b.y, b.w, b.h);
+			Rectangle rect3 = rect1.union(rect2);
+			x = rect3.x;
+			y = rect3.y;
+			w = rect3.width;
+			h = rect3.height;
+		}
+	}
+	public boolean equals(Object other)
+	{
 		return equals((Bounds) other);
+	}
+	public boolean contains(int inx, int iny)
+	{
+		return (inx >= x && iny >= y &
+				inx <= (x + w) && iny <= (y + h));
 	}
 }

@@ -8,24 +8,35 @@ package edu.mhs.compsys.idt;
  * @author akr
  * 
  */
-public class Change {
+public class Change
+{
 
-	private Bounds bounds;
-	private ClassificationType type;
+	private Bounds				bounds;
+	private ClassificationType	type;
+	private String				comment;
 
 	/**
 	 * @param bounds
 	 * @param type
 	 */
-	public Change(Bounds bounds, ClassificationType type) {
+	public Change(Bounds bounds, ClassificationType type, String comm)
+	{
 		this.bounds = bounds;
 		this.type = type;
+		comment = comm;
+	}
+	public Change(Bounds bounds, ClassificationType type)
+	{
+		this.bounds = bounds;
+		this.type = type;
+		comment = "";
 	}
 
 	/**
 	 * @return the bounds
 	 */
-	public Bounds getBounds() {
+	public Bounds getBounds()
+	{
 		return bounds;
 	}
 
@@ -33,14 +44,16 @@ public class Change {
 	 * @param bounds
 	 *            the bounds to set
 	 */
-	public void setBounds(Bounds bounds) {
+	public void setBounds(Bounds bounds)
+	{
 		this.bounds = bounds;
 	}
 
 	/**
 	 * @return the type
 	 */
-	public ClassificationType getType() {
+	public ClassificationType getType()
+	{
 		return type;
 	}
 
@@ -48,7 +61,8 @@ public class Change {
 	 * @param type
 	 *            the type to set
 	 */
-	public void setType(ClassificationType type) {
+	public void setType(ClassificationType type)
+	{
 		this.type = type;
 	}
 
@@ -58,16 +72,18 @@ public class Change {
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
-	public String toString() {
-		return String.format("[type=%s @ bounds=%s]", type, bounds);
+	public String toString()
+	{
+		return String.format("[type=%s @ bounds=%s | %s]", type, bounds,comment);
 	}
 
 	/**
 	 * @see java.lang.Object#clone()
 	 */
 	@Override
-	public Object clone() {
-		return new Change(bounds, type);
+	public Object clone()
+	{
+		return new Change(bounds, type,comment);
 	}
 
 	/**
@@ -75,7 +91,8 @@ public class Change {
 	 *            The other bounds
 	 * @return Whether or not the changes are the same.
 	 */
-	public boolean equals(Change b) {
+	public boolean equals(Change b)
+	{
 		return type.equals(b.getType()) && bounds.equals(b.getBounds());
 	}
 
@@ -85,7 +102,8 @@ public class Change {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object arg0) {
+	public boolean equals(Object arg0)
+	{
 		return equals((Change) arg0);
 	}
 }

@@ -80,11 +80,11 @@ public enum ClassificationType {
 	 */
 	DESKTOP_ICON_CHANGE("desktop", "desktop icon change"),
 
-	/**
-	 * Identify that an event occurred in the taskbar. Quantify location and
-	 * rectangular bounds of the update. Classify as ‘taskbar update’.
-	 */
-	TASKBAR_UPDATE("taskbar", "taskbar update");
+	//XXX 
+	TASKBAR_UPDATE_OPEN("taskbar", "taskbar update"),
+	
+	
+	TASKBAR_UPDATE_CLOSE("taskbar", "taskbar update");
 
 	private String description;
 

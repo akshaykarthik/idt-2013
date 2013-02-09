@@ -45,6 +45,8 @@ public class GraphicsPanel extends JPanel implements ActionListener
 	private JMenuBar			menu					= new JMenuBar();
 	private JButton				next, prev, helpButton;
 
+	private boolean				PROTek					= true;
+
 	private File[]				files;
 	private ImageIcon[]			images;
 	private boolean				drawImages				= false, notAllImages;
@@ -144,6 +146,9 @@ public class GraphicsPanel extends JPanel implements ActionListener
 
 		if (drawImages)
 		{
+			setSize(resX, resY);
+			jframe.setSize(resX, resY);
+
 			helpButton.setVisible(false);
 			helpButton.setFocusable(false);
 			resX = jframe.getWidth();
@@ -175,27 +180,40 @@ public class GraphicsPanel extends JPanel implements ActionListener
 				// put this back in
 				g.drawImage(rec.getChange(imageNum), 10, 55 + 10 + imgYSize,
 						imgXSize, imgYSize, null);
+
 				// g.drawImage(ImageAreaIdentifier.getAreas(rec.getBinDiff().get(imageNum)),
 				// 10, 55 + 10 + imgYSize, imgXSize, imgYSize, null);
 				// imgYSize + 10, null);
 
 				// Change Strings --- quadrant: 4
 				ArrayList<String> changeStrings = new ArrayList<String>();
-				ArrayList<StateTransition> changes = rec.getChanges();
-				try
+				if (PROTek)
 				{
-					StateTransition st = changes.get(imageNum);
-					for (Change ml : st.getChanges())
+
+					for (int i = 0; i < rec.getChangeBundle(imageNum).size(); i++)
 					{
-						changeStrings.add(ml.getType().getDescription() + " @ "
-								+ ml.getBounds().toString());
+						Change ch = rec.getChangeBundle(imageNum).get(i);
+						changeStrings.add(ch.getType().getDescription() + " at " + ch.getBounds().toString());
 					}
 				}
-				catch (Exception ex)
+				else
 				{
-					changeStrings.add("No changes loaded!");
-				}
 
+					ArrayList<StateTransition> changes = rec.getChanges();
+					try
+					{
+						StateTransition st = changes.get(imageNum);
+						for (Change ml : st.getChanges())
+						{
+							changeStrings.add(ml.getType().getDescription() + " @ "
+									+ ml.getBounds().toString());
+						}
+					}
+					catch (Exception ex)
+					{
+						changeStrings.add("No changes loaded!");
+					}
+				}
 				for (int i = 0; i < changeStrings.size(); i++)
 				{
 					g.drawString(changeStrings.get(i), 20 + imgWidth, 89
@@ -349,8 +367,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			add(next);
 			resX = 850;
 			resY = 800;
-			setSize(resX, resY);
-			jframe.setSize(resX, resY);
+
 			jframe.setLocation(
 					Toolkit.getDefaultToolkit().getScreenSize().width / 2
 							- jframe.getWidth() / 2, Toolkit
@@ -363,7 +380,14 @@ public class GraphicsPanel extends JPanel implements ActionListener
 		if (haveImages && drawImages)
 		{
 			rec = new Recognizer(files, config);
-			rec.process();
+			if (PROTek)
+			{
+				rec.proprocess();
+
+			}
+			else
+				rec.process();
+
 		}
 		repaint();
 	}

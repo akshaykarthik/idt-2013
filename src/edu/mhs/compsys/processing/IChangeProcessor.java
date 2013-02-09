@@ -42,6 +42,7 @@ public interface IChangeProcessor
 			ArrayList<Bounds> previousStateWindows);
 
 	Change[] getChanges();
-	
-	void proProcess(BufferedImage img, BufferedImage img2, BinaryImage diff, ArrayList<ChangeBundle> prevChanges);
+
+	void proProcess(BufferedImage img1, BufferedImage img2, BinaryImage diff, ArrayList<ChangeBundle> prevChanges,ChangeBundle curChanges);
+	ArrayList<Change> getPROChanges();
 }
