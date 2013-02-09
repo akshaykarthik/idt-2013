@@ -210,7 +210,7 @@ public class WindowStateProcessor implements IChangeProcessor
 		{
 			if (minDimension > 300)
 			{
-				if (taskbarOpen(prevChanges) && taskbarChangesExist(prevChanges))
+				if (taskbarOpen(prevChanges) && taskbarChangesExist(prevChanges) && !boundsInPrevWindow(biggestBounds, prevChanges))
 				{
 					_changes.add(new Change(biggestBounds, ClassificationType.WINDOW_OPEN));
 					if (pastIconSelect(prevChanges))
@@ -221,7 +221,7 @@ public class WindowStateProcessor implements IChangeProcessor
 				}
 
 			}
-			if (!addedIcon && minDimension < 300 && !boundsInPrevWindow(biggestBounds, prevChanges))
+			if (!addedIcon && minDimension > 40 && minDimension < 300 && !boundsInPrevWindow(biggestBounds, prevChanges))
 			{
 				_changes.add(new Change(biggestBounds, ClassificationType.DESKTOP_ICON_CHANGE));
 			}
@@ -252,29 +252,68 @@ public class WindowStateProcessor implements IChangeProcessor
 	}
 	private boolean boundsInPrevWindow(Bounds b, ArrayList<ChangeBundle> c)
 	{
-		boolean windowAlreadyThere = false;
+//DREW
+		ArrayList<Bounds> windows = new ArrayList<Bounds>();
+
 		for (int i = 0; i < c.size(); i++)
 		{
 			for (int j = 0; j < c.get(i).size(); j++)
 			{
-				if ((c.get(i).get(j).getType().equals(ClassificationType.WINDOW_OPEN) || c.get(i).get(j).getType().equals(ClassificationType.WINDOW_RESIZE) || c.get(i).get(j).getType().equals(ClassificationType.WINDOW_MOVE)) &&
-						b.overlaps(c.get(i).get(j).getBounds()))
+				if (c.get(i).get(j).getType().equals(ClassificationType.WINDOW_OPEN) || c.get(i).get(j).getType().equals(ClassificationType.WINDOW_RESIZE) || c.get(i).get(j).getType().equals(ClassificationType.WINDOW_MOVE))
 				{
-					windowAlreadyThere = true;
+					windows.add(c.get(i).get(j).getBounds());
+				}
+				else if (c.get(i).get(j).getType().equals(ClassificationType.WINDOW_CLOSE))
+				{
+					for (int w = windows.size() - 1; w >= 0; w--)
+					{
+						if (windows.get(w).overlaps(c.get(i).get(j).getBounds()))
+							windows.remove(w);
+					}
 				}
 			}
 		}
-		return windowAlreadyThere;
+
+		boolean ret = false;
+		for (int i = 0; i < windows.size(); i++)
+			if (b.overlaps(windows.get(i)))
+				ret = true;
+
+		return ret;
+		// boolean windowAlreadyThere = false;
+		// for (int i = 0; i < c.size(); i++)
+		// {
+		// for (int j = 0; j < c.get(i).size(); j++)
+		// {
+		// if ((c.get(i).get(j).getType().equals(ClassificationType.WINDOW_OPEN)
+		// || c.get(i).get(j).getType().equals(ClassificationType.WINDOW_RESIZE)
+		// || c.get(i).get(j).getType().equals(ClassificationType.WINDOW_MOVE))
+		// &&
+		// b.overlaps(c.get(i).get(j).getBounds()))
+		// {
+		// windowAlreadyThere = true;
+		// }
+		// }
+		// }
+		// return windowAlreadyThere;
 	}
 	private Bounds pastIcon(ArrayList<ChangeBundle> c)
 	{
 		Bounds latest = new Bounds();
+		boolean found = false;
 		for (int i = 0; i < c.size(); i++)
 		{
 			for (int j = 0; j < c.get(i).size(); j++)
 			{
 				if (c.get(i).get(j).getType().equals(ClassificationType.DESKTOP_ICON_CHANGE))
-					latest = c.get(i).get(j).getBounds();
+				{
+					if (!found)
+					{
+						latest = c.get(i).get(j).getBounds();
+						found = true;
+					}
+
+				}
 			}
 		}
 		return latest;

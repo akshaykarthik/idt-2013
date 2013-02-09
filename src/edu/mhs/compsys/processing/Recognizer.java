@@ -63,8 +63,7 @@ public class Recognizer
 
 			processors = new ArrayList<IChangeProcessor>();
 
-			processors.add(new DesktopTaskbarChangeProcessor());// DONE (like
-																// your mom)
+			processors.add(new DesktopTaskbarChangeProcessor());
 			processors.add(new WindowStateProcessor());
 			processors.add(new WindowChangeProcessor());
 			processors.add(new WindowMenuProcessor());
@@ -133,6 +132,7 @@ public class Recognizer
 
 		for (int i = 0; i < data.length() - 1; i++)
 		{
+			System.out.println(i);
 			final BufferedImage img1 = data.get(i);
 			final BufferedImage img2 = data.get(i + 1);
 			final BinaryImage diff = BinaryImageProcessor
@@ -158,6 +158,7 @@ public class Recognizer
 						+ proc.getClass().getName());
 				th.start();
 			}
+
 			changeBundles.add(newCB);
 
 		}

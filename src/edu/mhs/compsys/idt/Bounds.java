@@ -211,14 +211,16 @@ public class Bounds
 	}
 	public void merge(Bounds b)
 	{
-		Rectangle rect1 = new Rectangle(x, y, w, h);
-		Rectangle rect2 = new Rectangle(b.x, b.y, b.w, b.h);
-		Rectangle rect3 = rect1.union(rect2);
-		x = rect3.x;
-		y = rect3.y;
-		w = rect3.width;
-		h = rect3.height;
-
+		if (overlaps(b))
+		{
+			Rectangle rect1 = new Rectangle(x, y, w, h);
+			Rectangle rect2 = new Rectangle(b.x, b.y, b.w, b.h);
+			Rectangle rect3 = rect1.union(rect2);
+			x = rect3.x;
+			y = rect3.y;
+			w = rect3.width;
+			h = rect3.height;
+		}
 	}
 	public boolean equals(Object other)
 	{
