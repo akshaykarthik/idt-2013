@@ -184,7 +184,6 @@ public class WindowStateProcessor implements IChangeProcessor
 					for (int i = 0; i < areas.size(); i++)
 					{
 						if (newB.overlaps(areas.get(i)))
-							;
 						{
 							areas.get(i).merge(newB);
 							addNew = false;
@@ -203,8 +202,27 @@ public class WindowStateProcessor implements IChangeProcessor
 				biggestBounds = areas.get(i);
 
 		}
-		if (Math.min(biggestBounds.getWidth(), biggestBounds.getHeight()) > 300)
-			_changes.add(new Change(biggestBounds, ClassificationType.WINDOW_OPEN));
+		boolean windowAlreadyThere = false;
+		for (int i = 0; i < prevChanges.size(); i++)
+		{
+			for (int j = 0; j < prevChanges.get(i).size(); j++)
+			{
+				if ((prevChanges.get(i).get(j).getType().equals(ClassificationType.WINDOW_OPEN) || prevChanges.get(i).get(j).getType().equals(ClassificationType.WINDOW_RESIZE) || prevChanges.get(i).get(j).getType().equals(ClassificationType.WINDOW_MOVE)) &&
+						prevChanges.get(i).get(j).getBounds().getX()== biggestBounds.getX() && prevChanges.get(i).get(j).getBounds().getY() == biggestBounds.getY())
+					windowAlreadyThere = true;
+
+			}
+		}
+		if (!windowAlreadyThere)
+		{
+			if (Math.min(biggestBounds.getWidth(), biggestBounds.getHeight()) > 300)
+				_changes.add(new Change(biggestBounds, ClassificationType.WINDOW_OPEN));
+		}
+		else
+		{
+			//check is size changes
+			//if()
+		}
 
 	}
 	private boolean notContained(int x, int y, ArrayList<Bounds> bnds)
@@ -219,11 +237,11 @@ public class WindowStateProcessor implements IChangeProcessor
 	}
 	public ArrayList<Change> getPROChanges()
 	{
-		if(_changes==null)
-			{
-			System.out.println(this.getClass()+".getPROChanges returned null");
+		if (_changes == null)
+		{
+			System.out.println(this.getClass() + ".getPROChanges returned null");
 			return new ArrayList<Change>();
-			}
+		}
 		return _changes;
 	}
 }
