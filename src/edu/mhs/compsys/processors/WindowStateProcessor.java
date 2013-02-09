@@ -125,68 +125,85 @@ public class WindowStateProcessor implements IChangeProcessor
 	public void proProcess(BufferedImage img1, BufferedImage img2, BinaryImage diff, ArrayList<ChangeBundle> prevChanges)
 	{
 		_changes = new ArrayList<Change>();
-		boolean somethingHappened = false;
-		int startX = 0, startY = 0, endX = 0, endY = 0;
-		startY = cfg.getTaskBarHeight();
-
-		// bounds of change to be returned
-		Bounds bounds = new Bounds(-1, -1, -1, -1);
-
-		int checkAreaStartX = 0;
-		int checkAreaStartY = 0;
+	
 		int checkWidth = cfg.getImageWidth();
 		int checkHeight = cfg.getImageHeight() - cfg.getTaskBarHeight();
 
-		boolean[][] checked = new boolean[checkWidth][checkHeight];// stops
-																	// overlaps
-		for (int x = 0; x < checked.length; x++)
-			for (int y = 0; y < checked[0].length; y++)
-				checked[x][y] = false;
+		ArrayList<Bounds> areas = new ArrayList<Bounds>();
 
 		for (int x = 0; x < checkWidth; x++)// total checking X area
 		{
 			for (int y = 0; y < checkHeight; y++)// total checking Y
 													// area
 			{
-				if (diff.get(x + checkAreaStartX, y + checkAreaStartY) &&
-						!checked[x][y])// if an unchecked part
+				if (diff.get(x, y) && notContained(x, y, areas))
 				{
-					checked[x][y] = true;
-					somethingHappened = true;
-
-					startX = x;
-					startY = y;
-
-					int width = 0;
-					int height = 0;
-
-					// checking for the current width of change
-					boolean stopHeightCheck = false;
-					for (int w = 0; w < checkWidth - x - 1; w++)
+					int minx = x, maxx = x, miny = y, maxy = y;
+					boolean L = true, R = true, U = true, D = true;
+					while (L || R || U || D)
 					{
-						if (checked[w][y])
-							width++;
-						else
-							stopHeightCheck = true;
+						if (L)
+						{
+							L = false;
+							for (int i = miny; i <= maxy; i++)
+								if (diff.get(minx, i))
+									L = true;
+							if (L)
+								minx--;
+						}
+						if (R)
+						{
+							R = false;
+							for (int i = miny; i < maxy; i++)
+								if (diff.get(maxx, i))
+									R = true;
+							if (R)
+								maxx++;
+						}
+						if (U)
+						{
+							U = false;
+							for (int i = minx; i < maxx; i++)
+								if (diff.get(i, miny))
+									U = true;
+							if (U)
+								miny--;
+						}
+						if (D)
+						{
+							D = false;
+							for (int i = minx; i < maxx; i++)
+								if (diff.get(i, maxy))
+									D = true;
+							if (D)
+								maxy++;
+						}
 					}
-					// checking for the curent height of change
-					boolean stopWidthCheck = false;
-					for (int h = 0; h < checkHeight - y - 1; h++)
-					{
-						if (checked[x][h])
-							height++;
-						else
-							stopWidthCheck = true;
-					}
-					endX = startX + width;
-					endY = startY + height;
+					areas.add(new Bounds(minx, miny, maxy - miny, maxx - minx));
 				}
 			}
 		}
 
-		if (somethingHappened)
-			_changes.add(new Change(new Bounds(startX, startY, endY - startY, endX - startX), ClassificationType.WINDOW_OPEN));
+		Bounds biggestBounds = new Bounds(-1, -1, -1, -1);
+		for (int i = 0; i < areas.size(); i++)
+		{
+			if (areas.get(i).getHeight() * areas.get(i).getWidth() > biggestBounds.getWidth() * biggestBounds.getHeight())
+				biggestBounds = areas.get(i);
 
+		}
+		if (Math.min(biggestBounds.getWidth(), biggestBounds.getHeight()) > 300)
+			_changes.add(new Change(biggestBounds, ClassificationType.WINDOW_OPEN));
+
+	}
+	private boolean notContained(int x, int y, ArrayList<Bounds> bnds)
+	{
+		boolean ret = true;
+		for (int i = 0; i < bnds.size(); i++)
+		{
+			if (bnds.get(i).contains(x, y))
+				ret = false;
+		}
+		return ret;
 	}
 	public ArrayList<Change> getPROChanges()
 	{

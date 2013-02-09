@@ -143,9 +143,14 @@ public class GraphicsPanel extends JPanel implements ActionListener
 		g.setFont(new Font("Calibri", 0, 20));
 		g.setColor(Color.black);
 		g.drawString("Esc - Close", 10, this.getHeight() - 10);
+		
+		
 
 		if (drawImages)
 		{
+			setSize(resX, resY);
+			jframe.setSize(resX, resY);
+			
 			helpButton.setVisible(false);
 			helpButton.setFocusable(false);
 			resX = jframe.getWidth();
@@ -363,8 +368,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			add(next);
 			resX = 850;
 			resY = 800;
-			setSize(resX, resY);
-			jframe.setSize(resX, resY);
+			
 			jframe.setLocation(
 					Toolkit.getDefaultToolkit().getScreenSize().width / 2
 							- jframe.getWidth() / 2, Toolkit

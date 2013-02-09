@@ -142,7 +142,7 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor
 						if (checked[w][y])
 							width++;
 						else
-							w = Integer.MAX_VALUE;
+							w = cfg.getImageWidth();
 					}
 
 					for (int h = 0; h < cfg.getImageHeight() - y - 1; h++)
@@ -150,7 +150,7 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor
 						if (checked[x][h])
 							height++;
 						else
-							h = Integer.MAX_VALUE;
+							h = cfg.getImageHeight();
 					}
 					endX = startX + width;
 					endY = startY + height;
