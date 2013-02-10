@@ -108,10 +108,17 @@ public class WindowChangeProcessor implements IChangeProcessor
 		return _changes.toArray(new Change[0]);
 	}
 
-	public void proProcess(BufferedImage img1, BufferedImage img2,
-			BinaryImage diff, ArrayList<ChangeBundle> prevChanges,
-			ArrayList<Bounds> previousStateWindows)
+	public void proProcess(BufferedImage img1, BufferedImage img2, BinaryImage diff, ArrayList<ChangeBundle> prevChanges, ChangeBundle curChanges)
+
 	{
+		ArrayList<Bounds> previousStateWindows = new ArrayList<Bounds>();
+		// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+		// XXX you need to make a method to fix populate and track the windows
+		// because it wont be passed in, sorry.
+		// I suggest making a loop with a DesktopChangeProcessor and a
+		// WindowStateProcessos in an ArrayList so they will give you the
+		// opens/closes/moves
+
 		_changes = new ArrayList<Change>();
 
 		if (previousStateWindows.size() > 0)
@@ -166,9 +173,4 @@ public class WindowChangeProcessor implements IChangeProcessor
 		return _changes;
 	}
 
-	public void proProcess(BufferedImage img1, BufferedImage img2,
-			BinaryImage diff, ArrayList<ChangeBundle> prevChanges)
-	{
-		_changes = new ArrayList<Change>();
-	}
 }

@@ -143,14 +143,12 @@ public class GraphicsPanel extends JPanel implements ActionListener
 		g.setFont(new Font("Calibri", 0, 20));
 		g.setColor(Color.black);
 		g.drawString("Esc - Close", 10, this.getHeight() - 10);
-		
-		
 
 		if (drawImages)
 		{
 			setSize(resX, resY);
 			jframe.setSize(resX, resY);
-			
+
 			helpButton.setVisible(false);
 			helpButton.setFocusable(false);
 			resX = jframe.getWidth();
@@ -182,8 +180,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 				// put this back in
 				g.drawImage(rec.getChange(imageNum), 10, 55 + 10 + imgYSize,
 						imgXSize, imgYSize, null);
-				
-				
+
 				// g.drawImage(ImageAreaIdentifier.getAreas(rec.getBinDiff().get(imageNum)),
 				// 10, 55 + 10 + imgYSize, imgXSize, imgYSize, null);
 				// imgYSize + 10, null);
@@ -370,7 +367,7 @@ public class GraphicsPanel extends JPanel implements ActionListener
 			add(next);
 			resX = 850;
 			resY = 800;
-			
+
 			jframe.setLocation(
 					Toolkit.getDefaultToolkit().getScreenSize().width / 2
 							- jframe.getWidth() / 2, Toolkit
@@ -384,9 +381,10 @@ public class GraphicsPanel extends JPanel implements ActionListener
 		{
 			rec = new Recognizer(files, config);
 			if (PROTek)
-				{
+			{
 				rec.proprocess();
-				}
+
+			}
 			else
 				rec.process();
 

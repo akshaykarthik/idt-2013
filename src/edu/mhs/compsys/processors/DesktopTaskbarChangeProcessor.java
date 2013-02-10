@@ -106,7 +106,7 @@ public class DesktopTaskbarChangeProcessor implements IChangeProcessor
 		return _changes.toArray(new Change[0]);
 	}
 
-	public void proProcess(BufferedImage img1, BufferedImage img2, BinaryImage diff, ArrayList<ChangeBundle> prevChanges)
+	public void proProcess(BufferedImage img1, BufferedImage img2, BinaryImage diff, ArrayList<ChangeBundle> prevChanges, ChangeBundle curChanges)
 	{
 		_changes = new ArrayList<Change>();
 

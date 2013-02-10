@@ -142,21 +142,13 @@ public class Recognizer
 
 			final ChangeBundle newCB = new ChangeBundle();
 
-			for (final IChangeProcessor proc : processors)
+			for (int j = 0; j < processors.size(); j++)
 			{
-				Thread th = new Thread(new Runnable()
-				{
-					public void run()
-					{
-						proc.initialize(config);
-						proc.proProcess(img1, img2, diff, changeBundles);
-						newCB.addChanges(proc.getPROChanges());
+				final IChangeProcessor proc = processors.get(i);
 
-					}
-				});
-				th.setName("PROTek_THREAD " + (i) + " " + (i + 1) + " "
-						+ proc.getClass().getName());
-				th.start();
+				proc.initialize(config);
+				proc.proProcess(img1, img2, diff, changeBundles, newCB);
+				newCB.addChanges(proc.getPROChanges());
 			}
 
 			changeBundles.add(newCB);
